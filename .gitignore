@@ -31,3 +31,36 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+package-lock.json
+yarn.lock
+
+.env
+.env.*
+
+dist/
+out/
+
+*.log
+*.log.*
+*.tmp
+*.temp
+
+.npm/
+.yarn/
+
+.vscode/
+.idea/
+.DS_Store
+
+*.js
+*.js.map
+*.ts
+*.ts.map
+
+.bash_history
+.npmrc
+
+coverage/
+
+node_modules/
