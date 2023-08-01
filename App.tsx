@@ -4,11 +4,11 @@
  * @format
  */
 
-import React, { useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import type {PropsWithChildren} from 'react';
+import React, { useState } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import type { PropsWithChildren } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -18,29 +18,36 @@ import {
   useColorScheme,
   View,
   Image,
-} from 'react-native';
+} from "react-native";
 
 import {
   Colors,
   DebugInstructions,
   LearnMoreLinks,
   ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+} from "react-native/Libraries/NewAppScreen";
 
 const Stack = createStackNavigator();
 
-import LoginScreen from './components/LoginScreen.tsx';
-import SignUp from './components/SignUp.tsx';
-import FindSession from './components/FindSession.tsx';
+import LoginScreen from "./components/LoginScreen";
+import SignUp from "./components/SignUp";
+import FindSession from "./components/FindSession";
+import QRScannerScreen from "./components/QRScannerScreen";
+import SessionHomeScreen from "./components/SessionHomeScreen";
+import ProfileScreen from "./components/ProfileScreen";
+import OtherUserProfileScreen from "./components/OtherUserProfileScreen";
+import SearchForPeople from "./components/SearchForPeople";
+import ChatScreen from "./components/ChatScreen";
+import MyConnections from "./components/MyConnections";
 
-import CrowdSyncLogo from './images/CrowdSyncLogo.png'
+import CrowdSyncLogo from "./images/CrowdSyncLogo.png";
 
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+function Section({ children, title }: SectionProps): JSX.Element {
+  const isDarkMode = useColorScheme() === "dark";
   return (
     <View style={styles.sectionContainer}>
       <Text
@@ -49,7 +56,8 @@ function Section({children, title}: SectionProps): JSX.Element {
           {
             color: isDarkMode ? Colors.white : Colors.black,
           },
-        ]}>
+        ]}
+      >
         {title}
       </Text>
       <Text
@@ -58,7 +66,8 @@ function Section({children, title}: SectionProps): JSX.Element {
           {
             color: isDarkMode ? Colors.light : Colors.dark,
           },
-        ]}>
+        ]}
+      >
         {children}
       </Text>
     </View>
@@ -66,7 +75,7 @@ function Section({children, title}: SectionProps): JSX.Element {
 }
 
 function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  const isDarkMode = useColorScheme() === "dark";
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
   // Function to handle successful login and update authentication state
@@ -94,26 +103,73 @@ function App(): JSX.Element {
                 headerShown: false,
               }}
             >
-              {(props) => <LoginScreen {...props} onLoginSuccess={handleLoginSuccess} />}
+              {(props) => (
+                <LoginScreen {...props} onLoginSuccess={handleLoginSuccess} />
+              )}
             </Stack.Screen>
             <Stack.Screen
               name="SignUp"
               component={SignUp} // Add SignUp screen
               options={{
-                title: 'Sign Up', // Optional: Set the title for the SignUp screen header
+                title: "Sign Up", // Optional: Set the title for the SignUp screen header
               }}
             />
           </>
         ) : (
-          <Stack.Screen
-            name="FindSession"
-            options={{
-              header: () => <Header />, // Add the custom header
-            }}
-          >
-            {(props) => <FindSession {...props} onLogout={handleLogout} />} {/* Pass onLogout prop to FindSession */}
-          </Stack.Screen>
+          <>
+            <Stack.Screen
+              name="FindSession"
+              options={{
+                header: () => <Header />,
+              }}
+            >
+              {(props) => <FindSession {...props} onLogout={handleLogout} />}
+            </Stack.Screen>
+            <Stack.Screen
+              name="MyConnections"
+              component={MyConnections}
+              options={{
+                title: "My Connections",
+              }}
+            />
+            <Stack.Screen
+              name="ChatScreen"
+              component={ChatScreen}
+              options={{
+                title: "Chat",
+              }}
+            />
+            <Stack.Screen
+              name="SearchForPeople"
+              component={SearchForPeople}
+              options={{
+                title: "Search For People",
+              }}
+            />
+            <Stack.Screen
+              name="OtherUserProfile"
+              component={OtherUserProfileScreen}
+              options={{
+                title: "Other User",
+              }}
+            />
+            <Stack.Screen
+              name="Profile"
+              component={ProfileScreen}
+              options={{
+                title: "Profile",
+              }}
+            />
+            <Stack.Screen
+              name="SessionHome"
+              component={SessionHomeScreen} // Add SessionHomeScreen
+              options={{
+                title: "Session Home",
+              }}
+            />
+          </>
         )}
+        <Stack.Screen name="QRScanner" component={QRScannerScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -133,7 +189,7 @@ const Header = () => {
       <Text style={styles.headerTitle}>CrowdSync</Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   sectionContainer: {
@@ -142,15 +198,15 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 24,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   sectionDescription: {
     marginTop: 8,
     fontSize: 18,
-    fontWeight: '400',
+    fontWeight: "400",
   },
   highlight: {
-    fontWeight: '700',
+    fontWeight: "700",
   },
 });
 

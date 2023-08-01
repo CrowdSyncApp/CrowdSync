@@ -1,17 +1,35 @@
-import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { Button, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const FindSessionScreen = () => {
-  const handleStartSession = () => {
-    // Handle logic for starting a new session
-    // For this example, let's just print a message to the console
-    console.log('Starting your own session...');
+  const navigation = useNavigation();
+
+  // Simulated user data
+    const user = {
+      fullName: 'John Doe',
+      jobTitle: 'Software Engineer',
+      address: '123 Main St',
+      phoneNumber: '555-1234',
+      // Add other user information as needed
+    };
+
+    const handleProfilePress = () => {
+      // Navigate to the ProfileScreen and pass the user data as params
+      navigation.navigate('Profile', { user });
+    };
+
+  const handleJoinSessionWithQRCode = () => {
+    // Navigate to the QRScannerScreen
+    navigation.navigate('SessionHome');
   };
 
   return (
     <View>
-      <Text>Find Session Screen</Text>
-      <Button title="Start Your Own Session" onPress={handleStartSession} />
+      <Button
+        title="Join Session with QR Code"
+        onPress={handleJoinSessionWithQRCode}
+      />
+      <Button title="Profile" onPress={handleProfilePress} />
     </View>
   );
 };
