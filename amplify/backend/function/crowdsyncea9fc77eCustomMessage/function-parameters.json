@@ -1,0 +1,16 @@
+{
+  "trigger": true,
+  "modules": [
+    "verification-link"
+  ],
+  "parentResource": "crowdsyncea9fc77e",
+  "functionName": "crowdsyncea9fc77eCustomMessage",
+  "resourceName": "crowdsyncea9fc77eCustomMessage",
+  "parentStack": "auth",
+  "triggerEnvs": "[\n  {\n    \"key\": \"RESOURCENAME\",\n    \"value\": \"resourceName\"\n  }\n]",
+  "triggerDir": "C:\\snapshot\\repo\\build\\node_modules\\@aws-amplify\\amplify-category-auth\\provider-utils\\awscloudformation\\triggers\\CustomMessage",
+  "triggerTemplate": "CustomMessage.json.ejs",
+  "triggerEventPath": "CustomMessage.event.json",
+  "roleName": "crowdsyncea9fc77eCustomMessage",
+  "skipEdit": true
+}

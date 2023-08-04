@@ -1,0 +1,16 @@
+type UserProfile @model @auth(rules: [{allow: public}]) {
+  userId: ID!
+  fullName: String!
+  email: String!
+  phoneNumber: String
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+type UserConnection @model @auth(rules: [{allow: public}]) {
+  connectionId: ID!
+  user1Id: ID!
+  user2Id: ID!
+  status: String!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}

@@ -9,6 +9,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { PropsWithChildren } from "react";
+import { Amplify } from "aws-amplify";
+import awsmobile from './aws-exports';
+
+Amplify.configure(awsmobile);
+
 import {
   SafeAreaView,
   ScrollView,

@@ -1,0 +1,33 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-crowdsync-dev-110114-authRole",
+      "UnauthRoleArn": "arn:aws:iam::034033469384:role/amplify-crowdsync-dev-110114-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::034033469384:role/amplify-crowdsync-dev-110114-authRole",
+      "Region": "us-west-1",
+      "DeploymentBucketName": "amplify-crowdsync-dev-110114-deployment",
+      "UnauthRoleName": "amplify-crowdsync-dev-110114-unauthRole",
+      "StackName": "amplify-crowdsync-dev-110114",
+      "StackId": "arn:aws:cloudformation:us-west-1:034033469384:stack/amplify-crowdsync-dev-110114/68c2a0b0-3095-11ee-b672-065451e756ef",
+      "AmplifyAppId": "d2jor45tr2cyp1",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-crowdsync-dev-110114-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+    },
+    "categories": {
+      "auth": {
+        "crowdsyncea9fc77e": {}
+      },
+      "api": {
+        "crowdsync": {}
+      },
+      "function": {
+        "crowdsyncea9fc77eCustomMessage": {
+          "REDIRECTURL": "",
+          "EMAILSUBJECT": "Confirm CrowdSync Account Creation",
+          "EMAILMESSAGE": "Thank you for signing up for CrowdSync! Use the link to confirm your account.",
+          "deploymentBucketName": "amplify-crowdsync-dev-110114-deployment",
+          "s3Key": "amplify-builds/crowdsyncea9fc77eCustomMessage-57616a7257524c4e494c-build.zip"
+        }
+      }
+    }
+  }
+}
