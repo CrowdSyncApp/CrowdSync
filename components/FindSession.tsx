@@ -1,26 +1,21 @@
-import { Button, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import React from 'react';
+import { Button, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../QueryCaching'; // Import the useAuth and useUserProfile hooks
 
 const FindSessionScreen = () => {
   const navigation = useNavigation();
-
-  // Simulated user data
-  const user = {
-    fullName: "John Doe",
-    jobTitle: "Software Engineer",
-    address: "123 Main St",
-    phoneNumber: "555-1234",
-    // Add other user information as needed
-  };
+  const { user, fetchUserProfile } = useAuth(); // Get the authenticated user from the useAuth hook
 
   const handleProfilePress = () => {
-    // Navigate to the ProfileScreen and pass the user data as params
-    navigation.navigate("Profile", { user });
+    const userProfileData = await fetchUserProfile(user?.userId);
+    // Navigate to the ProfileScreen and pass the user profile data as params
+    navigation.navigate('Profile', { userProfileData });
   };
 
   const handleJoinSessionWithQRCode = () => {
     // Navigate to the QRScannerScreen
-    navigation.navigate("SessionHome");
+    navigation.navigate('SessionHome');
   };
 
   return (

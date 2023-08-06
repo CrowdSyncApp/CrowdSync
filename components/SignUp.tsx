@@ -3,7 +3,7 @@ import { View, Text, TextInput, Button } from "react-native";
 import { Auth, API, graphqlOperation } from "aws-amplify";
 import { createUserProfile } from "../src/graphql/mutations";
 import { useNavigation } from "@react-navigation/native";
-import { useAuth } from "../auth";
+import { useAuth } from "../QueryCaching";
 
 const SignUpScreen = () => {
   const navigation = useNavigation();
@@ -12,7 +12,7 @@ const SignUpScreen = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const { login } = useAuth();
+  const { login, fetchUserProfileData } = useAuth();
 
   const handleSignUp = async () => {
     try {
@@ -41,6 +41,10 @@ const SignUpScreen = () => {
 
       // After successful signup, automatically log in the user
       await login({ username, password });
+
+      // Fetch user data from DynamoDB
+      await fetchUserProfileData();
+
       navigation.navigate("FindSession");
     } catch (error) {
       console.error("Sign up error:", error);

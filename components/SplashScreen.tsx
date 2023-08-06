@@ -1,13 +1,19 @@
 import React, { useEffect } from "react";
 import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../QueryCaching";
 
 const LoadingScreen = ({ isUserLoggedIn }) => {
   const navigation = useNavigation();
+  const { fetchUserProfileData  } = useAuth();
 
   useEffect(() => {
     // Navigate based on user's login status
     if (isUserLoggedIn === true) {
+
+      // Fetch user data from DynamoDB
+      await fetchUserProfileData();
+
       // User is logged in, navigate to FindSession screen or other screens
       navigation.navigate("FindSession");
     } else if (isUserLoggedIn === false) {

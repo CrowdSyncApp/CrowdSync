@@ -12,7 +12,7 @@ import type { PropsWithChildren } from "react";
 import { Amplify, Auth } from "aws-amplify";
 import awsmobile from "./aws-exports";
 import { QueryClientProvider, QueryClient } from "react-query";
-import { AuthProvider, useAuth } from "./auth";
+import { AuthProvider, useAuth } from "./QueryCaching";
 
 Amplify.configure(awsmobile);
 

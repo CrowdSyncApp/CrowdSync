@@ -2,14 +2,15 @@
 import React from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useAuth } from "../auth";
+import { useAuth } from "../QueryCaching";
 import MyConnections from "./MyConnections";
 
 const ProfileScreen = ({ route }) => {
   // Extract the user information passed as props from the route object
-  const { user } = route.params;
+  const { userProfileData } = route.params;
   const { logout } = useAuth();
   const navigation = useNavigation();
+  console.log(userProfileData);
 
   const handleLogout = () => {
     logout();
@@ -18,7 +19,7 @@ const ProfileScreen = ({ route }) => {
 
   const handleMyConnectionsPress = () => {
     // Navigate to the ProfileScreen and pass the user data as params
-    navigation.navigate("MyConnections", { user });
+    navigation.navigate("MyConnections", { userProfileData });
   };
 
   return (
@@ -29,16 +30,16 @@ const ProfileScreen = ({ route }) => {
       </View>
 
       {/* Full Name */}
-      <Text style={styles.fullName}>{user.fullName}</Text>
+      <Text style={styles.fullName}>{userProfileData.fullName}</Text>
 
       {/* Job Title */}
-      <Text style={styles.infoText}>Job Title: {user.jobTitle}</Text>
+      <Text style={styles.infoText}>Job Title: {userProfileData.jobTitle}</Text>
 
       {/* Address */}
-      <Text style={styles.infoText}>Address: {user.address}</Text>
+      <Text style={styles.infoText}>Address: {userProfileData.address}</Text>
 
       {/* Phone Number */}
-      <Text style={styles.infoText}>Phone Number: {user.phoneNumber}</Text>
+      <Text style={styles.infoText}>Phone Number: {userProfileData.phoneNumber}</Text>
 
       {/* Links to URLs */}
       <View style={styles.linksContainer}>

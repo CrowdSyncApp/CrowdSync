@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { Auth } from "aws-amplify";
+import { Auth, graphqlOperation } from "aws-amplify";
+import { getUserProfile } from "../src/graphql/mutations";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AuthContext = createContext();
@@ -11,20 +12,26 @@ export function useAuth() {
     error: queryError,
     isLoading,
   } = useQuery("user", fetchUser);
-  //const queryClient = useQueryClient(); // Get the existing query client instance
 
-  const refreshToken = async () => {
-    try {
-      // Refresh the user's tokens
-      await Auth.refreshSession();
-      //queryClient.invalidateQueries('user'); // Invalidate the 'user' query after refreshing tokens
-    } catch (error) {
-      console.error("Token refresh error:", error);
-      throw error;
-    }
-  };
+  const { fetchUserProfile, refreshToken } = useContext(AuthContext);
 
   return useContext(AuthContext);
+}
+
+async function fetchUserProfile(userId) {
+  try {
+    const { data } = await API.graphql(
+      graphqlOperation(getUserProfile, { userId })
+    );
+
+    if (data && data.getUserProfile) {
+      return data.getUserProfile;
+    }
+    return null;
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    throw error;
+  }
 }
 
 async function fetchUser() {
@@ -90,6 +97,24 @@ export function AuthProvider({ children }) {
 
   const isUserLoggedIn = user === undefined ? undefined : !!user;
 
+  const fetchUserProfileData = async () => {
+    if (user && user.userId) {
+      const userProfileData = await fetchUserProfile(user.userId);
+      return userProfileData;
+    }
+    return null;
+  };
+
+  const refreshToken = async () => {
+    try {
+      // Refresh the user's tokens
+      await Auth.refreshSession();
+    } catch (error) {
+      console.error("Token refresh error:", error);
+      throw error;
+    }
+  };
+
   const value = {
     user,
     error,
@@ -97,6 +122,8 @@ export function AuthProvider({ children }) {
     isUserLoggedIn,
     login: loginMutation.mutate,
     logout: logoutMutation.mutate,
+    fetchUserProfile: fetchUserProfileData,
+    refreshToken,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

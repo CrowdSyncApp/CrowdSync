@@ -2,18 +2,20 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Auth } from "aws-amplify"; // Import Amplify Auth
-import { useAuth } from "../auth";
+import { useAuth } from "../QueryCaching";
 
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
-  const { login } = useAuth();
+  const { login, fetchUserProfileData  } = useAuth();
 
   const handleLogin = async () => {
     try {
-      console.log(username);
       await login({ username, password });
+
+      // Fetch user data from DynamoDB
+      await fetchUserProfileData();
       // Navigation logic after successful login
       navigation.navigate("FindSession");
     } catch (error) {
