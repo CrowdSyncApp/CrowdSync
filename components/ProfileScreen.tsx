@@ -2,14 +2,19 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
+import { useAuth } from '../auth';
 import MyConnections from './MyConnections';
 
 const ProfileScreen = ({ route }) => {
   // Extract the user information passed as props from the route object
   const { user } = route.params;
-
+  const { logout } = useAuth();
   const navigation = useNavigation();
+
+  const handleLogout = () => {
+    logout();
+        navigation.navigate('Login');
+  };
 
   const handleMyConnectionsPress = () => {
         // Navigate to the ProfileScreen and pass the user data as params
@@ -63,6 +68,8 @@ const ProfileScreen = ({ route }) => {
 
       {/* My Connections Button */}
       <Button title="My Connections" onPress={handleMyConnectionsPress} />
+
+      <Button title="Logout" onPress={logout} />
     </View>
   );
 };

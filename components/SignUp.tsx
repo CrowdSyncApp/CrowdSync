@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import { Auth, API, graphqlOperation } from 'aws-amplify';
 import { createUserProfile } from '../src/graphql/mutations';
+import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../auth';
 
 const SignUpScreen = () => {
+  const navigation = useNavigation();
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState(''); // Use this field for email or phone number
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const { login } = useAuth();
 
   const handleSignUp = async () => {
     try {
@@ -26,18 +31,22 @@ const SignUpScreen = () => {
       };
 
       try {
-      console.log(userProfileInput);
           const response = await API.graphql(graphqlOperation(createUserProfile, { input: userProfileInput }));
           const data = response.data;
-          console.log(data);
       } catch (error) {
          console.error('Error storing data:', error);
       }
 
-      // Handle successful sign-up
+      // After successful signup, automatically log in the user
+      await login({ username, password });
+      navigation.navigate('FindSession');
     } catch (error) {
       console.error('Sign up error:', error);
-      // Handle sign-up error
+      if (error.code === 'UsernameExistsException') {
+              setErrorMessage('Username already exists. Please choose a different email or phone number.');
+      } else {
+              setErrorMessage('An error occurred during sign up. Please try again later.');
+      }
     }
   };
 
@@ -48,7 +57,13 @@ const SignUpScreen = () => {
 
   const handleUsernameChange = (value) => {
     setUsername(value);
+    setErrorMessage('');
   };
+
+  const handleLoginRedirect = () => {
+      // Navigate to the Login screen
+      navigation.navigate('Login');
+    };
 
   return (
     <View>
@@ -76,7 +91,9 @@ const SignUpScreen = () => {
         onChangeText={setConfirmPassword}
         secureTextEntry
       />
+      <Text style={{ color: 'red' }}>{errorMessage}</Text>
       <Button title="Sign Up" onPress={handleSignUp} />
+      <Button title="Log In With Existing Account" onPress={handleLoginRedirect} />
     </View>
   );
 };

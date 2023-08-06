@@ -4,13 +4,15 @@
  * @format
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { PropsWithChildren } from "react";
-import { Amplify } from "aws-amplify";
+import { Amplify, Auth } from "aws-amplify";
 import awsmobile from './aws-exports';
+import { QueryClientProvider, QueryClient } from 'react-query';
+import { AuthProvider, useAuth } from './auth';
 
 Amplify.configure(awsmobile);
 
@@ -44,8 +46,12 @@ import OtherUserProfileScreen from "./components/OtherUserProfileScreen";
 import SearchForPeople from "./components/SearchForPeople";
 import ChatScreen from "./components/ChatScreen";
 import MyConnections from "./components/MyConnections";
+import ForgotUsername from "./components/ForgotUsername";
+import ForgotPassword from "./components/ForgotPassword";
 
 import CrowdSyncLogo from "./images/CrowdSyncLogo.png";
+
+export const AppContext = React.createContext();
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -81,26 +87,38 @@ function Section({ children, title }: SectionProps): JSX.Element {
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === "dark";
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  //const { isUserLoggedIn, refreshToken } = useAuth();
 
-  // Function to handle successful login and update authentication state
-  const handleLoginSuccess = () => {
-    setIsUserLoggedIn(true);
-  };
+  useEffect(() => {
+      const checkTokenFreshness = async () => {
+        try {
+          // Check if the user is authenticated and token is fresh
+          const session = await Auth.currentSession();
+          const accessTokenExpiration = new Date(session.getAccessToken().payload.exp * 1000);
 
-  // Function to handle user logout and update authentication state
-  const handleLogout = () => {
-    setIsUserLoggedIn(false);
-  };
+          if (accessTokenExpiration <= new Date()) {
+            // Token is not fresh, refresh tokens
+            //await refreshToken();
+            console.log("here");
+          }
+        } catch (error) {
+          console.error('Token check error:', error);
+          // Handle token check error, e.g., redirect to login screen
+        }
+      };
+
+      checkTokenFreshness();
+    }, []);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
   return (
+  <QueryClientProvider client={new QueryClient()}>
+    <AuthProvider>
     <NavigationContainer>
       <Stack.Navigator>
-        {!isUserLoggedIn ? (
           <>
             <Stack.Screen
               name="Login"
@@ -109,27 +127,27 @@ function App(): JSX.Element {
               }}
             >
               {(props) => (
-                <LoginScreen {...props} onLoginSuccess={handleLoginSuccess} />
+                <LoginScreen {...props} />
               )}
             </Stack.Screen>
             <Stack.Screen
               name="SignUp"
-              component={SignUp} // Add SignUp screen
               options={{
-                title: "Sign Up", // Optional: Set the title for the SignUp screen header
-              }}
-            />
-          </>
-        ) : (
-          <>
-            <Stack.Screen
-              name="FindSession"
-              options={{
-                header: () => <Header />,
+                title: "Sign Up",
               }}
             >
-              {(props) => <FindSession {...props} onLogout={handleLogout} />}
+              {(props) => <SignUp {...props} />}
             </Stack.Screen>
+        <Stack.Screen name="ForgotUsername" component={ForgotUsername} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+            <Stack.Screen
+                name="FindSession"
+                options={{
+                  header: () => <Header />,
+                }}
+              >
+                {(props) => <FindSession {...props} />}
+              </Stack.Screen>
             <Stack.Screen
               name="MyConnections"
               component={MyConnections}
@@ -159,12 +177,12 @@ function App(): JSX.Element {
               }}
             />
             <Stack.Screen
-              name="Profile"
-              component={ProfileScreen}
-              options={{
-                title: "Profile",
-              }}
-            />
+            name="Profile"
+            component={ProfileScreen}
+            options={{
+              title: "Profile",
+            }}
+          />
             <Stack.Screen
               name="SessionHome"
               component={SessionHomeScreen} // Add SessionHomeScreen
@@ -173,10 +191,11 @@ function App(): JSX.Element {
               }}
             />
           </>
-        )}
         <Stack.Screen name="QRScanner" component={QRScannerScreen} />
       </Stack.Navigator>
     </NavigationContainer>
+    </AuthProvider>
+    </QueryClientProvider>
   );
 }
 
