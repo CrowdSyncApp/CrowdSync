@@ -10,9 +10,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { PropsWithChildren } from "react";
 import { Amplify, Auth } from "aws-amplify";
-import awsmobile from './aws-exports';
-import { QueryClientProvider, QueryClient } from 'react-query';
-import { AuthProvider, useAuth } from './auth';
+import awsmobile from "./aws-exports";
+import { QueryClientProvider, QueryClient } from "react-query";
+import { AuthProvider, useAuth } from "./auth";
 
 Amplify.configure(awsmobile);
 
@@ -48,6 +48,7 @@ import ChatScreen from "./components/ChatScreen";
 import MyConnections from "./components/MyConnections";
 import ForgotUsername from "./components/ForgotUsername";
 import ForgotPassword from "./components/ForgotPassword";
+import SplashScreen from "./components/SplashScreen";
 
 import CrowdSyncLogo from "./images/CrowdSyncLogo.png";
 
@@ -87,117 +88,124 @@ function Section({ children, title }: SectionProps): JSX.Element {
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === "dark";
-  //const { isUserLoggedIn, refreshToken } = useAuth();
-
-  useEffect(() => {
-      const checkTokenFreshness = async () => {
-        try {
-          // Check if the user is authenticated and token is fresh
-          const session = await Auth.currentSession();
-          const accessTokenExpiration = new Date(session.getAccessToken().payload.exp * 1000);
-
-          if (accessTokenExpiration <= new Date()) {
-            // Token is not fresh, refresh tokens
-            //await refreshToken();
-            console.log("here");
-          }
-        } catch (error) {
-          console.error('Token check error:', error);
-          // Handle token check error, e.g., redirect to login screen
-        }
-      };
-
-      checkTokenFreshness();
-    }, []);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
   return (
-  <QueryClientProvider client={new QueryClient()}>
-    <AuthProvider>
-    <NavigationContainer>
-      <Stack.Navigator>
-          <>
-            <Stack.Screen
-              name="Login"
-              options={{
-                headerShown: false,
-              }}
-            >
-              {(props) => (
-                <LoginScreen {...props} />
-              )}
-            </Stack.Screen>
-            <Stack.Screen
-              name="SignUp"
-              options={{
-                title: "Sign Up",
-              }}
-            >
-              {(props) => <SignUp {...props} />}
-            </Stack.Screen>
-        <Stack.Screen name="ForgotUsername" component={ForgotUsername} />
-        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-            <Stack.Screen
-                name="FindSession"
-                options={{
-                  header: () => <Header />,
-                }}
-              >
-                {(props) => <FindSession {...props} />}
-              </Stack.Screen>
-            <Stack.Screen
-              name="MyConnections"
-              component={MyConnections}
-              options={{
-                title: "My Connections",
-              }}
-            />
-            <Stack.Screen
-              name="ChatScreen"
-              component={ChatScreen}
-              options={{
-                title: "Chat",
-              }}
-            />
-            <Stack.Screen
-              name="SearchForPeople"
-              component={SearchForPeople}
-              options={{
-                title: "Search For People",
-              }}
-            />
-            <Stack.Screen
-              name="OtherUserProfile"
-              component={OtherUserProfileScreen}
-              options={{
-                title: "Other User",
-              }}
-            />
-            <Stack.Screen
-            name="Profile"
-            component={ProfileScreen}
-            options={{
-              title: "Profile",
-            }}
-          />
-            <Stack.Screen
-              name="SessionHome"
-              component={SessionHomeScreen} // Add SessionHomeScreen
-              options={{
-                title: "Session Home",
-              }}
-            />
-          </>
-        <Stack.Screen name="QRScanner" component={QRScannerScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-    </AuthProvider>
+    <QueryClientProvider client={new QueryClient()}>
+      <AuthProvider>
+        <NavigationContainer>
+          <AppNavigator />
+        </NavigationContainer>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
+
+const AppNavigator = () => {
+  const auth = useAuth();
+  const { isUserLoggedIn, refreshToken } = auth;
+
+  useEffect(() => {
+    const checkTokenFreshness = async () => {
+      try {
+        const session = await Auth.currentSession();
+        const accessTokenExpiration = new Date(
+          session.getAccessToken().payload.exp * 1000
+        );
+
+        // Check token freshness and refresh if needed
+        if (accessTokenExpiration <= new Date()) {
+          await refreshToken();
+        }
+      } catch (error) {
+        console.error("Token check error:", error);
+      }
+    };
+
+    checkTokenFreshness();
+  }, []);
+
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="SplashScreen" options={{ headerShown: false }}>
+        {/* Render the LoadingScreen component as children */}
+        {(props) => <SplashScreen {...props} isUserLoggedIn={isUserLoggedIn} />}
+      </Stack.Screen>
+      <Stack.Screen
+        name="FindSession"
+        options={{
+          header: () => <Header />,
+        }}
+      >
+        {(props) => <FindSession {...props} />}
+      </Stack.Screen>
+      <Stack.Screen
+        name="MyConnections"
+        component={MyConnections}
+        options={{
+          title: "My Connections",
+        }}
+      />
+      <Stack.Screen
+        name="ChatScreen"
+        component={ChatScreen}
+        options={{
+          title: "Chat",
+        }}
+      />
+      <Stack.Screen
+        name="SearchForPeople"
+        component={SearchForPeople}
+        options={{
+          title: "Search For People",
+        }}
+      />
+      <Stack.Screen
+        name="OtherUserProfile"
+        component={OtherUserProfileScreen}
+        options={{
+          title: "Other User",
+        }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          title: "Profile",
+        }}
+      />
+      <Stack.Screen
+        name="SessionHome"
+        component={SessionHomeScreen} // Add SessionHomeScreen
+        options={{
+          title: "Session Home",
+        }}
+      />
+      <Stack.Screen name="QRScanner" component={QRScannerScreen} />
+      <Stack.Screen
+        name="Login"
+        options={{
+          headerShown: false,
+        }}
+      >
+        {(props) => <LoginScreen {...props} />}
+      </Stack.Screen>
+      <Stack.Screen
+        name="SignUp"
+        options={{
+          title: "Sign Up",
+        }}
+      >
+        {(props) => <SignUp {...props} />}
+      </Stack.Screen>
+      <Stack.Screen name="ForgotUsername" component={ForgotUsername} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+    </Stack.Navigator>
+  );
+};
 
 const Header = () => {
   return (

@@ -1,9 +1,9 @@
 // ProfileScreen.tsx
-import React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useAuth } from '../auth';
-import MyConnections from './MyConnections';
+import React from "react";
+import { View, Text, StyleSheet, Button } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../auth";
+import MyConnections from "./MyConnections";
 
 const ProfileScreen = ({ route }) => {
   // Extract the user information passed as props from the route object
@@ -13,12 +13,12 @@ const ProfileScreen = ({ route }) => {
 
   const handleLogout = () => {
     logout();
-        navigation.navigate('Login');
+    navigation.navigate("Login");
   };
 
   const handleMyConnectionsPress = () => {
-        // Navigate to the ProfileScreen and pass the user data as params
-        navigation.navigate('MyConnections', { user });
+    // Navigate to the ProfileScreen and pass the user data as params
+    navigation.navigate("MyConnections", { user });
   };
 
   return (
@@ -80,12 +80,12 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   profilePictureContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 16,
   },
   fullName: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 16,
   },
   infoText: {
@@ -100,12 +100,12 @@ const styles = StyleSheet.create({
   },
   tagsHeader: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 8,
   },
   tag: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     padding: 8,
     marginBottom: 8,
   },
