@@ -8,7 +8,7 @@ const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
-  const { login, fetchUserProfileData  } = useAuth();
+  const { login, fetchUserProfileData } = useAuth();
 
   const handleLogin = async () => {
     try {

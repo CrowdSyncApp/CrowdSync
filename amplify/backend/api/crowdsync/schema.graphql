@@ -6,6 +6,9 @@ type UserProfile @model @auth(rules: [{allow: public}]) {
   createdAt: AWSDateTime
   updatedAt: AWSDateTime
 }
+type Query {
+  getUserProfile(userId: ID!): UserProfile
+}
 type UserConnection @model @auth(rules: [{allow: public}]) {
   connectionId: ID!
   user1Id: ID!

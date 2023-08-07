@@ -131,7 +131,6 @@ const AppNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="SplashScreen" options={{ headerShown: false }}>
-        {/* Render the LoadingScreen component as children */}
         {(props) => <SplashScreen {...props} isUserLoggedIn={isUserLoggedIn} />}
       </Stack.Screen>
       <Stack.Screen

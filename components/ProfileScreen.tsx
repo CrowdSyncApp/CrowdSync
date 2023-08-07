@@ -10,7 +10,6 @@ const ProfileScreen = ({ route }) => {
   const { userProfileData } = route.params;
   const { logout } = useAuth();
   const navigation = useNavigation();
-  console.log(userProfileData);
 
   const handleLogout = () => {
     logout();
