@@ -10,7 +10,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { PropsWithChildren } from "react";
 import { Amplify, Auth } from "aws-amplify";
-import awsmobile from "./aws-exports";
+import awsmobile from "./src/aws-exports";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { AuthProvider, useAuth } from "./QueryCaching";
 
@@ -111,14 +111,16 @@ const AppNavigator = () => {
   useEffect(() => {
     const checkTokenFreshness = async () => {
       try {
-        const session = await Auth.currentSession();
-        const accessTokenExpiration = new Date(
-          session.getAccessToken().payload.exp * 1000
-        );
+        if (isUserLoggedIn) {
+            const session = await Auth.currentSession();
+            const accessTokenExpiration = new Date(
+              session.getAccessToken().payload.exp * 1000
+            );
 
-        // Check token freshness and refresh if needed
-        if (accessTokenExpiration <= new Date()) {
-          await refreshToken();
+            // Check token freshness and refresh if needed
+            if (accessTokenExpiration <= new Date()) {
+              await refreshToken();
+            }
         }
       } catch (error) {
         console.error("Token check error:", error);

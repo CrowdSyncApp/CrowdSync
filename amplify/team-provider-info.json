@@ -16,9 +16,6 @@
       "auth": {
         "crowdsyncea9fc77e": {}
       },
-      "api": {
-        "crowdsync": {}
-      },
       "function": {
         "crowdsyncea9fc77eCustomMessage": {
           "REDIRECTURL": "",

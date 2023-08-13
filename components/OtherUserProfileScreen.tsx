@@ -8,7 +8,7 @@ const OtherUserProfileScreen = () => {
   const navigation = useNavigation(); // Get navigation instance
   const route = useRoute(); // Get route object
 
-  const { user } = route.params;
+  const { userData } = route.params;
 
   // Sample data for the user profile (you can replace this with actual data from your backend)
   const userProfile = {
@@ -28,7 +28,8 @@ const OtherUserProfileScreen = () => {
   // Function to handle opening the chat (you can implement your chat logic here)
   const handleChatPress = () => {
     // Implement your chat logic here
-    navigation.navigate('ChatScreen', { user });
+    const receiverData = userData;
+    navigation.navigate('ChatScreen', { receiverData });
   };
 
   return (

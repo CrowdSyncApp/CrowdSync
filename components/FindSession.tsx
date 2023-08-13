@@ -1,12 +1,14 @@
-import React from 'react';
-import { Button, View } from 'react-native';
+import React, { useState } from 'react';
+import { Button, View, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../QueryCaching';
-import { startSession, endSession } from './SessionManager';
+import { startSession } from './SessionManager';
+import { Auth } from 'aws-amplify';
 
 const FindSessionScreen = () => {
   const navigation = useNavigation();
-  const { user, fetchUserProfileData } = useAuth(); // Get the authenticated user from the useAuth hook
+  const { user, fetchUserProfileData } = useAuth();
+  const [sessionTitle, setSessionTitle] = useState('General'); // Default title is General
 
   const handleProfilePress = async () => {
     const userProfileData = await fetchUserProfileData(user?.userId);
@@ -19,18 +21,34 @@ const FindSessionScreen = () => {
     navigation.navigate('SessionHome');
   };
 
+  const handleStartSession = async () => {
+
+    const userProfileData = await fetchUserProfileData(user?.userId);
+      const newSession = await startSession(userProfileData, sessionTitle);
+
+      // Check if startSession was successful and navigate to SessionHomeScreen
+      if (newSession) {
+        navigation.navigate('SessionHome', { sessionData: newSession });
+      }
+    };
+
 const renderSessionButtons = () => {
-    if (
-      user?.attributes?.email === 'sstben@gmail.com' ||
-      user?.attributes?.email === 'chuynh@crowdsync.net'
-    ) {
+
+    const userGroups = user?.signInUserSession?.idToken?.payload['cognito:groups'] || [];
+
+    if (userGroups.includes('CrowdSync_UserPool_Admin')) {
       return (
         <View>
-          <Button title="Start Session" onPress={() => {startSession}} />
-          <Button title="End Session" onPress={() => {endSession}} />
+        <TextInput
+              placeholder="General"
+              value={sessionTitle}
+              onChangeText={text => setSessionTitle(text)}
+            />
+          <Button title="Start Session" onPress={handleStartSession} />
         </View>
       );
     }
+
     return null;
   };
 
@@ -41,6 +59,7 @@ const renderSessionButtons = () => {
         onPress={handleJoinSessionWithQRCode}
       />
       <Button title="Profile" onPress={handleProfilePress} />
+      {renderSessionButtons()}
     </View>
   );
 };

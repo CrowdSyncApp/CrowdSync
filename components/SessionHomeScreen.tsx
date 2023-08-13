@@ -1,20 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Button, FlatList, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { API } from 'aws-amplify';
 import QRCode from 'react-native-qrcode-svg';
+import { useAuth } from '../QueryCaching';
+import { endSession } from './SessionManager';
+import { listParticipants } from '../src/graphql/queries';
 
-// Dummy data for the list of profiles (you can replace this with real data)
-const dummyProfiles = [
-  { id: 1, name: 'John Doe' },
-  { id: 2, name: 'Jane Smith' },
-  { id: 3, name: 'Michael Johnson' },
-];
+const SessionHomeScreen = ({ route }) => {
+  const navigation = useNavigation();
+  const { user, fetchUserProfileData } = useAuth();
+  const { sessionData } = route.params;
+  const [participants, setParticipants] = useState([]);
 
-const SessionHomeScreen = ({ navigation }) => {
-  // Function to handle pressing the Exit button
-  const handleExit = () => {
-    // Handle the action when Exit button is pressed (e.g., navigate to another screen)
-    // For now, we'll just go back to the previous screen
-    navigation.goBack();
+  useEffect(() => {
+      // Fetch participant data for the current session
+      const fetchParticipants = async () => {
+        try {
+          const response = await API.graphql({
+            query: listParticipants,
+            variables: {
+              filter: {
+                sessionId: {
+                  eq: sessionData.sessionId,
+                },
+              },
+            },
+          });
+          const fetchedParticipants = response.data.listParticipants.items;
+          setParticipants(fetchedParticipants);
+        } catch (error) {
+          console.error('Error fetching participants:', error);
+        }
+      };
+
+      fetchParticipants();
+    }, [sessionData.sessionId]);
+
+  const handleProfilePress = async () => {
+      const userProfileData = await fetchUserProfileData(user?.userId);
+      // Navigate to the ProfileScreen and pass the user profile data as params
+      navigation.navigate('Profile', { userProfileData });
   };
 
   // Function to handle pressing the Search For People button
@@ -31,9 +57,22 @@ const SessionHomeScreen = ({ navigation }) => {
     navigation.navigate('ChatScreen');
   };
 
-  const handleUserProfilePress = (userId) => {
-      navigation.navigate('OtherUserProfile', { userId });
+  const handleEndSession = async () => {
+      try {
+        await endSession(sessionData.sessionId, sessionData.startTime);
+
+        navigation.navigate('FindSession');
+      } catch (error) {
+        // Handle the error as needed
+        console.error('Error ending session:', error);
+      }
+    };
+
+  const handleUserProfilePress = (userData) => {
+      navigation.navigate('OtherUserProfile', { userData });
   };
+
+  const isAdmin = user?.signInUserSession?.idToken?.payload['cognito:groups']?.includes('CrowdSync_UserPool_Admin');
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -42,25 +81,32 @@ const SessionHomeScreen = ({ navigation }) => {
             <QRCode value="Your QR code data goes here" size={200} />
           </View>
 
-          {/* List of profiles */}
           <View style={{ flex: 1, width: '100%' }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
-              Available Profiles:
-            </Text>
-            <FlatList
-              data={dummyProfiles}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => handleUserProfilePress(item.id)}>
-                  <Text style={{ fontSize: 16 }}>{item.name}</Text>
-                </TouchableOpacity>
-              )}
-            />
-          </View>
+                  <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
+                    Available Profiles:
+                  </Text>
+                  <FlatList
+                    data={participants} // Use participants data
+                    keyExtractor={(item) => item.userId}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity onPress={() => handleUserProfilePress(item)}>
+                        <Text style={{ fontSize: 16 }}>{item.fullName}</Text>
+                      </TouchableOpacity>
+                    )}
+                  />
+                </View>
 
-      {/* Buttons */}
+      <View>
+      <Button title="Profile" onPress={handleProfilePress} />
+      </View>
+
+    {isAdmin && (
+            <View style={{ flexDirection: 'row', marginBottom: 20 }}>
+              <Button title="End Session" onPress={handleEndSession} />
+            </View>
+          )}
+
       <View style={{ flexDirection: 'row', marginBottom: 20 }}>
-        <Button title="Exit" onPress={handleExit} />
         <View style={{ marginLeft: 10 }}>
           <Button title="Search For People" onPress={handleSearchForPeople} />
         </View>

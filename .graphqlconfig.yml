@@ -1,5 +1,5 @@
 projects:
-  crowdsync:
+  CrowdSyncAPI:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.ts
@@ -10,6 +10,9 @@ projects:
         codeGenTarget: typescript
         generatedFileName: src/API.ts
         docsFilePath: src/graphql
+        region: us-west-1
+        apiId: vb2ejb67hva37hdnukgwq33gce
+        maxDepth: 2
 extensions:
   amplify:
     version: 3

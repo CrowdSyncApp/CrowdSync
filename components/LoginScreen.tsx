@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Auth } from "aws-amplify"; // Import Amplify Auth
+import { Auth } from "aws-amplify";
 import { useAuth } from "../QueryCaching";
 
 const LoginScreen = () => {

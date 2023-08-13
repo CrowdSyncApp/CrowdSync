@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Button } from "react-native";
 import { Auth, API, graphqlOperation } from "aws-amplify";
-import { createUserProfile } from "../src/graphql/mutations";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
+import { createUserProfile } from "../src/graphql/mutations";
 
 const SignUpScreen = () => {
   const navigation = useNavigation();
@@ -22,12 +22,16 @@ const SignUpScreen = () => {
         password: password,
       });
 
+        const now = new Date().toISOString();
+
       // Create the user profile in DynamoDB using the API
       const userProfileInput = {
         userId: user.userSub,
         fullName: fullName,
         email: isEmailFormat(username) ? username : "", // Store the email if it's in email format, otherwise set to null
-        phoneNumber: isEmailFormat(username) ? "" : username, // Store the phone number if it's not in email format, otherwise set to null
+        phoneNumber: isEmailFormat(username) ? null : username, // Store the phone number if it's not in email format, otherwise set to null
+        createdAt: now,
+        updatedAt: now,
       };
 
       try {

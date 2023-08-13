@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { Auth, graphqlOperation, API } from "aws-amplify";
-import { createUserProfile } from "../src/graphql/mutations";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getUserProfile } from "./src/graphql/queries";
 
 const AuthContext = createContext();
 
@@ -21,8 +21,6 @@ async function fetchUserProfile(userId) {
     const { data } = await API.graphql(
       graphqlOperation(getUserProfile, { userId })
     );
-    console.log("here");
-    console.log(data);
 
     if (data && data.getUserProfile) {
       return data.getUserProfile;
@@ -98,8 +96,8 @@ export function AuthProvider({ children }) {
   const isUserLoggedIn = user === undefined ? undefined : !!user;
 
   const fetchUserProfileData = async () => {
-    if (user && user.userId) {
-      const userProfileData = await fetchUserProfile(user.userId);
+    if (user && user.username) {
+      const userProfileData = await fetchUserProfile(user.username);
       return userProfileData;
     }
     return null;
