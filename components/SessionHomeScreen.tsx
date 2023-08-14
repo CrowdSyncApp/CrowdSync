@@ -111,7 +111,10 @@ const SessionHomeScreen = ({ route }) => {
           <Button title="Search For People" onPress={handleSearchForPeople} />
         </View>
         <View style={{ marginLeft: 10 }}>
-          <Button title="Chat" onPress={handleChat} />
+          <Button
+            title="Chat"
+            onPress={() => navigation.navigate('ChatScreen', { participants: participants, chatType: "GROUP" })}
+          />
         </View>
       </View>
     </View>

@@ -18,6 +18,8 @@ export function useAuth() {
 
 async function fetchUserProfile(userId) {
   try {
+    await Auth.currentSession(); // Refresh session
+
     const { data } = await API.graphql(
       graphqlOperation(getUserProfile, { userId })
     );

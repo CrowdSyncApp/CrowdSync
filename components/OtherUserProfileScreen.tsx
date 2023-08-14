@@ -28,8 +28,7 @@ const OtherUserProfileScreen = () => {
   // Function to handle opening the chat (you can implement your chat logic here)
   const handleChatPress = () => {
     // Implement your chat logic here
-    const receiverData = userData;
-    navigation.navigate('ChatScreen', { receiverData });
+    navigation.navigate('ChatScreen', { participants: [userData], chatType: "INDIVIDUAL" });
   };
 
   return (
