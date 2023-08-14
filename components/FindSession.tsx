@@ -17,8 +17,7 @@ const FindSessionScreen = () => {
   };
 
   const handleJoinSessionWithQRCode = () => {
-    // Navigate to the QRScannerScreen
-    navigation.navigate('SessionHome');
+    navigation.navigate('QRScanner');
   };
 
   const handleStartSession = async () => {

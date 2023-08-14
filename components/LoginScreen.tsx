@@ -14,8 +14,6 @@ const LoginScreen = () => {
     try {
       await login({ username, password });
 
-      // Fetch user data from DynamoDB
-      await fetchUserProfileData();
       // Navigation logic after successful login
       navigation.navigate("FindSession");
     } catch (error) {
@@ -28,6 +26,18 @@ const LoginScreen = () => {
     // Navigate to the SignUp screen
     navigation.navigate("SignUp"); // Replace 'SignUp' with the name of your SignUp screen in the navigation stack
   };
+
+  const handleGuestSignIn = async () => {
+      try {
+        const anonymousUser = await Auth.currentCredentials(); // Guest account
+
+        // Navigate to the FindSession screen or any other desired screen
+        navigation.navigate("FindSession");
+      } catch (error) {
+        console.error("Guest Sign In error:", error);
+        alert("Guest Sign In failed. Please try again.");
+      }
+    };
 
   const handleForgotUsername = () => {
     // Navigate to the ForgotUsername screen
@@ -79,6 +89,12 @@ const LoginScreen = () => {
       >
         <Text style={{ color: "white", textAlign: "center" }}>Sign Up</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+              onPress={handleGuestSignIn}
+              style={{ backgroundColor: "orange", padding: 10, marginBottom: 10 }}
+            >
+              <Text style={{ color: "white", textAlign: "center" }}>Guest Sign In</Text>
+            </TouchableOpacity>
       <TouchableOpacity onPress={handleForgotPassword}>
         <Text style={{ color: "blue", textAlign: "center", marginTop: 10 }}>
           Forgot Password?

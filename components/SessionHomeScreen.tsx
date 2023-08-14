@@ -13,6 +13,11 @@ const SessionHomeScreen = ({ route }) => {
   const { sessionData } = route.params;
   const [participants, setParticipants] = useState([]);
 
+  const qrCodeData = JSON.stringify({
+      sessionId: sessionData.sessionId,
+      startTime: sessionData.startTime,
+    });
+
   useEffect(() => {
       // Fetch participant data for the current session
       const fetchParticipants = async () => {
@@ -78,8 +83,8 @@ const SessionHomeScreen = ({ route }) => {
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           {/* QR Code */}
           <View style={{ marginBottom: 20 }}>
-            <QRCode value="Your QR code data goes here" size={200} />
-          </View>
+                  <QRCode value={qrCodeData} size={200} />
+                </View>
 
           <View style={{ flex: 1, width: '100%' }}>
                   <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>

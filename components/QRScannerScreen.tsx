@@ -1,17 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { RNCamera, BarCodeReadEvent } from 'react-native-camera';
+import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../QueryCaching';
+import { createParticipant } from './SessionManager';
 
 const QRScannerScreen = () => {
   const [scannedData, setScannedData] = useState<string | null>(null);
+  const navigation = useNavigation();
+    const { user, fetchUserProfileData } = useAuth();
 
   // Function to handle QR code scanning
-  const handleBarCodeScanned = (event: BarCodeReadEvent) => {
+  const handleBarCodeScanned = async (event: BarCodeReadEvent) => {
     const { data } = event;
-    // Perform your logic with the scanned data here
-    setScannedData(data);
-    // You can do something with the scanned data, such as sending it to the server,
-    // displaying it on the screen, etc.
+
+    try {
+          const userProfileData = await fetchUserProfileData(user?.userId);
+          const fullName = userProfileData.fullName;
+
+          const sessionData = data;
+          await createParticipant(user?.userId, fullName, sessionData.sessionId);
+
+          navigation.navigate('SessionHome', { sessionData: sessionData });
+        } catch (error) {
+          // Handle errors, e.g., show an error message to the user
+          console.error('Error joining session:', error);
+        }
+
+        setScannedData(data);
   };
 
   useEffect(() => {
