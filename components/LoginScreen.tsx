@@ -53,7 +53,7 @@ const LoginScreen = () => {
     <View>
       <Text>Login Screen</Text>
       <TextInput
-        placeholder="Username"
+        placeholder="Email or Phone"
         value={username}
         onChangeText={setUsername}
         autoCapitalize="none"

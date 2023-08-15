@@ -4,6 +4,8 @@ import { View, Text, StyleSheet, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
 import MyConnections from "./MyConnections";
+import { getParticipants } from '../src/graphql/queries';
+import { updateParticipants } from '../src/graphql/mutations';
 
 const ProfileScreen = ({ route }) => {
   // Extract the user information passed as props from the route object
@@ -35,7 +37,7 @@ const ProfileScreen = ({ route }) => {
       <Text style={styles.infoText}>Job Title: {userProfileData.jobTitle}</Text>
 
       {/* Address */}
-      <Text style={styles.infoText}>Address: {userProfileData.address}</Text>
+      <Text style={styles.infoText}>Location: {userProfileData.address}</Text>
 
       {/* Phone Number */}
       <Text style={styles.infoText}>Phone Number: {userProfileData.phoneNumber}</Text>
@@ -52,20 +54,16 @@ const ProfileScreen = ({ route }) => {
         {/* The last tag can be a button */}
         {/* For example: */}
         <View style={styles.tag}>
-          <Text>Tag 1</Text>
+          <Text>Software Engineer</Text>
         </View>
         <View style={styles.tag}>
-          <Text>Tag 2</Text>
+          <Text>Startups</Text>
         </View>
         <View style={styles.tag}>
-          <Text>Tag 3</Text>
+          <Text>Seinfeld</Text>
         </View>
         <Button title="Add Tag" onPress={() => {}} />
       </View>
-
-      {/* Go Invisible Button */}
-      <Button title="Go Invisible" onPress={() => {}} />
-
       {/* My Connections Button */}
       <Button title="My Connections" onPress={handleMyConnectionsPress} />
 

@@ -25,7 +25,7 @@ const createSessionWithRetry = async (userId, title, retryAttempt = 1) => {
       startTime: now,
       endTime: null,
       title: title,
-      status: 'ACTIVE', // Set the status to 'ACTIVE' when starting a session
+      status: 'ACTIVE',
     },
   };
 
@@ -57,6 +57,7 @@ const createParticipant = async (userId, fullName, sessionId) => {
       userId: userId,
       joinedAt: now,
       fullName: fullName,
+      visibility: "VISIBLE",
     },
   };
 

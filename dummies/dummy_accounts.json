@@ -1,0 +1,62 @@
+[
+  {
+    "profilePicture": "https://images.pexels.com/photos/6274712/pexels-photo-6274712.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "name": "John Doe",
+    "jobTitle": "Software Engineer",
+    "address": "123 Main St, City, State",
+    "phoneNumber": "123-456-7890",
+    "socialUrls": [
+      "https://www.linkedin.com/in/johndoe",
+      "https://twitter.com/johndoe"
+    ],
+    "tags": ["Tech", "Programming", "Web Development"]
+  },
+  {
+    "profilePicture": "https://images.pexels.com/photos/8993561/pexels-photo-8993561.jpeg",
+    "name": "Jane Smith",
+    "jobTitle": "Product Manager",
+    "address": "456 Elm St, City, State",
+    "phoneNumber": "987-654-3210",
+    "socialUrls": [
+      "https://www.linkedin.com/in/janesmith",
+      "https://twitter.com/janesmith"
+    ],
+    "tags": ["Product Management", "Strategy", "Innovation"]
+  },
+  {
+    "profilePicture": "https://images.pexels.com/photos/3454298/pexels-photo-3454298.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "name": "Alex Johnson",
+    "jobTitle": "Graphic Designer",
+    "address": "789 Oak St, City, State",
+    "phoneNumber": "555-123-4567",
+    "socialUrls": [
+      "https://www.linkedin.com/in/alexjohnson",
+      "https://dribbble.com/alexjohnson"
+    ],
+    "tags": ["Design", "Illustration", "Branding"]
+  },
+  {
+    "profilePicture": "https://images.pexels.com/photos/7275385/pexels-photo-7275385.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "name": "Emily Brown",
+    "jobTitle": "Marketing Specialist",
+    "address": "567 Pine St, City, State",
+    "phoneNumber": "777-888-9999",
+    "socialUrls": [
+      "https://www.linkedin.com/in/emilybrown",
+      "https://twitter.com/emilybrown"
+    ],
+    "tags": ["Marketing", "Digital Strategy", "Content"]
+  },
+  {
+    "profilePicture": "https://images.pexels.com/photos/5384445/pexels-photo-5384445.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "name": "Michael Wilson",
+    "jobTitle": "Entrepreneur",
+    "address": "101 Cedar St, City, State",
+    "phoneNumber": "444-555-6666",
+    "socialUrls": [
+      "https://www.linkedin.com/in/michaelwilson",
+      "https://angel.co/michaelwilson"
+    ],
+    "tags": ["Startups", "Venture Capital", "Innovation"]
+  }
+]

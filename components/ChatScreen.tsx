@@ -10,6 +10,7 @@ import { useAuth } from '../QueryCaching';
 const ChatScreen = ({ route }) => {
   const [messages, setMessages] = useState<string[]>([]);
   const [newMessage, setNewMessage] = useState('');
+  const [timestamps, setTimestamps] = useState<number[]>([]);
   const [senderId, setSenderId] = useState('');
   const [participantsList, setParticipantsList] = useState('');
   const [ttlExpiration, setTtlExpiration] = useState(0);
@@ -60,6 +61,15 @@ const ChatScreen = ({ route }) => {
     }
   };
 
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    return `${month}/${day}, ${hours}:${minutes}`;
+  };
+
   const fetchChatMessages = async () => {
     try {
       const response = await API.graphql(graphqlOperation(listChats));
@@ -72,7 +82,7 @@ const ChatScreen = ({ route }) => {
         filteredChatMessages = chatMessages.filter(
           (chat) =>
             chat.senderIdReceiverIdTimestamp.split('#').some((id) =>
-              participantsList.map((participant) => participant.userId).includes(id)
+              participants.map((participant) => participant.userId).includes(id)
             ) &&
             chat.chatTypeStatus === 'GROUP#ACTIVE'
         );
@@ -87,6 +97,13 @@ const ChatScreen = ({ route }) => {
         );
       }
 
+      filteredChatMessages.sort((a, b) => {
+          const timestampA = parseInt(a.senderIdReceiverIdTimestamp.split('#')[2]);
+          const timestampB = parseInt(b.senderIdReceiverIdTimestamp.split('#')[2]);
+          return timestampB - timestampA;
+      });
+
+      if (!ttlExpiration) {
       // Find the latest chat message with a valid ttlExpiration
       const latestChatWithExpiration = filteredChatMessages.find(
         (chat) => chat.ttlExpiration > 0
@@ -102,9 +119,11 @@ const ChatScreen = ({ route }) => {
         const expirationDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days in milliseconds
         setTtlExpiration(Math.floor(expirationDate.getTime() / 1000)); // Convert to seconds
       }
+      }
 
       // Update your state with the fetched chat messages
       setMessages(filteredChatMessages.map((item) => item.messageContent));
+      setTimestamps(filteredChatMessages.map((item) => parseInt(item.senderIdReceiverIdTimestamp.split('#')[2])));
     } catch (error) {
       console.error('Error fetching chat messages:', error);
     }
@@ -114,14 +133,19 @@ const ChatScreen = ({ route }) => {
     <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 20 }}>
       {/* Chat Messages */}
       <FlatList
-        data={messages}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <View style={{ backgroundColor: '#f0f0f0', padding: 10, borderRadius: 5, marginBottom: 10 }}>
-            <Text>{item}</Text>
-          </View>
-        )}
-      />
+          data={messages}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }) => (
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+              <View style={{ backgroundColor: '#f0f0f0', padding: 10, borderRadius: 5 }}>
+                <Text>{item}</Text>
+              </View>
+              <Text style={{ fontSize: 12, marginLeft: 5, color: 'gray' }}>
+                {formatTimestamp(timestamps[index])}
+              </Text>
+            </View>
+          )}
+        />
 
       {/* New Message Text Input */}
       <TextInput

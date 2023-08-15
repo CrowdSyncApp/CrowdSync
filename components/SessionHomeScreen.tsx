@@ -1,45 +1,83 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { API } from 'aws-amplify';
 import QRCode from 'react-native-qrcode-svg';
 import { useAuth } from '../QueryCaching';
 import { endSession } from './SessionManager';
-import { listParticipants } from '../src/graphql/queries';
+import { getParticipants } from '../src/graphql/queries';
+import participantsData from '../dummies/dummy_accounts.json';
 
 const SessionHomeScreen = ({ route }) => {
   const navigation = useNavigation();
   const { user, fetchUserProfileData } = useAuth();
   const { sessionData } = route.params;
   const [participants, setParticipants] = useState([]);
+  const [isVisible, setIsVisible] = useState(true);
 
   const qrCodeData = JSON.stringify({
       sessionId: sessionData.sessionId,
       startTime: sessionData.startTime,
     });
 
+    const styles = StyleSheet.create({
+      circleIndicator: {
+        width: 20,
+        height: 20,
+        borderRadius: 10,
+        marginRight: 10,
+      },
+    });
+
   useEffect(() => {
       // Fetch participant data for the current session
       const fetchParticipants = async () => {
-        try {
+        /*try {
           const response = await API.graphql({
-            query: listParticipants,
-            variables: {
-              filter: {
-                sessionId: {
-                  eq: sessionData.sessionId,
-                },
-              },
-            },
-          });
+                  query: listParticipants,
+                  variables: {
+                    filter: {
+                      sessionId: {
+                        eq: sessionData.sessionId,
+                      },
+                      visibility: {
+                        eq: 'VISIBLE',
+                      },
+                      userId: {
+                          ne: user?.attributes.sub,
+                        },
+                    },
+                  },
+                });
           const fetchedParticipants = response.data.listParticipants.items;
           setParticipants(fetchedParticipants);
         } catch (error) {
           console.error('Error fetching participants:', error);
-        }
+        }*/
+        const participantsList = participantsData;
+      setParticipants(participantsList);
       };
 
+      const fetchVisibility = async () => {
+        const userProfileData = await fetchUserProfileData(user?.userId);
+            try {
+              const response = await API.graphql({
+                query: getParticipants,
+                variables: {
+                sessionId: sessionData.sessionId,
+                  userId: user?.attributes.sub,
+                },
+              });
+
+              // Update the visibility state
+              setIsVisible(response.data.getParticipants.visibility === 'VISIBLE');
+            } catch (error) {
+              console.error('Error fetching visibility:', error);
+            }
+          };
+
       fetchParticipants();
+      fetchVisibility();
     }, [sessionData.sessionId]);
 
   const handleProfilePress = async () => {
@@ -73,6 +111,26 @@ const SessionHomeScreen = ({ route }) => {
       }
     };
 
+  const handleToggleVisibility = async () => {
+      try {
+        // Toggle the visibility in the database
+        const newVisibility = isVisible ? 'INVISIBLE' : 'VISIBLE';
+        await API.graphql({
+          query: updateParticipants,
+          variables: {
+          sessionId: sessionData.sessionId,
+            userId: userProfileData.userId,
+            visibility: newVisibility,
+          },
+        });
+
+        // Update the visibility state
+        setIsVisible(!isVisible);
+      } catch (error) {
+        console.error('Error toggling visibility:', error);
+      }
+    };
+
   const handleUserProfilePress = (userData) => {
       navigation.navigate('OtherUserProfile', { userData });
   };
@@ -81,6 +139,9 @@ const SessionHomeScreen = ({ route }) => {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{ marginTop: 20 }}>
+            <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{sessionData.title}</Text>
+          </View>
           {/* QR Code */}
           <View style={{ marginBottom: 20 }}>
                   <QRCode value={qrCodeData} size={200} />
@@ -91,11 +152,15 @@ const SessionHomeScreen = ({ route }) => {
                     Available Profiles:
                   </Text>
                   <FlatList
-                    data={participants} // Use participants data
-                    keyExtractor={(item) => item.userId}
+                    data={participants}
+                    keyExtractor={(item) => item.id} // Use a unique identifier from your data
                     renderItem={({ item }) => (
                       <TouchableOpacity onPress={() => handleUserProfilePress(item)}>
-                        <Text style={{ fontSize: 16 }}>{item.fullName}</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
+                          {/* You can add profile pictures here if you have them */}
+                          {/* <Image source={item.profilePicture} style={{ width: 50, height: 50, borderRadius: 25 }} /> */}
+                          <Text style={{ fontSize: 16, marginLeft: 10 }}>{item.name}</Text>
+                        </View>
                       </TouchableOpacity>
                     )}
                   />
@@ -103,6 +168,18 @@ const SessionHomeScreen = ({ route }) => {
 
       <View>
       <Button title="Profile" onPress={handleProfilePress} />
+
+        <View
+                style={[
+                  styles.circleIndicator,
+                  { backgroundColor: isVisible ? "green" : "red" },
+                ]}
+              />
+
+      <Button
+          title={isVisible ? "Go Invisible" : "Go Visible"}
+          onPress={handleToggleVisibility}
+        />
       </View>
 
     {isAdmin && (
