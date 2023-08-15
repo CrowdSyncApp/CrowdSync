@@ -54,8 +54,8 @@ const SessionHomeScreen = ({ route }) => {
         } catch (error) {
           console.error('Error fetching participants:', error);
         }*/
-        const participantsList = participantsData;
-      setParticipants(participantsList);
+        const filteredParticipantsList = participantsData.filter(participant => participant.visibility === "VISIBLE");
+        setParticipants(filteredParticipantsList);
       };
 
       const fetchVisibility = async () => {
@@ -81,10 +81,23 @@ const SessionHomeScreen = ({ route }) => {
     }, [sessionData.sessionId]);
 
   const handleProfilePress = async () => {
-      const userProfileData = await fetchUserProfileData(user?.userId);
+      let userProfileData;
+
+      if (user) {
+        userProfileData = await fetchUserProfileData(user?.userId);
+      } else {
+        // Pick a random user from participantsData
+        const randomIndex = Math.floor(Math.random() * participantsData.length);
+        userProfileData = participantsData[randomIndex];
+      }
+
       // Navigate to the ProfileScreen and pass the user profile data as params
       navigation.navigate('Profile', { userProfileData });
-  };
+    };
+
+    const handleJoinSessionWithQRCode = () => {
+      navigation.navigate('QRScanner');
+    };
 
   // Function to handle pressing the Search For People button
   const handleSearchForPeople = () => {
@@ -153,7 +166,7 @@ const SessionHomeScreen = ({ route }) => {
                   </Text>
                   <FlatList
                     data={participants}
-                    keyExtractor={(item) => item.id} // Use a unique identifier from your data
+                    keyExtractor={(item) => item.userId}
                     renderItem={({ item }) => (
                       <TouchableOpacity onPress={() => handleUserProfilePress(item)}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>

@@ -43,13 +43,7 @@ const SignUpScreen = () => {
         console.error("Error storing data:", error);
       }
 
-      // After successful signup, automatically log in the user
-      await login({ username, password });
-
-      // Fetch user data from DynamoDB
-      await fetchUserProfileData();
-
-      navigation.navigate("FindSession");
+      navigation.navigate("Login");
     } catch (error) {
       console.error("Sign up error:", error);
       if (error.code === "UsernameExistsException") {

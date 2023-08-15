@@ -50,20 +50,16 @@ const ProfileScreen = ({ route }) => {
       {/* My Tags */}
       <View style={styles.tagsContainer}>
         <Text style={styles.tagsHeader}>My Tags:</Text>
-        {/* Add list of tags as Text components here */}
-        {/* The last tag can be a button */}
-        {/* For example: */}
-        <View style={styles.tag}>
-          <Text>Software Engineer</Text>
-        </View>
-        <View style={styles.tag}>
-          <Text>Startups</Text>
-        </View>
-        <View style={styles.tag}>
-          <Text>Seinfeld</Text>
-        </View>
+        {/* Render list of tags */}
+        {userProfileData.tags.map((tag, index) => (
+          <View key={index} style={styles.tag}>
+            <Text>{tag}</Text>
+          </View>
+        ))}
+        {/* Add a button for adding tags */}
         <Button title="Add Tag" onPress={() => {}} />
       </View>
+
       {/* My Connections Button */}
       <Button title="My Connections" onPress={handleMyConnectionsPress} />
 

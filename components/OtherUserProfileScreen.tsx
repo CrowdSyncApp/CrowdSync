@@ -23,7 +23,7 @@ const OtherUserProfileScreen = () => {
 <Image source={{ uri: userData.profilePicture }} style={{ width: 100, height: 100, borderRadius: 50, alignSelf: 'center', marginTop: 20 }} />
 
       {/* User's Name */}
-      <Text style={{ fontSize: 24, fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}>{userData.name}</Text>
+      <Text style={{ fontSize: 24, fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}>{userData.fullName}</Text>
 
       {/* Job Title */}
       <Text style={{ fontSize: 18, alignSelf: 'center', marginTop: 5 }}>{userData.jobTitle}</Text>

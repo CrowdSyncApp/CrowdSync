@@ -14,13 +14,13 @@ const MyConnections = ({ navigation }) => {
         {/* List of Connections */}
         <FlatList
             data={participantsData}
-            keyExtractor={(item) => item.id} // Use a unique identifier from your data
+            keyExtractor={(item) => item.userId} // Use a unique identifier from your data
             renderItem={({ item }) => (
               <TouchableOpacity onPress={() => handleConnectionPress(item)}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
                   {/* You can add profile pictures here if you have them */}
                   {/* <Image source={item.profilePicture} style={{ width: 50, height: 50, borderRadius: 25 }} /> */}
-                  <Text style={{ fontSize: 16, marginLeft: 10 }}>{item.name}</Text>
+                  <Text style={{ fontSize: 16, marginLeft: 10 }}>{item.fullName}</Text>
                 </View>
               </TouchableOpacity>
             )}

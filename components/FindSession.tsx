@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../QueryCaching';
 import { startSession } from './SessionManager';
 import { Auth } from 'aws-amplify';
+import participantsData from '../dummies/dummy_accounts.json';
 
 const FindSessionScreen = () => {
   const navigation = useNavigation();
@@ -11,7 +12,16 @@ const FindSessionScreen = () => {
   const [sessionTitle, setSessionTitle] = useState('General'); // Default title is General
 
   const handleProfilePress = async () => {
-    const userProfileData = await fetchUserProfileData(user?.userId);
+    let userProfileData;
+
+    if (user) {
+      userProfileData = await fetchUserProfileData(user?.userId);
+    } else {
+      // Pick a random user from participantsData
+      const randomIndex = Math.floor(Math.random() * participantsData.length);
+      userProfileData = participantsData[randomIndex];
+    }
+
     // Navigate to the ProfileScreen and pass the user profile data as params
     navigation.navigate('Profile', { userProfileData });
   };

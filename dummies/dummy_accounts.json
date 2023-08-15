@@ -1,7 +1,8 @@
 [
   {
+    "userId": "1",
     "profilePicture": "https://images.pexels.com/photos/6274712/pexels-photo-6274712.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "name": "John Doe",
+    "fullName": "John Doe",
     "jobTitle": "Software Engineer",
     "address": "123 Main St, City, State",
     "phoneNumber": "123-456-7890",
@@ -9,11 +10,13 @@
       "https://www.linkedin.com/in/johndoe",
       "https://twitter.com/johndoe"
     ],
-    "tags": ["Tech", "Programming", "Web Development"]
+    "tags": ["Tech", "Programming", "Web Development"],
+    "visibility": "VISIBLE"
   },
   {
+    "userId": "2",
     "profilePicture": "https://images.pexels.com/photos/8993561/pexels-photo-8993561.jpeg",
-    "name": "Jane Smith",
+    "fullName": "Jane Smith",
     "jobTitle": "Product Manager",
     "address": "456 Elm St, City, State",
     "phoneNumber": "987-654-3210",
@@ -21,11 +24,13 @@
       "https://www.linkedin.com/in/janesmith",
       "https://twitter.com/janesmith"
     ],
-    "tags": ["Product Management", "Strategy", "Innovation"]
+    "tags": ["Product Management", "Strategy", "Innovation"],
+    "visibility": "VISIBLE"
   },
   {
+    "userId": "3",
     "profilePicture": "https://images.pexels.com/photos/3454298/pexels-photo-3454298.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "name": "Alex Johnson",
+    "fullName": "Alex Johnson",
     "jobTitle": "Graphic Designer",
     "address": "789 Oak St, City, State",
     "phoneNumber": "555-123-4567",
@@ -33,11 +38,13 @@
       "https://www.linkedin.com/in/alexjohnson",
       "https://dribbble.com/alexjohnson"
     ],
-    "tags": ["Design", "Illustration", "Branding"]
+    "tags": ["Design", "Illustration", "Branding"],
+    "visibility": "INVISIBLE"
   },
   {
+    "userId": "4",
     "profilePicture": "https://images.pexels.com/photos/7275385/pexels-photo-7275385.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "name": "Emily Brown",
+    "fullName": "Emily Brown",
     "jobTitle": "Marketing Specialist",
     "address": "567 Pine St, City, State",
     "phoneNumber": "777-888-9999",
@@ -45,11 +52,13 @@
       "https://www.linkedin.com/in/emilybrown",
       "https://twitter.com/emilybrown"
     ],
-    "tags": ["Marketing", "Digital Strategy", "Content"]
+    "tags": ["Marketing", "Digital Strategy", "Content"],
+    "visibility": "VISIBLE"
   },
   {
+    "userId": "5",
     "profilePicture": "https://images.pexels.com/photos/5384445/pexels-photo-5384445.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "name": "Michael Wilson",
+    "fullName": "Michael Wilson",
     "jobTitle": "Entrepreneur",
     "address": "101 Cedar St, City, State",
     "phoneNumber": "444-555-6666",
@@ -57,6 +66,7 @@
       "https://www.linkedin.com/in/michaelwilson",
       "https://angel.co/michaelwilson"
     ],
-    "tags": ["Startups", "Venture Capital", "Innovation"]
+    "tags": ["Startups", "Venture Capital", "Innovation"],
+    "visibility": "VISIBLE"
   }
 ]

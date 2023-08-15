@@ -34,17 +34,19 @@ const ChatScreen = ({ route }) => {
       try {
         let chatTypeStatus = `${chatType}#ACTIVE`;
 
-        // Send chat messages to all participants
+        // Send chat messages to all visible participants
         const sendMessagePromises = participantsList.map(async (participant) => {
-          await API.graphql(graphqlOperation(createChats, {
-            input: {
-                  chatId,
-                  senderIdReceiverIdTimestamp: `${senderId}#${participant.userId}#${now}`,
-                  messageContent: newMessage.trim(),
-                  ttlExpiration,
-                  chatTypeStatus,
-                },
-          }));
+          if (participant.visibility === 'VISIBLE') {
+            await API.graphql(graphqlOperation(createChats, {
+              input: {
+                chatId,
+                senderIdReceiverIdTimestamp: `${senderId}#${participant.userId}#${now}`,
+                messageContent: newMessage.trim(),
+                ttlExpiration,
+                chatTypeStatus,
+              },
+            }));
+          }
         });
 
         // Wait for all messages to be sent
@@ -79,13 +81,34 @@ const ChatScreen = ({ route }) => {
       let filteredChatMessages = [];
       if (chatType === "GROUP") {
         // Group chat: Get messages for the group by checking senderIdReceiverIdTimestamp
-        filteredChatMessages = chatMessages.filter(
-          (chat) =>
-            chat.senderIdReceiverIdTimestamp.split('#').some((id) =>
-              participants.map((participant) => participant.userId).includes(id)
-            ) &&
-            chat.chatTypeStatus === 'GROUP#ACTIVE'
-        );
+        const displayedChatMessages = {};
+        filteredChatMessages = chatMessages.filter((chat) => {
+          const [senderId, receiverId] = chat.senderIdReceiverIdTimestamp.split('#');
+          const senderIdString = senderId.toString();
+          const receiverIdString = receiverId.toString();
+
+          const isSenderInParticipants = participants
+            .map((participant) => participant.userId.toString())
+            .includes(senderIdString);
+
+          const isReceiverInParticipants = participants
+            .map((participant) => participant.userId.toString())
+            .includes(receiverIdString);
+
+          const isChatAlreadyDisplayed = displayedChatMessages[chat.chatId];
+
+            const shouldDisplayChat =
+              ((isSenderInParticipants && receiverId === user?.attributes.sub) ||
+              (isReceiverInParticipants && senderId === user?.attributes.sub)) &&
+              chat.chatTypeStatus === 'GROUP#ACTIVE' && !isChatAlreadyDisplayed;
+
+            if (shouldDisplayChat) {
+              displayedChatMessages[chat.chatId] = true; // Mark chat as displayed
+            }
+
+            return shouldDisplayChat;
+        });
+
       } else {
         const receiverId = participants[0].userId;
         // Individual chat: Get messages for the receiver
@@ -98,9 +121,9 @@ const ChatScreen = ({ route }) => {
       }
 
       filteredChatMessages.sort((a, b) => {
-          const timestampA = parseInt(a.senderIdReceiverIdTimestamp.split('#')[2]);
-          const timestampB = parseInt(b.senderIdReceiverIdTimestamp.split('#')[2]);
-          return timestampB - timestampA;
+        const timestampA = new Date(a.senderIdReceiverIdTimestamp.split('#')[2]);
+        const timestampB = new Date(b.senderIdReceiverIdTimestamp.split('#')[2]);
+        return timestampA - timestampB;
       });
 
       if (!ttlExpiration) {
