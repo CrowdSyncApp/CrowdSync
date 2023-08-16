@@ -56,7 +56,11 @@ async function login(credentials) {
 
     return user;
   } catch (error) {
-    console.error("Login error:", error);
+    if (error.message === 'User is not confirmed.') {
+        alert("Please verify your account before logging in.");
+    } else {
+        alert("Invalid email or password. Please try again.");
+    }
     throw error;
   }
 }

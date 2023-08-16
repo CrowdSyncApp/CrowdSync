@@ -12,18 +12,14 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      await login({ username, password });
-      const user = await Auth.currentAuthenticatedUser();
+      const user = await login({ username, password });
 
       // Navigation logic after successful login
-      navigation.navigate("FindSession");
-    } catch (error) {
-    console.log("error", error);
-      if (error === 'The user is not authenticated') {
-        alert("Please verify your account before logging in.");
-      } else {
-        alert("Invalid email or password. Please try again.");
+      if (user) {
+        navigation.navigate("FindSession");
       }
+    } catch (error) {
+        throw error;
     }
   };
 
