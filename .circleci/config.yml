@@ -17,16 +17,12 @@ jobs:
             yarn install
 
       - run:
-          name: Clean NPM cache
-          command: npm cache verify
-
-      - run:
           name: Deintegrate CocoaPods
-          command: npx pod deintegrate
+          command: pod deintegrate
 
       - run:
           name: Update CocoaPods
-          command: npx pod update
+          command: pod update
 
       - run:
           name: Build iOS app
