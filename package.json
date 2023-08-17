@@ -55,6 +55,6 @@
     "node": ">=16"
   },
   "scripts": {
-    "ios:build": "cd ios && xcodebuild -workspace Crowdsync.xcworkspace -scheme Crowdsync -destination 'platform=iOS Simulator,name=iPhone 11' clean build"
+    "ios:build": "xcodebuild -project YourProject.xcodeproj -scheme YourScheme -destination 'platform=iOS Simulator,name=iPhone 11' clean build"
   }
 }
