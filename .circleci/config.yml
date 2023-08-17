@@ -17,6 +17,10 @@ jobs:
             yarn install
 
       - run:
+          name: See Location
+          command: pwd
+
+      - run:
           name: Deintegrate CocoaPods
           command: pod deintegrate
 
