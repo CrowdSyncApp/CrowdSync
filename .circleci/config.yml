@@ -17,6 +17,10 @@ jobs:
             yarn install
 
       - run:
+          name: Delete Package Lock
+          command: rm package-lock.json
+
+      - run:
           name: Deintegrate CocoaPods
           command: npx pod deintegrate
 
