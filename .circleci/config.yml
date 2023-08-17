@@ -18,7 +18,7 @@ jobs:
 
       - run:
           name: See Location
-          command: pwd
+          command: ls
 
       - run:
           name: Deintegrate CocoaPods
