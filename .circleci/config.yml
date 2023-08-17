@@ -18,13 +18,13 @@ jobs:
 
       - run:
           name: Deintegrate CocoaPods
-          command: pod deintegrate
+          command: cd ios && pod deintegrate
 
       - run:
           name: Update CocoaPods
-          command: pod update
+          command: cd ios && pod update
 
       - run:
           name: Build iOS app
           command: |
-            yarn ios:build
+            cd ios && yarn ios:build
