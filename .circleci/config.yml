@@ -17,16 +17,12 @@ jobs:
             yarn install
 
       - run:
-          name: Move to IOS directory
-          command: cd ios
-
-      - run:
           name: Deintegrate CocoaPods
-          command: pod deintegrate
+          command: cd ios && pod deintegrate
 
       - run:
           name: Update CocoaPods
-          command: pod update
+          command: cd ios && pod update
 
       - run:
           name: Build iOS app
