@@ -17,6 +17,14 @@ jobs:
             yarn install
 
       - run:
+          name: Deintegrate CocoaPods
+          command: npx pod deintegrate
+
+      - run:
+          name: Update CocoaPods
+          command: npx pod update
+
+      - run:
           name: Build iOS app
           command: |
             yarn ios:build
