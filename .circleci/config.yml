@@ -1,13 +1,10 @@
 version: 2.1
 
-executors:
-  macos-executor:
-    docker:
-      - image: circleci/macos:latest
-
 jobs:
   build:
-    executor: macos-executor
+    macos:
+      xcode: 14.2.0
+
     steps:
       - checkout
       - run:
