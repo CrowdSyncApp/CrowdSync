@@ -17,8 +17,8 @@ jobs:
             yarn install
 
       - run:
-          name: See Location
-          command: ls
+          name: Move to IOS directory
+          command: cd ios
 
       - run:
           name: Deintegrate CocoaPods
