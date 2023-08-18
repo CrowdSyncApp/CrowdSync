@@ -23,7 +23,7 @@ jobs:
       - run:
           name: Gem CocoaPods
           command: cd ios && gem install cocoapods
-          
+
       - run:
           name: Update CocoaPods
           command: cd ios && pod update
@@ -31,6 +31,10 @@ jobs:
       - run:
           name: Install CocoaPods
           command: cd ios && pod install
+
+      - run:
+          name: IOS Dir Look 
+          command: cd ios && ls
 
       - run:
           name: Build iOS app
