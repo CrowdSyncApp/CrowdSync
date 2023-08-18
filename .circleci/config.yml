@@ -34,7 +34,7 @@ jobs:
 
       - run:
           name: IOS Dir Look 
-          command: ls && cd ios && ls
+          command: cd ios && ls
 
       - run:
           name: Build iOS app
