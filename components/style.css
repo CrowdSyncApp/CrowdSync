@@ -1,0 +1,145 @@
+:root {
+  --primary-bg-color: #274073;
+  --secondary-color: #516bbc;
+  --text-color: #000000;
+  --secondary-text-color: #ffffff;
+  --accent-color: #88a0bf;
+  --tertiary-color: #adc8d9;
+}
+
+.index {
+  background-color: #221e2c;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.index .div {
+  background-color: #221e2c;
+  border: 1px solid;
+  border-color: #000000;
+  height: 852px;
+  position: relative;
+  width: 393px;
+}
+
+.index .overlap-group {
+  height: 69px;
+  left: 6px;
+  position: absolute;
+  top: 20px;
+  width: 379px;
+}
+
+.index .text-wrapper {
+  color: #ffffff;
+  font-family: "Alatsi", Helvetica;
+  font-size: 48px;
+  font-weight: 400;
+  left: 43px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-align: center;
+  top: 7px;
+  white-space: nowrap;
+  width: 294px;
+}
+
+.index .ellipse-wrapper {
+  height: 60px;
+  left: 319px;
+  position: absolute;
+  top: 0;
+  width: 60px;
+}
+
+.index .ellipse-2 {
+  height: 60px;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  width: 60px;
+}
+
+.index .component-13 {
+  left: 0 !important;
+  position: absolute !important;
+  top: 0 !important;
+}
+
+.index .rectangle {
+  height: 266px;
+  left: 0;
+  position: absolute;
+  top: 167px;
+  width: 393px;
+}
+
+.index .text-wrapper-2 {
+  color: #ffffff;
+  font-family: "Alatsi", Helvetica;
+  font-size: 32px;
+  font-weight: 400;
+  left: 13px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-align: center;
+  top: 437px;
+}
+
+.index .rectangle-2 {
+  height: 317px;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 485px;
+  width: 393px;
+}
+
+.index .p {
+  color: #ffffff;
+  font-family: "Alatsi", Helvetica;
+  font-size: 20px;
+  font-weight: 400;
+  left: 13px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-align: center;
+  top: 807px;
+}
+
+.index .overlap {
+  border-radius: 50px;
+  height: 45px;
+  left: 13px;
+  position: absolute;
+  top: 109px;
+  width: 106px;
+}
+
+.index .rectangle-3 {
+  background-color: #513468;
+  border-radius: 50px;
+  height: 45px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 106px;
+}
+
+.index .text-wrapper-3 {
+  color: #ffffff;
+  font-family: "Alatsi", Helvetica;
+  font-size: 32px;
+  font-weight: 400;
+  left: 20px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 1px;
+}

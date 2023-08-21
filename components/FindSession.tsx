@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Button, View, TextInput } from 'react-native';
+import { Pressable, View, TextInput, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../QueryCaching';
 import { startSession } from './SessionManager';
 import { Auth } from 'aws-amplify';
 import participantsData from '../dummies/dummy_accounts.json';
+import styles, { palette, fonts } from './style';
 
 const FindSessionScreen = () => {
   const navigation = useNavigation();
@@ -41,19 +42,24 @@ const FindSessionScreen = () => {
       }
     };
 
-const renderSessionButtons = () => {
+  const renderSessionButtons = () => {
 
     const userGroups = user?.signInUserSession?.idToken?.payload['cognito:groups'] || [];
 
     if (userGroups.includes('CrowdSync_UserPool_Admin')) {
       return (
-        <View>
+        <View style={styles.textInputContainer}>
+        <View style={{ marginTop: 30 }} />
         <TextInput
+        style={styles.textInput}
               placeholder="General"
               value={sessionTitle}
               onChangeText={text => setSessionTitle(text)}
             />
-          <Button title="Start Session" onPress={handleStartSession} />
+            <View style={{ paddingVertical: 10 }} />
+            <Pressable style={styles.basicButton} onPress={handleStartSession}>
+                    <Text style={styles.buttonText}>Start Session</Text>
+                  </Pressable>
         </View>
       );
     }
@@ -62,13 +68,20 @@ const renderSessionButtons = () => {
   };
 
   return (
-    <View>
-      <Button
-        title="Join Session with QR Code"
-        onPress={handleJoinSessionWithQRCode}
-      />
-      <Button title="Profile" onPress={handleProfilePress} />
+    <View style={styles.index}>
+      <View style={styles.div}>
+      <View style={styles.buttonContainer}>
+      <Pressable style={styles.basicButton} onPress={handleJoinSessionWithQRCode}>
+        <Text style={styles.buttonText}>Join Session with QR Code</Text>
+      </Pressable>
+      <View style={{ paddingVertical: 10 }} />
+      <Pressable style={styles.basicButton} onPress={handleProfilePress}>
+        <Text style={styles.buttonText}>Profile</Text>
+      </Pressable>
+      <View style={{ paddingVertical: 10 }} />
       {renderSessionButtons()}
+      </View>
+      </View>
     </View>
   );
 };
