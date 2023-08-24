@@ -11,8 +11,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { PropsWithChildren } from "react";
 import { Amplify, Auth } from "aws-amplify";
 import awsmobile from "./src/aws-exports";
-import { QueryClientProvider, QueryClient } from "react-query";
 import { AuthProvider, useAuth } from "./QueryCaching";
+import styles, { palette, fonts } from './components/style';
 
 Amplify.configure(awsmobile);
 
@@ -42,6 +42,7 @@ import FindSession from "./components/FindSession";
 import QRScannerScreen from "./components/QRScannerScreen";
 import SessionHomeScreen from "./components/SessionHomeScreen";
 import ProfileScreen from "./components/ProfileScreen";
+import EditProfileScreen from "./components/EditProfileScreen";
 import OtherUserProfileScreen from "./components/OtherUserProfileScreen";
 import SearchForPeople from "./components/SearchForPeople";
 import ChatScreen from "./components/ChatScreen";
@@ -49,42 +50,9 @@ import MyConnections from "./components/MyConnections";
 import ForgotUsername from "./components/ForgotUsername";
 import ForgotPassword from "./components/ForgotPassword";
 import SplashScreen from "./components/SplashScreen";
-
-import CrowdSyncLogo from "./images/CrowdSyncLogo.png";
+import Header from './components/Header';
 
 export const AppContext = React.createContext();
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({ children, title }: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === "dark";
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}
-      >
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}
-      >
-        {children}
-      </Text>
-    </View>
-  );
-}
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === "dark";
@@ -94,13 +62,11 @@ function App(): JSX.Element {
   };
 
   return (
-    <QueryClientProvider client={new QueryClient()}>
       <AuthProvider>
         <NavigationContainer>
           <AppNavigator />
         </NavigationContainer>
       </AuthProvider>
-    </QueryClientProvider>
   );
 }
 
@@ -132,9 +98,13 @@ const AppNavigator = () => {
 
   return (
     <Stack.Navigator>
-      <Stack.Screen name="SplashScreen" options={{ headerShown: false }}>
-        {(props) => <SplashScreen {...props} isUserLoggedIn={isUserLoggedIn} />}
-      </Stack.Screen>
+      <Stack.Screen
+          name="SplashScreen"
+          component={SplashScreen}
+          options={{
+            title: "Splash Screen",
+          }}
+        />
       <Stack.Screen
         name="FindSession"
         options={{
@@ -179,6 +149,13 @@ const AppNavigator = () => {
         }}
       />
       <Stack.Screen
+              name="EditProfile"
+              component={EditProfileScreen}
+              options={{
+                title: "Edit Profile",
+              }}
+            />
+      <Stack.Screen
         name="SessionHome"
         component={SessionHomeScreen} // Add SessionHomeScreen
         options={{
@@ -207,40 +184,5 @@ const AppNavigator = () => {
     </Stack.Navigator>
   );
 };
-
-const Header = () => {
-  return (
-    <View style={styles.header}>
-      <Image
-        source={CrowdSyncLogo}
-        style={{
-          width: 50, // Set the desired width of your logo
-          height: 50, // Set the desired height of your logo
-        }}
-      />
-      {/* Replace "Your App Name" with your desired title */}
-      <Text style={styles.headerTitle}>CrowdSync</Text>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: "600",
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: "400",
-  },
-  highlight: {
-    fontWeight: "700",
-  },
-});
 
 export default App;

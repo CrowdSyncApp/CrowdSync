@@ -8,16 +8,11 @@ const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
-  const { login, fetchUserProfileData } = useAuth();
+  const { login } = useAuth();
 
   const handleLogin = async () => {
     try {
       const user = await login({ username, password });
-
-      // Navigation logic after successful login
-      if (user) {
-        navigation.navigate("FindSession");
-      }
     } catch (error) {
         throw error;
     }

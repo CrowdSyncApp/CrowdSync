@@ -1,30 +1,22 @@
 import React, { useEffect } from "react";
 import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useAuth } from "../QueryCaching";
+import { useAuth } from '../QueryCaching';
 
-const SplashScreen = ({ isUserLoggedIn }) => {
+const SplashScreen = () => {
   const navigation = useNavigation();
-  const { fetchUserProfileData } = useAuth();
+  const { isLoading, isUserLoggedIn } = useAuth();
 
-  useEffect(() => {
-      // Define an async function to handle fetching user profile data
-      const fetchUserProfileAndNavigate = async () => {
-        if (isUserLoggedIn === true) {
-          // Fetch user data from DynamoDB
-          await fetchUserProfileData();
-
-          // User is logged in, navigate to FindSession screen or other screens
+    useEffect(() => {
+      // Check if isLoading is false and isUserLoggedIn has a value
+      if (!isLoading && isUserLoggedIn !== undefined) {
+        if (isUserLoggedIn) {
           navigation.navigate("FindSession");
-        } else if (isUserLoggedIn === false) {
-          // User is not logged in, navigate to Login screen or other screens
+        } else {
           navigation.navigate("Login");
         }
-      };
-
-      // Call the async function
-      fetchUserProfileAndNavigate();
-    }, [isUserLoggedIn, navigation]);
+      }
+    }, [isLoading, isUserLoggedIn, navigation]);
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>

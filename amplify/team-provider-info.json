@@ -24,6 +24,12 @@
           "deploymentBucketName": "amplify-crowdsync-dev-110114-deployment",
           "s3Key": "amplify-builds/crowdsyncea9fc77eCustomMessage-57616a7257524c4e494c-build.zip"
         }
+      },
+      "storage": {
+        "crowdsyncb3eaa847": {
+          "bucketName": "crowdsyncuserprofileimages",
+          "region": "us-west-1"
+        }
       }
     }
   }

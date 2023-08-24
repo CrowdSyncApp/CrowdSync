@@ -1,24 +1,18 @@
 // ProfileScreen.tsx
-import React, { useState } from "react";
-import { View, Text, StyleSheet, Button, TextInput } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, Button, TouchableOpacity, Image, ScrollView, Linking } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
 import MyConnections from "./MyConnections";
 import { getParticipants } from '../src/graphql/queries';
-import { updateParticipants, updateUserProfile } from '../src/graphql/mutations';
+import { Storage } from "aws-amplify";
+import { updateParticipants } from '../src/graphql/mutations';
 
 const ProfileScreen = ({ route }) => {
   // Extract the user information passed as props from the route object
   const { userProfileData } = route.params;
   const { logout } = useAuth();
   const navigation = useNavigation();
-
-  const [editableFields, setEditableFields] = useState({
-      fullName: userProfileData.fullName,
-      jobTitle: userProfileData.jobTitle,
-      address: userProfileData.address,
-      phoneNumber: userProfileData.phoneNumber,
-    });
 
   const handleLogout = () => {
     logout();
@@ -30,33 +24,30 @@ const ProfileScreen = ({ route }) => {
     navigation.navigate("MyConnections", { userProfileData });
   };
 
-  const handleSaveChanges = () => {
-      // Update DynamoDB table with editableFields data
-      // You would need to implement this part using your GraphQL mutations
-
-      // For example:
-      // const updatedUserProfile = await API.graphql(graphqlOperation(updateUserProfile, {
-      //   input: {
-      //     userId: userProfileData.userId,
-      //     fullName: editableFields.fullName,
-      //     jobTitle: editableFields.jobTitle,
-      //     address: editableFields.address,
-      //     phoneNumber: editableFields.phoneNumber,
-      //   }
-      // }));
-
-      // Update the userProfileData in the state with the new values
-      // setUserProfileData(updatedUserProfile);
-
-      // You can also display a success message to the user
-      // alert("Profile updated successfully!");
+  const handleEditProfilePress = () => {
+      navigation.navigate("EditProfile", { userProfileData });
     };
 
+    const handleLinkPress = (url) => {
+        if (url) {
+          Linking.openURL(url).catch((err) => console.error("Error opening URL:", err));
+        }
+      };
+
   return (
+  <ScrollView style={{ flexGrow: 1 }}>
     <View style={styles.container}>
       {/* Profile Picture */}
       <View style={styles.profilePictureContainer}>
-        {/* Add your profile picture component here */}
+      <Image
+        source={{ uri: userProfileData?.profilePictureUri }}
+        style={{
+          width: 350,
+          height: 350,
+          borderRadius: 100,
+          resizeMode: "contain",
+        }}
+      />
       </View>
 
       {/* Full Name */}
@@ -71,9 +62,18 @@ const ProfileScreen = ({ route }) => {
       {/* Phone Number */}
       <Text style={styles.infoText}>Phone Number: {userProfileData.phoneNumber}</Text>
 
-      {/* Links to URLs */}
+      {/* Social Links */}
       <View style={styles.linksContainer}>
-        {/* Add rows of links to URLs here */}
+        <Text style={styles.linksHeader}>Social Links:</Text>
+        {userProfileData.socialLinks ? (
+          userProfileData.socialLinks.map((link, index) => (
+            <TouchableOpacity key={index} onPress={() => handleLinkPress(link)}>
+              <Text style={styles.linkText}>{link}</Text>
+            </TouchableOpacity>
+          ))
+        ) : (
+          <Text>No social links available.</Text>
+        )}
       </View>
 
       {/* My Tags */}
@@ -91,17 +91,16 @@ const ProfileScreen = ({ route }) => {
           // Display an empty list of tags
           <Text>No tags available.</Text>
         )}
-        {/* Add a button for adding tags */}
-        <Button title="Add Tag" onPress={() => {}} />
       </View>
 
-      <Button title="Save Changes" onPress={handleSaveChanges} />
+      <Button title="Edit Profile" onPress={handleEditProfilePress} />
 
       {/* My Connections Button */}
       <Button title="My Connections" onPress={handleMyConnectionsPress} />
 
-      <Button title="Log Out" onPress={logout} />
+      <Button title="Log Out" onPress={handleLogout} />
     </View>
+    </ScrollView>
   );
 };
 
