@@ -1,6 +1,7 @@
 // SessionManager.tsx
-import { API } from 'aws-amplify';
+import { API, graphqlOperation } from 'aws-amplify';
 import { createSessions, updateSessions, createParticipants } from "../src/graphql/mutations";
+import { listParticipants } from "../src/graphql/queries";
 import 'react-native-get-random-values';
 import { v4 } from 'uuid';
 
@@ -8,6 +9,27 @@ const MAX_RETRY_ATTEMPTS = 5; // Maximum number of retry attempts
 
 const generateUniqueSessionId = () => {
   return v4();
+};
+
+export const getSessionIdForUser = async (userId) => {
+  try {
+    const filter = {
+      userId: { eq: userId },
+      sessionStatus: { ne: 'INACTIVE' }
+    };
+
+    const listParticipantsResponse = await API.graphql(graphqlOperation(listParticipants, { filter }));
+    const participants = listParticipantsResponse.data.listParticipants.items;
+
+    if (participants.length === 0) {
+      return 'INACTIVE';
+    }
+
+    return participants[0].sessionId;
+  } catch (error) {
+    console.error('Error fetching session ID for user:', error);
+    return 'INACTIVE';
+  }
 };
 
 const createSessionWithRetry = async (userId, title, retryAttempt = 1) => {
@@ -58,6 +80,7 @@ const createParticipant = async (userId, fullName, sessionId) => {
       joinedAt: now,
       fullName: fullName,
       visibility: "VISIBLE",
+      sessionStatus: "ACTIVE"
     },
   };
 

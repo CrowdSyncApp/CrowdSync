@@ -51,6 +51,7 @@ import ForgotUsername from "./components/ForgotUsername";
 import ForgotPassword from "./components/ForgotPassword";
 import SplashScreen from "./components/SplashScreen";
 import Header from './components/Header';
+import AddTags from './components/AddTags';
 
 export const AppContext = React.createContext();
 
@@ -149,12 +150,19 @@ const AppNavigator = () => {
         }}
       />
       <Stack.Screen
-              name="EditProfile"
-              component={EditProfileScreen}
-              options={{
-                title: "Edit Profile",
-              }}
-            />
+      name="EditProfile"
+      component={EditProfileScreen}
+      options={{
+        title: "Edit Profile",
+      }}
+    />
+    <Stack.Screen
+            name="AddTags"
+            component={AddTags}
+            options={{
+              title: "Add Tags",
+            }}
+          />
       <Stack.Screen
         name="SessionHome"
         component={SessionHomeScreen} // Add SessionHomeScreen

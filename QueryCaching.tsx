@@ -1,9 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { Auth, API, Storage, Hub, graphqlOperation } from "aws-amplify";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getUserProfile, listTagSets } from "./src/graphql/queries";
+import { getUserProfile, listTagSets, listUserTags, getTagSet } from "./src/graphql/queries";
+import { getSessionIdForUser } from "./components/SessionManager";
 import { v4 } from 'uuid';
-import { updateParticipants, updateUserProfile, createTagSet } from './src/graphql/mutations';
+import { updateParticipants, updateUserProfile, createTagSet, createUserTags, deleteUserTags } from './src/graphql/mutations';
 import skillsJson from './data/skills.json';
 
 const AuthContext = createContext();
@@ -38,9 +39,9 @@ async function fetchUserProfileImage(profilePictureFilename) {
 async function fetchUserProfile(userId) {
   try {
     const cachedUserProfile = await AsyncStorage.getItem("userProfileData");
-    //if (cachedUserProfile) {
-    //      return JSON.parse(cachedUserProfile);
-   // }
+    if (cachedUserProfile) {
+         return JSON.parse(cachedUserProfile);
+    }
 
     const { data } = await API.graphql(
       graphqlOperation(getUserProfile, { userId })
@@ -52,6 +53,12 @@ async function fetchUserProfile(userId) {
            const profileImage = await fetchUserProfileImage(data.getUserProfile.profilePicture);
            data.getUserProfile.profilePictureUri = profileImage;
        }
+
+       const currSessionId = await getSessionIdForUser(userId);
+       data.getUserProfile.sessionId = currSessionId;
+
+       const userTags = await getAllUserTags(userId, currSessionId);
+       data.getUserProfile.tags = userTags;
 
       await AsyncStorage.setItem("userProfileData", JSON.stringify(data.getUserProfile));
 
@@ -96,6 +103,63 @@ async function logout() {
     throw error;
   }
 }
+
+const getUserTagsIds = async (userId, sessionId) => {
+  try {
+    const response = await API.graphql(graphqlOperation(listUserTags, {
+      filter: {
+        userId: { eq: userId },
+        sessionId: { eq: sessionId }
+      }
+    }));
+
+    const userTags = response.data.listUserTags.items || [];
+    const tagIds = userTags.map(tag => tag.tagId);
+    return tagIds;
+  } catch (error) {
+    console.error('Error fetching user tags:', error);
+    return [];
+  }
+};
+
+const getAllUserTags = async (userId, sessionId) => {
+  try {
+    const tagIds = await getUserTagsIds(userId, sessionId);
+    const tagSets = await getTagSets();
+
+    const userTagsWithTags = tagIds.map(tagId => tagSets.find(tag => tag.tagId === tagId)).filter(tag => tag);
+    return userTagsWithTags;
+
+  } catch (error) {
+    console.error('Error fetching user tags with tags:', error);
+    return [];
+  }
+};
+
+const getTagSets = async () => {
+  try {
+    // Check if the tag set is already stored in AsyncStorage
+    const storedTagSet = await AsyncStorage.getItem("tagSet");
+    if (storedTagSet) {
+      return JSON.parse(storedTagSet);
+    }
+
+    // If not stored, fetch from API and store in AsyncStorage
+    const response = await API.graphql(graphqlOperation(listTagSets));
+    const tagSets = response.data.listTagSets.items.map((item) => ({
+      tag: item.tag,
+      tagId: item.tagId
+    }));
+
+    // Store the tag set in AsyncStorage
+    await AsyncStorage.setItem("tagSet", JSON.stringify(tagSets));
+
+    return tagSets;
+  } catch (error) {
+    console.error('Error listing TagSets:', error);
+    return [];
+  }
+};
 
 const populateTagSet = async () => {
   try {
@@ -168,6 +232,74 @@ const populateTagSet = async () => {
     console.log(`Successfully added ${newTags.length} new tags.`);
   } catch (error) {
     console.error("Error populating TagSet table:", error);
+  }
+};
+
+const createUserTagsWithSession = async (userId, sessionId, tagIds) => {
+  try {
+    const batchCreatePromises = tagIds.map(async tagId => {
+      const currTagId = tagId.tagId;
+      const input = {
+        userTagId: v4(),
+        sessionId: sessionId,
+        userId: userId,
+        tagId: currTagId,
+      };
+      await API.graphql(graphqlOperation(createUserTags, { input }));
+      const tagSetResponse = await API.graphql(graphqlOperation(getTagSet, { tagId: currTagId }));
+      const tag = tagSetResponse.data.getTagSet.tag;
+      return { tagId: currTagId, tag: tag };
+    });
+
+    const addedTags = await Promise.all(batchCreatePromises);
+    console.log('User tags batch added successfully.');
+    return addedTags;
+  } catch (error) {
+    console.error('Error adding user tags:', error);
+    return [];
+  }
+};
+
+const removeUserTagsByTagId = async (userId, sessionId, tagIds) => {
+  try {
+    const deletePromises = [];
+
+    for (const tagIdPair of tagIds) {
+      const tagId = tagIdPair.tagId;
+
+      // Fetch the userTagIds and sessionIds using the listUserTags query for the current tagId
+      const response = await API.graphql(graphqlOperation(listUserTags, {
+        filter: {
+          userId: { eq: userId },
+          tagId: { eq: tagId },
+        },
+      }));
+
+      const userTags = response.data.listUserTags.items;
+
+      // Create an array of promises to delete user tags in a batch for the current tagId
+      const deleteTagPromises = userTags.map(async (userTag) => {
+        try {
+          const input = { userTagId: userTag.userTagId, sessionId: sessionId };
+          return await API.graphql(graphqlOperation(deleteUserTags, { input }));
+        } catch (error) {
+          console.error('Error deleting user tag:', error);
+          throw error;
+        }
+      });
+
+      // Accumulate the delete tag promises for the current tagId
+      deletePromises.push(deleteTagPromises);
+    }
+
+    // Execute the batch delete operation for all tagIds
+    const deleteResults = await Promise.all(deletePromises);
+
+    console.log('User tags removed successfully:', deleteResults);
+    return deleteResults;
+  } catch (error) {
+    console.error('Error removing user tags:', error);
+    return [];
   }
 };
 
@@ -248,9 +380,12 @@ export function AuthProvider({ children }) {
     logout,
     isLoading,
     uploadImageToS3,
+    getTagSets,
     populateTagSet,
     updateUserProfileTable,
+    removeUserTagsByTagId,
     fetchUserProfileData,
+    createUserTagsWithSession,
     refreshToken,
     isUserLoggedIn
   };

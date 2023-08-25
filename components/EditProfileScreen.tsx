@@ -11,9 +11,16 @@ import { launchImageLibrary } from 'react-native-image-picker';
 
 const ProfileScreen = ({ route }) => {
   // Extract the user information passed as props from the route object
-  const { userProfileData } = route.params;
-  const { uploadImageToS3, updateUserProfileTable } = useAuth();
+  const { userProfileData, updatedTags } = route.params;
+  const [currTags, setCurrTags] = useState(userProfileData.tags);
+  const { uploadImageToS3, updateUserProfileTable, createUserTagsWithSession, removeUserTagsByTagId } = useAuth();
   const navigation = useNavigation();
+
+    useEffect(() => {
+        if (updatedTags) {
+          setCurrTags(updatedTags);
+        }
+      }, [updatedTags]);
 
   const [editableFields, setEditableFields] = useState({
       userId: userProfileData.userId,
@@ -22,9 +29,8 @@ const ProfileScreen = ({ route }) => {
       address: userProfileData.address,
       phoneNumber: userProfileData.phoneNumber,
       profilePicture: userProfileData.profilePicture,
-      socialLinks: userProfileData.socialLinks || [],
+      socialLinks: userProfileData.socialLinks || []
     });
-
     const [profilePictureUri, setProfilePictureUri] = useState(null);
 
     const handleAddSocialLink = () => {
@@ -34,6 +40,10 @@ const ProfileScreen = ({ route }) => {
             socialLinks: [...editableFields.socialLinks, ""],
           });
         }
+      };
+
+      const handleAddTags = () => {
+        navigation.navigate('AddTags', { userProfileData });
       };
 
       const handleSocialLinkChange = (index, value) => {
@@ -73,10 +83,24 @@ const ProfileScreen = ({ route }) => {
                   socialLinks: editableFields.socialLinks
                 };
 
-            // Update DynamoDB with the edited fields
-            // For example, using Amplify mutations
             const updatedUserData = await updateUserProfileTable(updatedFields);
+
+            const newTags = currTags.filter(currTag => !userProfileData.tags.some(userTag => userTag.tagId === currTag.tagId));
+
+            const removedTags = userProfileData.tags.filter(userTag => !currTags.some(currTag => currTag.tagId === userTag.tagId));
+
+            const addedTags = await createUserTagsWithSession(userProfileData.userId, userProfileData.sessionId, newTags);
+            let combinedTags = [...userProfileData.tags, ...addedTags];
+
+            const tagIds = removedTags;
+            await removeUserTagsByTagId(userProfileData.userId, userProfileData.sessionId, tagIds);
+
+            removedTags.forEach(removedTag => {
+                  combinedTags = combinedTags.filter(tag => tag.tagId !== removedTag.tagId);
+                });
+
             updatedUserData.profilePictureUri = newProfilePictureUri;
+            updatedUserData.tags = combinedTags;
 
             alert("Changes saved successfully!");
             navigation.navigate('Profile', { userProfileData: updatedUserData });
@@ -147,34 +171,33 @@ const ProfileScreen = ({ route }) => {
           </View>
 
       {/* Social Links */}
-                <View style={styles.linksContainer}>
-                  <Text style={styles.linksHeader}>Social Links:</Text>
-                  {editableFields.socialLinks.map((link, index) => (
-                    <View key={index} style={styles.linkInputContainer}>
-                      <TextInput
-                        style={styles.linkInput}
-                        placeholder="Add a social link"
-                        value={link}
-                        onChangeText={(text) => handleSocialLinkChange(index, text)}
-                      />
-                    </View>
-                  ))}
-                  {editableFields.socialLinks.length < 5 && (
-                    <TouchableOpacity onPress={handleAddSocialLink}>
-                      <Text style={styles.addLinkButton}>Add Link</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
+        <View style={styles.linksContainer}>
+          <Text style={styles.linksHeader}>Social Links:</Text>
+          {editableFields.socialLinks.map((link, index) => (
+            <View key={index} style={styles.linkInputContainer}>
+              <TextInput
+                style={styles.linkInput}
+                placeholder="Add a social link"
+                value={link}
+                onChangeText={(text) => handleSocialLinkChange(index, text)}
+              />
+            </View>
+          ))}
+          {editableFields.socialLinks.length < 5 && (
+            <TouchableOpacity onPress={handleAddSocialLink}>
+              <Text style={styles.addLinkButton}>Add Link</Text>
+            </TouchableOpacity>
+          )}
+        </View>
 
       {/* My Tags */}
       <View style={styles.tagsContainer}>
         <Text style={styles.tagsHeader}>My Tags:</Text>
-        {/* Check if userProfileData.tags is defined */}
-        {userProfileData.tags ? (
+        {currTags.length > 0 ? (
           // Render list of tags
-          userProfileData.tags.map((tag, index) => (
+          currTags.map((tag, index) => (
             <View key={index} style={styles.tag}>
-              <Text>{tag}</Text>
+              <Text>{tag.tag}</Text>
             </View>
           ))
         ) : (
@@ -182,7 +205,7 @@ const ProfileScreen = ({ route }) => {
           <Text>No tags available.</Text>
         )}
         {/* Add a button for adding tags */}
-        <Button title="Add Tag" onPress={() => {}} />
+        <Button title="Add/Remove Tag" onPress={handleAddTags} />
       </View>
 
       <Button title="Save Changes" onPress={handleSaveChanges} />

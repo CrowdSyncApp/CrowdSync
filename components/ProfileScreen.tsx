@@ -19,6 +19,30 @@ const ProfileScreen = ({ route }) => {
     navigation.navigate("Login");
   };
 
+  const renderTags = (tags) => {
+    if (!tags || tags.length === 0) {
+      return <Text>No tags available.</Text>;
+    }
+
+    return tags.map((tag, index) => (
+      <View key={index} style={styles.tag}>
+        <Text>{tag.tag}</Text>
+      </View>
+    ));
+  };
+
+  const renderSocialLinks = (socialLinks) => {
+    if (socialLinks && socialLinks.length > 0) {
+      return socialLinks.map((link, index) => (
+        <TouchableOpacity key={index} onPress={() => handleLinkPress(link)}>
+          <Text style={styles.linkText}>{link}</Text>
+        </TouchableOpacity>
+      ));
+    } else {
+      return <Text>No social links available.</Text>;
+    }
+  };
+
   const handleMyConnectionsPress = () => {
     // Navigate to the ProfileScreen and pass the user data as params
     navigation.navigate("MyConnections", { userProfileData });
@@ -35,71 +59,52 @@ const ProfileScreen = ({ route }) => {
       };
 
   return (
-  <ScrollView style={{ flexGrow: 1 }}>
-    <View style={styles.container}>
-      {/* Profile Picture */}
-      <View style={styles.profilePictureContainer}>
-      <Image
-        source={{ uri: userProfileData?.profilePictureUri }}
-        style={{
-          width: 350,
-          height: 350,
-          borderRadius: 100,
-          resizeMode: "contain",
-        }}
-      />
+    <ScrollView style={{ flexGrow: 1 }}>
+      <View style={styles.container}>
+        {/* Profile Picture */}
+        <View style={styles.profilePictureContainer}>
+          <Image
+            source={{ uri: userProfileData?.profilePictureUri }}
+            style={{
+              width: 350,
+              height: 350,
+              borderRadius: 100,
+              resizeMode: "contain",
+            }}
+          />
+        </View>
+
+        {/* Full Name */}
+        <Text style={styles.fullName}>{userProfileData.fullName}</Text>
+
+        {/* Job Title */}
+        <Text style={styles.infoText}>Job Title: {userProfileData.jobTitle}</Text>
+
+        {/* Address */}
+        <Text style={styles.infoText}>Location: {userProfileData.address}</Text>
+
+        {/* Phone Number */}
+        <Text style={styles.infoText}>Phone Number: {userProfileData.phoneNumber}</Text>
+
+        {/* Render Social Links */}
+        <View style={styles.linksContainer}>
+          <Text style={styles.linksHeader}>Social Links:</Text>
+          {renderSocialLinks(userProfileData.socialLinks)}
+        </View>
+
+        {/* Render My Tags */}
+        <View style={styles.tagsContainer}>
+          <Text style={styles.tagsHeader}>My Tags:</Text>
+          {renderTags(userProfileData.tags)}
+        </View>
+
+        <Button title="Edit Profile" onPress={handleEditProfilePress} />
+
+        {/* My Connections Button */}
+        <Button title="My Connections" onPress={handleMyConnectionsPress} />
+
+        <Button title="Log Out" onPress={handleLogout} />
       </View>
-
-      {/* Full Name */}
-      <Text style={styles.fullName}>{userProfileData.fullName}</Text>
-
-      {/* Job Title */}
-      <Text style={styles.infoText}>Job Title: {userProfileData.jobTitle}</Text>
-
-      {/* Address */}
-      <Text style={styles.infoText}>Location: {userProfileData.address}</Text>
-
-      {/* Phone Number */}
-      <Text style={styles.infoText}>Phone Number: {userProfileData.phoneNumber}</Text>
-
-      {/* Social Links */}
-      <View style={styles.linksContainer}>
-        <Text style={styles.linksHeader}>Social Links:</Text>
-        {userProfileData.socialLinks ? (
-          userProfileData.socialLinks.map((link, index) => (
-            <TouchableOpacity key={index} onPress={() => handleLinkPress(link)}>
-              <Text style={styles.linkText}>{link}</Text>
-            </TouchableOpacity>
-          ))
-        ) : (
-          <Text>No social links available.</Text>
-        )}
-      </View>
-
-      {/* My Tags */}
-      <View style={styles.tagsContainer}>
-        <Text style={styles.tagsHeader}>My Tags:</Text>
-        {/* Check if userProfileData.tags is defined */}
-        {userProfileData.tags ? (
-          // Render list of tags
-          userProfileData.tags.map((tag, index) => (
-            <View key={index} style={styles.tag}>
-              <Text>{tag}</Text>
-            </View>
-          ))
-        ) : (
-          // Display an empty list of tags
-          <Text>No tags available.</Text>
-        )}
-      </View>
-
-      <Button title="Edit Profile" onPress={handleEditProfilePress} />
-
-      {/* My Connections Button */}
-      <Button title="My Connections" onPress={handleMyConnectionsPress} />
-
-      <Button title="Log Out" onPress={handleLogout} />
-    </View>
     </ScrollView>
   );
 };

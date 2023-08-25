@@ -90,10 +90,6 @@ const FindSessionScreen = () => {
       <View style={{ paddingVertical: 10 }} />
       {renderSessionButtons()}
       </View>
-
-      <Pressable style={styles.basicButton} onPress={handlePopulateTagSet}>
-                  <Text style={styles.buttonText}>Populate TagSet Table</Text>
-                </Pressable>
       </View>
     </View>
     </ScrollView>
