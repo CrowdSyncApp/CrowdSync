@@ -15,7 +15,7 @@ const QRScannerScreen = () => {
     const { data } = event;
 
     try {
-          const userProfileData = await fetchUserProfileData(user?.userId);
+          const userProfileData = await fetchUserProfileData(user?.username);
           const fullName = userProfileData.fullName;
 
           const sessionData = data;

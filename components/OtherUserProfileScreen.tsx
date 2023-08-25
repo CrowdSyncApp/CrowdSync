@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import styles, { palette, fonts } from "./style";
 
 const OtherUserProfileScreen = () => {
 
@@ -18,7 +19,7 @@ const OtherUserProfileScreen = () => {
   };
 
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       {/* Profile Picture */}
 <Image source={{ uri: userData.profilePicture }} style={{ width: 100, height: 100, borderRadius: 50, alignSelf: 'center', marginTop: 20 }} />
 

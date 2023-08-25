@@ -75,7 +75,7 @@ const FindSessionScreen = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
       <ScrollView
-              style={{ flexGrow: 1 }} // Ensure ScrollView takes up available space
+              contentContainerStyle={{ flexGrow: 1 }}
             >
     <View style={styles.index}>
       <View style={styles.div}>

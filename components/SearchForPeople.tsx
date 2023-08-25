@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native';
+import styles, { palette, fonts } from "./style";
 
 const SearchForPeople = () => {
   const [searchQuery, setSearchQuery] = useState('');

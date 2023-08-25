@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import participantsData from '../dummies/dummy_accounts.json';
+import styles, { palette, fonts } from './style';
 
 const MyConnections = ({ navigation }) => {
   // Function to handle when a connection is pressed
@@ -10,7 +11,12 @@ const MyConnections = ({ navigation }) => {
   };
 
   return (
-      <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 20 }}>
+      <KeyboardAvoidingView
+              style={{ flex: 1 }}
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
+          <View style={styles.index}>
+            <View style={styles.div}>
         {/* List of Connections */}
         <FlatList
             data={participantsData}
@@ -18,14 +24,15 @@ const MyConnections = ({ navigation }) => {
             renderItem={({ item }) => (
               <TouchableOpacity onPress={() => handleConnectionPress(item)}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
-                  {/* You can add profile pictures here if you have them */}
-                  {/* <Image source={item.profilePicture} style={{ width: 50, height: 50, borderRadius: 25 }} /> */}
-                  <Text style={{ fontSize: 16, marginLeft: 10 }}>{item.fullName}</Text>
+                  <Text style={styles.secondaryHeaderTitle}>{item.fullName}</Text>
                 </View>
               </TouchableOpacity>
             )}
           />
+
       </View>
+    </View>
+    </KeyboardAvoidingView>
     );
   };
 

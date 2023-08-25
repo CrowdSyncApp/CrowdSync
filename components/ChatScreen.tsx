@@ -6,6 +6,7 @@ import { listChats } from '../src/graphql/queries';
 import 'react-native-get-random-values';
 import { v4 } from 'uuid';
 import { useAuth } from '../QueryCaching';
+import styles, { palette, fonts } from "./style";
 
 const ChatScreen = ({ route }) => {
   const [messages, setMessages] = useState<string[]>([]);

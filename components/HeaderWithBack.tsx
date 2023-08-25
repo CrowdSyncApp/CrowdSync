@@ -18,7 +18,7 @@ const Header = () => {
       const getUserProfileData = async () => {
 
         if (user) {
-            fetchedUserProfileData = await fetchUserProfileData(user?.userId);
+            fetchedUserProfileData = await fetchUserProfileData(user?.username);
           } else {
             // Pick a random user from participantsData
             const randomIndex = Math.floor(Math.random() * participantsData.length);
@@ -42,7 +42,7 @@ const handleProfilePress = async () => {
     <View style={styles.header}>
       <TouchableOpacity onPress={handleGoBack}>
               <Image
-                source={BackArrow}
+                source={CrowdSyncBackArrow}
                 style={{
                   width: 50,
                   height: 50,

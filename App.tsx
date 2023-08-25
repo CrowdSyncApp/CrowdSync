@@ -194,7 +194,7 @@ const AppNavigator = () => {
         name="SignUp"
         options={{
           title: "Sign Up",
-          header: () => <HeaderWithBack />,
+          header: () => <SimplifiedHeader />,
         }}
       >
         {(props) => <SignUp {...props} />}
