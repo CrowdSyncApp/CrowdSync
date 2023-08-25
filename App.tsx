@@ -51,6 +51,8 @@ import ForgotUsername from "./components/ForgotUsername";
 import ForgotPassword from "./components/ForgotPassword";
 import SplashScreen from "./components/SplashScreen";
 import Header from './components/Header';
+import HeaderWithBack from './components/HeaderWithBack';
+import SimplifiedHeader from './components/SimplifiedHeader';
 import AddTags from './components/AddTags';
 
 export const AppContext = React.createContext();
@@ -104,6 +106,7 @@ const AppNavigator = () => {
           component={SplashScreen}
           options={{
             title: "Splash Screen",
+            headerShown: false,
           }}
         />
       <Stack.Screen
@@ -119,6 +122,7 @@ const AppNavigator = () => {
         component={MyConnections}
         options={{
           title: "My Connections",
+          header: () => <HeaderWithBack />,
         }}
       />
       <Stack.Screen
@@ -126,6 +130,7 @@ const AppNavigator = () => {
         component={ChatScreen}
         options={{
           title: "Chat",
+          header: () => <HeaderWithBack />,
         }}
       />
       <Stack.Screen
@@ -133,6 +138,7 @@ const AppNavigator = () => {
         component={SearchForPeople}
         options={{
           title: "Search For People",
+          header: () => <HeaderWithBack />,
         }}
       />
       <Stack.Screen
@@ -140,6 +146,7 @@ const AppNavigator = () => {
         component={OtherUserProfileScreen}
         options={{
           title: "Other User",
+          header: () => <HeaderWithBack />,
         }}
       />
       <Stack.Screen
@@ -147,6 +154,7 @@ const AppNavigator = () => {
         component={ProfileScreen}
         options={{
           title: "Profile",
+          header: () => <SimplifiedHeader />
         }}
       />
       <Stack.Screen
@@ -154,20 +162,23 @@ const AppNavigator = () => {
       component={EditProfileScreen}
       options={{
         title: "Edit Profile",
+        header: () => <SimplifiedHeader />
       }}
     />
     <Stack.Screen
-            name="AddTags"
-            component={AddTags}
-            options={{
-              title: "Add Tags",
-            }}
-          />
+        name="AddTags"
+        component={AddTags}
+        options={{
+          title: "Add Tags",
+          header: () => <SimplifiedHeader />
+        }}
+      />
       <Stack.Screen
         name="SessionHome"
         component={SessionHomeScreen} // Add SessionHomeScreen
         options={{
           title: "Session Home",
+          header: () => <Header />,
         }}
       />
       <Stack.Screen name="QRScanner" component={QRScannerScreen} />
@@ -183,12 +194,13 @@ const AppNavigator = () => {
         name="SignUp"
         options={{
           title: "Sign Up",
+          header: () => <HeaderWithBack />,
         }}
       >
         {(props) => <SignUp {...props} />}
       </Stack.Screen>
-      <Stack.Screen name="ForgotUsername" component={ForgotUsername} />
-      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+      <Stack.Screen name="ForgotUsername" component={ForgotUsername} options={{header: () => <SimplifiedHeader />, title: "Forgot Username"}}/>
+      <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{header: () => <SimplifiedHeader />, title: "Forgot Username"}}/>
     </Stack.Navigator>
   );
 };

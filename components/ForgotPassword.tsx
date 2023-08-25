@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import { Auth } from 'aws-amplify';
 import { useNavigation } from '@react-navigation/native';
+import CrowdSyncLogo from "../images/Crowdsync_Logo.png";
+import styles, { palette, fonts } from './style';
 
 const ForgotPasswordScreen = () => {
   const [username, setUsername] = useState('');
@@ -33,18 +35,25 @@ const ForgotPasswordScreen = () => {
   };
 
   return (
-    <View>
-      <Text>Forgot Password Screen</Text>
+    <View style={styles.index}>
+        <View style={styles.div}>
+      <View style={styles.titleContainer}>
+          <Image source={CrowdSyncLogo} resizeMode="contain" style={styles.splashLogo} />
+            <Text style={styles.headerTitle}>CrowdSync</Text>
+            </View>
+            <View style={{ paddingVertical: 10 }}>
       <TextInput
         placeholder="Username"
         value={username}
         onChangeText={setUsername}
         autoCapitalize="none"
         keyboardType="email-address"
+        style={styles.textInput}
       />
+      <View style={{ marginTop: 20 }} />
       {!isCodeSent ? (
-        <TouchableOpacity onPress={handleSendCode}>
-          <Text>Send Verification Code</Text>
+        <TouchableOpacity onPress={handleSendCode} style={styles.basicButton}>
+          <Text style={styles.buttonText}>Send Verification Code</Text>
         </TouchableOpacity>
       ) : (
         <>
@@ -52,18 +61,22 @@ const ForgotPasswordScreen = () => {
             placeholder="Verification Code"
             value={verificationCode}
             onChangeText={setVerificationCode}
+            style={styles.textInput}
           />
           <TextInput
             placeholder="New Password"
             value={newPassword}
             onChangeText={setNewPassword}
             secureTextEntry
+            style={styles.textInput}
           />
-          <TouchableOpacity onPress={handleResetPassword}>
-            <Text>Reset Password</Text>
+          <TouchableOpacity onPress={handleResetPassword} style={styles.basicButton}>
+            <Text style={styles.buttonText}>Reset Password</Text>
           </TouchableOpacity>
         </>
       )}
+      </View>
+    </View>
     </View>
   );
 };

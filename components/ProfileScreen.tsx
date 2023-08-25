@@ -1,12 +1,13 @@
 // ProfileScreen.tsx
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Button, TouchableOpacity, Image, ScrollView, Linking } from "react-native";
+import { View, Text, StyleSheet, Button, TouchableOpacity, Image, ScrollView, Linking, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
 import MyConnections from "./MyConnections";
 import { getParticipants } from '../src/graphql/queries';
 import { Storage } from "aws-amplify";
 import { updateParticipants } from '../src/graphql/mutations';
+import styles, { palette, fonts } from './style';
 
 const ProfileScreen = ({ route }) => {
   // Extract the user information passed as props from the route object
@@ -26,7 +27,7 @@ const ProfileScreen = ({ route }) => {
 
     return tags.map((tag, index) => (
       <View key={index} style={styles.tag}>
-        <Text>{tag.tag}</Text>
+        <Text style={styles.detailText}>{tag.tag}</Text>
       </View>
     ));
   };
@@ -35,7 +36,7 @@ const ProfileScreen = ({ route }) => {
     if (socialLinks && socialLinks.length > 0) {
       return socialLinks.map((link, index) => (
         <TouchableOpacity key={index} onPress={() => handleLinkPress(link)}>
-          <Text style={styles.linkText}>{link}</Text>
+          <Text style={styles.detailText}>{link}</Text>
         </TouchableOpacity>
       ));
     } else {
@@ -60,6 +61,8 @@ const ProfileScreen = ({ route }) => {
 
   return (
     <ScrollView style={{ flexGrow: 1 }}>
+    <View style={styles.index}>
+          <View style={styles.div}>
       <View style={styles.container}>
         {/* Profile Picture */}
         <View style={styles.profilePictureContainer}>
@@ -75,75 +78,67 @@ const ProfileScreen = ({ route }) => {
         </View>
 
         {/* Full Name */}
-        <Text style={styles.fullName}>{userProfileData.fullName}</Text>
+        <View style={{alignItems: "center"}}>
+        <Text style={styles.headerTitle}>{userProfileData.fullName}</Text>
+        </View>
 
-        {/* Job Title */}
-        <Text style={styles.infoText}>Job Title: {userProfileData.jobTitle}</Text>
+        {/* Job Title and Company */}
+        {userProfileData.jobTitle || userProfileData.company ? (
+        <View style={{alignItems: "center"}}>
+          <Text style={styles.secondaryHeaderTitle}>
+            {userProfileData.jobTitle}{userProfileData.jobTitle && userProfileData.company ? ", " : ""}{userProfileData.company}
+          </Text>
+          </View>
+        ) : null}
 
-        {/* Address */}
-        <Text style={styles.infoText}>Location: {userProfileData.address}</Text>
-
-        {/* Phone Number */}
-        <Text style={styles.infoText}>Phone Number: {userProfileData.phoneNumber}</Text>
+        {/* Location and Phone Number */}
+        {userProfileData.jobTitle || userProfileData.company ? (
+        <View style={{alignItems: "center"}}>
+          <Text style={styles.secondaryHeaderTitle}>
+            {userProfileData.address}{userProfileData.address && userProfileData.phoneNumber ? ", " : ""}{userProfileData.phoneNumber}
+          </Text>
+          </View>
+        ) : null}
 
         {/* Render Social Links */}
         <View style={styles.linksContainer}>
-          <Text style={styles.linksHeader}>Social Links:</Text>
+          <Text style={styles.secondaryHeaderTitle}>Social Links:</Text>
           {renderSocialLinks(userProfileData.socialLinks)}
         </View>
 
-        {/* Render My Tags */}
+        {/* My Tags */}
         <View style={styles.tagsContainer}>
-          <Text style={styles.tagsHeader}>My Tags:</Text>
-          {renderTags(userProfileData.tags)}
+          <Text style={styles.secondaryHeaderTitle}>My Tags:</Text>
+          <Text style={styles.detailText}>
+            {userProfileData.tags && userProfileData.tags.length > 0
+              ? userProfileData.tags.map((tag, index) =>
+                  index === userProfileData.tags.length - 1 ? tag.tag : tag.tag + ", "
+                )
+              : "No tags available."}
+          </Text>
         </View>
 
-        <Button title="Edit Profile" onPress={handleEditProfilePress} />
+        <View style={styles.buttonContainer}>
+              <Pressable style={styles.basicButton} onPress={handleEditProfilePress}>
+                <Text style={styles.buttonText}>Edit Profile</Text>
+              </Pressable>
+              <View style={{ paddingVertical: 10 }} />
 
-        {/* My Connections Button */}
-        <Button title="My Connections" onPress={handleMyConnectionsPress} />
+              <Pressable style={styles.basicButton} onPress={handleMyConnectionsPress}>
+                <Text style={styles.buttonText}>My Connections</Text>
+              </Pressable>
+              <View style={{ paddingVertical: 10 }} />
 
-        <Button title="Log Out" onPress={handleLogout} />
+              <Pressable style={styles.basicButton} onPress={handleLogout}>
+                              <Text style={styles.buttonText}>Log Out</Text>
+                            </Pressable>
+                            <View style={{ paddingVertical: 10 }} />
+          </View>
+      </View>
+      </View>
       </View>
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  profilePictureContainer: {
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  fullName: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 16,
-  },
-  infoText: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  linksContainer: {
-    marginBottom: 16,
-  },
-  tagsContainer: {
-    marginBottom: 16,
-  },
-  tagsHeader: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
-  tag: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 8,
-    marginBottom: 8,
-  },
-});
 
 export default ProfileScreen;

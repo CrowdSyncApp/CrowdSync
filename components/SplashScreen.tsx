@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from '../QueryCaching';
+import styles, { palette, fonts } from './style';
+import CrowdSyncLogo from "../images/Crowdsync_Logo.png";
 
 const SplashScreen = () => {
   const navigation = useNavigation();
@@ -19,18 +21,13 @@ const SplashScreen = () => {
     }, [isLoading, isUserLoggedIn, navigation]);
 
   return (
+  <View style={styles.splash}>
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <ActivityIndicator size="large" />
+      <Image source={CrowdSyncLogo} resizeMode="contain" style={styles.splashLogo} />
+      <Text style={styles.headerTitle}>CrowdSync</Text>
+    </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
 
 export default SplashScreen;
