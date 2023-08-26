@@ -23,7 +23,7 @@ import {
 import { launchImageLibrary } from "react-native-image-picker";
 import styles, { palette, fonts } from "./style";
 
-const ProfileScreen = ({ route }) => {
+const EditProfileScreen = ({ route }) => {
   // Extract the user information passed as props from the route object
   const { userProfileData, updatedTags } = route.params;
   const [currTags, setCurrTags] = useState(userProfileData.tags);
@@ -68,6 +68,12 @@ const ProfileScreen = ({ route }) => {
   const handleSocialLinkChange = (index, value) => {
     const updatedLinks = [...editableFields.socialLinks];
     updatedLinks[index] = value;
+    setEditableFields({ ...editableFields, socialLinks: updatedLinks });
+  };
+
+  const handleDeleteSocialLink = (index) => {
+    const updatedLinks = [...editableFields.socialLinks];
+    updatedLinks.splice(index, 1); // Remove the link at the given index
     setEditableFields({ ...editableFields, socialLinks: updatedLinks });
   };
 
@@ -228,10 +234,16 @@ const ProfileScreen = ({ route }) => {
                 <View key={index}>
                   <TextInput
                     style={styles.textInput}
-                    placeholder="Add a social link"
+                    placeholder="Add a link"
                     value={link}
                     onChangeText={(text) => handleSocialLinkChange(index, text)}
                   />
+                  <TouchableOpacity
+                    style={{ position: "absolute", right: 10, top: -17 }}
+                    onPress={() => handleDeleteSocialLink(index)}
+                  >
+                    <Text style={{ color: "red", fontSize: 50 }}>-</Text>
+                  </TouchableOpacity>
                   <View style={{ paddingVertical: 5 }} />
                 </View>
               ))}
@@ -287,4 +299,4 @@ const ProfileScreen = ({ route }) => {
   );
 };
 
-export default ProfileScreen;
+export default EditProfileScreen;
