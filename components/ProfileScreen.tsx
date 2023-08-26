@@ -30,18 +30,6 @@ const ProfileScreen = ({ route }) => {
     navigation.navigate("Login");
   };
 
-  const renderTags = (tags) => {
-    if (!tags || tags.length === 0) {
-      return <Text>No tags available.</Text>;
-    }
-
-    return tags.map((tag, index) => (
-      <View key={index} style={styles.tag}>
-        <Text style={styles.detailText}>{tag.tag}</Text>
-      </View>
-    ));
-  };
-
   const renderSocialLinks = (socialLinks) => {
     if (socialLinks && socialLinks.length > 0) {
       return socialLinks.map((link, index) => (
@@ -50,7 +38,7 @@ const ProfileScreen = ({ route }) => {
         </TouchableOpacity>
       ));
     } else {
-      return <Text>No social links available.</Text>;
+      return <Text style={styles.detailText}>No social links available.</Text>;
     }
   };
 
@@ -140,14 +128,16 @@ const ProfileScreen = ({ route }) => {
           <View style={styles.buttonContainer}>
             <Pressable
               style={styles.basicButton}
-              onPress={handleEditProfilePress}>
+              onPress={handleEditProfilePress}
+            >
               <Text style={styles.buttonText}>Edit Profile</Text>
             </Pressable>
             <View style={{ paddingVertical: 10 }} />
 
             <Pressable
               style={styles.basicButton}
-              onPress={handleMyConnectionsPress}>
+              onPress={handleMyConnectionsPress}
+            >
               <Text style={styles.buttonText}>My Connections</Text>
             </Pressable>
             <View style={{ paddingVertical: 10 }} />

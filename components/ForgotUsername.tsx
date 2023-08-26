@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
-import { Auth } from 'aws-amplify';
+import React, { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { Auth } from "aws-amplify";
 
 const ForgotUsernameScreen = () => {
-  const [email, setEmail] = useState('');
-  const [retrievedUsername, setRetrievedUsername] = useState('');
+  const [email, setEmail] = useState("");
+  const [retrievedUsername, setRetrievedUsername] = useState("");
 
   const handleRetrieveUsername = async () => {
     try {
       const retrievedUsername = await Auth.forgotPassword(username);
       setRetrievedUsername(retrievedUsername);
     } catch (error) {
-      console.error('Forgot username error:', error);
-      alert('An error occurred. Please try again.');
+      console.error("Forgot username error:", error);
+      alert("An error occurred. Please try again.");
     }
   };
 

@@ -12,7 +12,7 @@ import type { PropsWithChildren } from "react";
 import { Amplify, Auth } from "aws-amplify";
 import awsmobile from "./src/aws-exports";
 import { AuthProvider, useAuth } from "./QueryCaching";
-import styles, { palette, fonts } from './components/style';
+import styles, { palette, fonts } from "./components/style";
 
 Amplify.configure(awsmobile);
 
@@ -50,10 +50,10 @@ import MyConnections from "./components/MyConnections";
 import ForgotUsername from "./components/ForgotUsername";
 import ForgotPassword from "./components/ForgotPassword";
 import SplashScreen from "./components/SplashScreen";
-import Header from './components/Header';
-import HeaderWithBack from './components/HeaderWithBack';
-import SimplifiedHeader from './components/SimplifiedHeader';
-import AddTags from './components/AddTags';
+import Header from "./components/Header";
+import HeaderWithBack from "./components/HeaderWithBack";
+import SimplifiedHeader from "./components/SimplifiedHeader";
+import AddTags from "./components/AddTags";
 
 export const AppContext = React.createContext();
 
@@ -65,11 +65,11 @@ function App(): JSX.Element {
   };
 
   return (
-      <AuthProvider>
-        <NavigationContainer>
-          <AppNavigator />
-        </NavigationContainer>
-      </AuthProvider>
+    <AuthProvider>
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
+    </AuthProvider>
   );
 }
 
@@ -81,15 +81,15 @@ const AppNavigator = () => {
     const checkTokenFreshness = async () => {
       try {
         if (isUserLoggedIn) {
-            const session = await Auth.currentSession();
-            const accessTokenExpiration = new Date(
-              session.getAccessToken().payload.exp * 1000
-            );
+          const session = await Auth.currentSession();
+          const accessTokenExpiration = new Date(
+            session.getAccessToken().payload.exp * 1000
+          );
 
-            // Check token freshness and refresh if needed
-            if (accessTokenExpiration <= new Date()) {
-              await refreshToken();
-            }
+          // Check token freshness and refresh if needed
+          if (accessTokenExpiration <= new Date()) {
+            await refreshToken();
+          }
         }
       } catch (error) {
         console.error("Token check error:", error);
@@ -102,13 +102,13 @@ const AppNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-          name="SplashScreen"
-          component={SplashScreen}
-          options={{
-            title: "Splash Screen",
-            headerShown: false,
-          }}
-        />
+        name="SplashScreen"
+        component={SplashScreen}
+        options={{
+          title: "Splash Screen",
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="FindSession"
         options={{
@@ -154,23 +154,23 @@ const AppNavigator = () => {
         component={ProfileScreen}
         options={{
           title: "Profile",
-          header: () => <SimplifiedHeader />
+          header: () => <SimplifiedHeader />,
         }}
       />
       <Stack.Screen
-      name="EditProfile"
-      component={EditProfileScreen}
-      options={{
-        title: "Edit Profile",
-        header: () => <SimplifiedHeader />
-      }}
-    />
-    <Stack.Screen
+        name="EditProfile"
+        component={EditProfileScreen}
+        options={{
+          title: "Edit Profile",
+          header: () => <SimplifiedHeader />,
+        }}
+      />
+      <Stack.Screen
         name="AddTags"
         component={AddTags}
         options={{
           title: "Add Tags",
-          header: () => <SimplifiedHeader />
+          header: () => <SimplifiedHeader />,
         }}
       />
       <Stack.Screen
@@ -199,8 +199,22 @@ const AppNavigator = () => {
       >
         {(props) => <SignUp {...props} />}
       </Stack.Screen>
-      <Stack.Screen name="ForgotUsername" component={ForgotUsername} options={{header: () => <SimplifiedHeader />, title: "Forgot Username"}}/>
-      <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{header: () => <SimplifiedHeader />, title: "Forgot Username"}}/>
+      <Stack.Screen
+        name="ForgotUsername"
+        component={ForgotUsername}
+        options={{
+          header: () => <SimplifiedHeader />,
+          title: "Forgot Username",
+        }}
+      />
+      <Stack.Screen
+        name="ForgotPassword"
+        component={ForgotPassword}
+        options={{
+          header: () => <SimplifiedHeader />,
+          title: "Forgot Username",
+        }}
+      />
     </Stack.Navigator>
   );
 };

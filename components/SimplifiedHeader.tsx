@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Image, TouchableOpacity } from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 import BackArrow from "../images/CrowdSync_Back_Arrow.png";
-import styles from './style';
+import styles from "./style";
 
 const Header = () => {
   const navigation = useNavigation();

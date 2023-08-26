@@ -162,21 +162,23 @@ const SessionHomeScreen = ({ route }) => {
         </View>
 
         <View style={{ alignItems: "center" }}>
-                  <Text style={styles.headerTitle}>
-                    {sessionData.title}
-                  </Text>
-                </View>
+          <Text style={styles.headerTitle}>{sessionData.title}</Text>
+        </View>
 
         <View style={{ flex: 1, width: "100%" }}>
-          <Text style={styles.secondaryHeaderTitle}>
-            Available Profiles:
-          </Text>
+          <Text style={styles.secondaryHeaderTitle}>Available Profiles:</Text>
           <FlatList
             data={participants}
             keyExtractor={(item) => item.userId}
             renderItem={({ item }) => (
               <TouchableOpacity onPress={() => handleUserProfilePress(item)}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingVertical: 10,
+                  }}
+                >
                   <Text style={styles.detailText}>{item.fullName}</Text>
                 </View>
               </TouchableOpacity>
@@ -185,37 +187,44 @@ const SessionHomeScreen = ({ route }) => {
         </View>
         <View style={{ height: 40, marginBottom: 10 }}>
           <TouchableOpacity
-              style={styles.loginButton}
-              onPress={handleToggleVisibility}>
-              <Text style={styles.buttonText}>{isVisible ? "Go Invisible" : "Go Visible"}</Text>
-            </TouchableOpacity>
-           </View>
+            style={styles.loginButton}
+            onPress={handleToggleVisibility}
+          >
+            <Text style={styles.buttonText}>
+              {isVisible ? "Go Invisible" : "Go Visible"}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         {isAdmin && (
           <View style={{ flexDirection: "row", marginBottom: 20 }}>
             <TouchableOpacity
-                style={styles.tertiaryButton}
-                onPress={handleEndSession}>
-                <Text style={styles.buttonText}>End Session</Text>
-              </TouchableOpacity>
+              style={styles.tertiaryButton}
+              onPress={handleEndSession}
+            >
+              <Text style={styles.buttonText}>End Session</Text>
+            </TouchableOpacity>
           </View>
         )}
 
         <View style={styles.flexButtonContainer}>
           <TouchableOpacity
             style={styles.loginButton}
-            onPress={handleSearchForPeople}>
+            onPress={handleSearchForPeople}
+          >
             <Text style={styles.buttonText}>Search</Text>
           </TouchableOpacity>
           <TouchableOpacity
-              style={styles.loginButton}
-              onPress={() =>
+            style={styles.loginButton}
+            onPress={() =>
               navigation.navigate("ChatScreen", {
                 participants: participants,
                 chatType: "GROUP",
-              })}>
-              <Text style={styles.buttonText}>Chat</Text>
-            </TouchableOpacity>
+              })
+            }
+          >
+            <Text style={styles.buttonText}>Chat</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

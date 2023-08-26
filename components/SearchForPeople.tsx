@@ -1,16 +1,26 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Pressable,
+} from "react-native";
 import styles, { palette, fonts } from "./style";
 
 const SearchForPeople = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [searchResults, setSearchResults] = useState<string[]>([]);
 
   // Function to handle the search button press
   const handleSearch = () => {
     // Save the search query to search history
-    if (searchQuery.trim() !== '') {
+    if (searchQuery.trim() !== "") {
       setSearchHistory([...searchHistory, searchQuery.trim()]);
     }
 
@@ -22,43 +32,46 @@ const SearchForPeople = () => {
   // Function to handle tapping on a user's profile link
   const handleUserProfileLinkPress = (user: string) => {
     // Implement your logic to navigate to the user's profile screen
-    console.log('Open user profile of: ', user);
+    console.log("Open user profile of: ", user);
   };
 
   return (
-    <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 20 }}>
-      {/* Search Text Input */}
-      <TextInput
-        value={searchQuery}
-        onChangeText={setSearchQuery}
-        placeholder="Enter search query"
-        style={{ fontSize: 16, borderWidth: 1, padding: 10, marginBottom: 10 }}
-      />
+    <KeyboardAvoidingView
+      style={{ flex: 1 }} // Set the flex property to 1 to fill the available space
+      behavior={Platform.OS === "ios" ? "padding" : "height"} // Adjust behavior based on platform
+    >
+      <View style={styles.index}>
+        <View style={styles.div}>
+          {/* Search Text Input */}
+          <TextInput
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            placeholder="Search by name, company, or tag..."
+            style={styles.textInput}
+          />
 
-      {/* Search Button */}
-      <TouchableOpacity
-        onPress={handleSearch}
-        style={{ backgroundColor: '#007bff', borderRadius: 5, padding: 10, marginBottom: 20 }}
-      >
-        <Text style={{ fontSize: 18, color: 'white', textAlign: 'center' }}>Search</Text>
-      </TouchableOpacity>
+          {/* Search Button */}
+          <View style={{ paddingVertical: 10 }} />
 
-      {/* Search History */}
-      <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Search History:</Text>
-      <Text style={{ fontSize: 16 }}>{searchHistory.join(', ')}</Text>
+          <Pressable style={styles.basicButton} onPress={handleSearch}>
+            <Text style={styles.buttonText}>Save Changes</Text>
+          </Pressable>
 
-      {/* Search Results */}
-      <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 20 }}>Search Results:</Text>
-      <FlatList
-        data={searchResults}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleUserProfileLinkPress(item)}>
-            <Text style={{ fontSize: 16, color: 'blue', marginTop: 5 }}>{item}</Text>
-          </TouchableOpacity>
-        )}
-      />
-    </View>
+          {/* Search Results */}
+          <FlatList
+            data={searchResults}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => handleUserProfileLinkPress(item)}
+              >
+                <Text style={styles.detailText}>{item}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 

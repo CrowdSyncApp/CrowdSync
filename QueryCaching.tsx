@@ -1,11 +1,22 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { Auth, API, Storage, Hub, graphqlOperation } from "aws-amplify";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getUserProfile, listTagSets, listUserTags, getTagSet } from "./src/graphql/queries";
+import {
+  getUserProfile,
+  listTagSets,
+  listUserTags,
+  getTagSet,
+} from "./src/graphql/queries";
 import { getSessionIdForUser } from "./components/SessionManager";
-import { v4 } from 'uuid';
-import { updateParticipants, updateUserProfile, createTagSet, createUserTags, deleteUserTags } from './src/graphql/mutations';
-import skillsJson from './data/skills.json';
+import { v4 } from "uuid";
+import {
+  updateParticipants,
+  updateUserProfile,
+  createTagSet,
+  createUserTags,
+  deleteUserTags,
+} from "./src/graphql/mutations";
+import skillsJson from "./data/skills.json";
 
 const AuthContext = createContext();
 
@@ -14,20 +25,22 @@ export function useAuth() {
 }
 
 async function fetchUserProfileImage(profilePictureFilename) {
-    let getLevel;
+  let getLevel;
   try {
-
-    getLevel = 'private';
+    getLevel = "private";
     if (!profilePictureFilename) {
-        // Default image
-        profilePictureFilename = "CrowdSync_Temp_Profile.png";
-        getLevel = 'public';
+      // Default image
+      profilePictureFilename = "CrowdSync_Temp_Profile.png";
+      getLevel = "public";
     }
-    profilePictureFilename = "CrowdSync_Temp_Profile.png";  // TODO remove, temporary
-    getLevel = 'public';  // TODO remove, temporary
+    profilePictureFilename = "CrowdSync_Temp_Profile.png"; // TODO remove, temporary
+    getLevel = "public"; // TODO remove, temporary
 
     // Fetch the profile image URL from S3 using Amplify's Storage API
-     const imageKey = await Storage.get(profilePictureFilename, {level: getLevel, validateObjectExistence: true});
+    const imageKey = await Storage.get(profilePictureFilename, {
+      level: getLevel,
+      validateObjectExistence: true,
+    });
 
     return imageKey;
   } catch (error) {
@@ -40,7 +53,7 @@ async function fetchUserProfile(userId) {
   try {
     const cachedUserProfile = await AsyncStorage.getItem("userProfileData");
     if (cachedUserProfile) {
-         return JSON.parse(cachedUserProfile);
+      return JSON.parse(cachedUserProfile);
     }
 
     const { data } = await API.graphql(
@@ -48,25 +61,29 @@ async function fetchUserProfile(userId) {
     );
 
     if (data && data.getUserProfile) {
+      if (!data.getUserProfile.profilePictureUri) {
+        const profileImage = await fetchUserProfileImage(
+          data.getUserProfile.profilePicture
+        );
+        data.getUserProfile.profilePictureUri = profileImage;
+      }
 
-        if (!data.getUserProfile.profilePictureUri) {
-           const profileImage = await fetchUserProfileImage(data.getUserProfile.profilePicture);
-           data.getUserProfile.profilePictureUri = profileImage;
-       }
+      const currSessionId = await getSessionIdForUser(userId);
+      data.getUserProfile.sessionId = currSessionId;
 
-       const currSessionId = await getSessionIdForUser(userId);
-       data.getUserProfile.sessionId = currSessionId;
+      const userTags = await getAllUserTags(userId, currSessionId);
+      data.getUserProfile.tags = userTags;
 
-       const userTags = await getAllUserTags(userId, currSessionId);
-       data.getUserProfile.tags = userTags;
-
-      await AsyncStorage.setItem("userProfileData", JSON.stringify(data.getUserProfile));
+      await AsyncStorage.setItem(
+        "userProfileData",
+        JSON.stringify(data.getUserProfile)
+      );
 
       return data.getUserProfile;
     }
     return null;
   } catch (error) {
-    console.error('Error fetching user profile:', error);
+    console.error("Error fetching user profile:", error);
     throw error;
   }
 }
@@ -86,10 +103,10 @@ async function login(credentials) {
     const user = await Auth.signIn(credentials.username, credentials.password);
     return user;
   } catch (error) {
-    if (error.message === 'User is not confirmed.') {
-        alert("Please verify your account before logging in.");
+    if (error.message === "User is not confirmed.") {
+      alert("Please verify your account before logging in.");
     } else {
-        alert("Invalid email or password. Please try again.");
+      alert("Invalid email or password. Please try again.");
     }
     throw error;
   }
@@ -106,18 +123,20 @@ async function logout() {
 
 const getUserTagsIds = async (userId, sessionId) => {
   try {
-    const response = await API.graphql(graphqlOperation(listUserTags, {
-      filter: {
-        userId: { eq: userId },
-        sessionId: { eq: sessionId }
-      }
-    }));
+    const response = await API.graphql(
+      graphqlOperation(listUserTags, {
+        filter: {
+          userId: { eq: userId },
+          sessionId: { eq: sessionId },
+        },
+      })
+    );
 
     const userTags = response.data.listUserTags.items || [];
-    const tagIds = userTags.map(tag => tag.tagId);
+    const tagIds = userTags.map((tag) => tag.tagId);
     return tagIds;
   } catch (error) {
-    console.error('Error fetching user tags:', error);
+    console.error("Error fetching user tags:", error);
     return [];
   }
 };
@@ -127,11 +146,12 @@ const getAllUserTags = async (userId, sessionId) => {
     const tagIds = await getUserTagsIds(userId, sessionId);
     const tagSets = await getTagSets();
 
-    const userTagsWithTags = tagIds.map(tagId => tagSets.find(tag => tag.tagId === tagId)).filter(tag => tag);
+    const userTagsWithTags = tagIds
+      .map((tagId) => tagSets.find((tag) => tag.tagId === tagId))
+      .filter((tag) => tag);
     return userTagsWithTags;
-
   } catch (error) {
-    console.error('Error fetching user tags with tags:', error);
+    console.error("Error fetching user tags with tags:", error);
     return [];
   }
 };
@@ -148,7 +168,7 @@ const getTagSets = async () => {
     const response = await API.graphql(graphqlOperation(listTagSets));
     const tagSets = response.data.listTagSets.items.map((item) => ({
       tag: item.tag,
-      tagId: item.tagId
+      tagId: item.tagId,
     }));
 
     // Store the tag set in AsyncStorage
@@ -156,7 +176,7 @@ const getTagSets = async () => {
 
     return tagSets;
   } catch (error) {
-    console.error('Error listing TagSets:', error);
+    console.error("Error listing TagSets:", error);
     return [];
   }
 };
@@ -165,15 +185,21 @@ const populateTagSet = async () => {
   try {
     const batchSize = 25; // Set the batch size according to your needs
 
-    const tagRows = skillsJson.map(row => ({
+    const tagRows = skillsJson.map((row) => ({
       tag: row.tag.trim(),
-      tagId: row.tagId.trim()
+      tagId: row.tagId.trim(),
     }));
 
-    const existingTagsResponse = await API.graphql(graphqlOperation(listTagSets));
-    const existingTags = existingTagsResponse.data.listTagSets.items.map(item => item.tag);
+    const existingTagsResponse = await API.graphql(
+      graphqlOperation(listTagSets)
+    );
+    const existingTags = existingTagsResponse.data.listTagSets.items.map(
+      (item) => item.tag
+    );
 
-    const newTags = tagRows.filter(tagData => !existingTags.includes(tagData.tag));
+    const newTags = tagRows.filter(
+      (tagData) => !existingTags.includes(tagData.tag)
+    );
 
     console.log(`Total new tags to add: ${newTags.length}`);
 
@@ -190,9 +216,11 @@ const populateTagSet = async () => {
       while (retryAttempts < maxRetries) {
         try {
           const batch = tagBatches[batchIndex];
-          console.log(`Processing batch ${batchIndex + 1} of ${tagBatches.length}`);
+          console.log(
+            `Processing batch ${batchIndex + 1} of ${tagBatches.length}`
+          );
 
-          const batchCreatePromises = batch.map(async tagData => {
+          const batchCreatePromises = batch.map(async (tagData) => {
             const input = {
               tag: tagData.tag,
               tagId: tagData.tagId, // Make sure this matches your GraphQL schema
@@ -208,24 +236,38 @@ const populateTagSet = async () => {
 
           await Promise.all(batchCreatePromises);
 
-          console.log(`Batch ${batchIndex + 1} of ${tagBatches.length} completed`);
+          console.log(
+            `Batch ${batchIndex + 1} of ${tagBatches.length} completed`
+          );
 
           // Add a delay between batches
           if (batchIndex < tagBatches.length - 1) {
-            console.log(`Waiting for ${delayBetweenBatchesMs / 1000} seconds before the next batch...`);
-            await new Promise(resolve => setTimeout(resolve, delayBetweenBatchesMs));
+            console.log(
+              `Waiting for ${
+                delayBetweenBatchesMs / 1000
+              } seconds before the next batch...`
+            );
+            await new Promise((resolve) =>
+              setTimeout(resolve, delayBetweenBatchesMs)
+            );
           }
 
           break; // Exit the retry loop if successful
         } catch (error) {
-          console.error(`Error processing batch ${batchIndex + 1}, retrying...`);
+          console.error(
+            `Error processing batch ${batchIndex + 1}, retrying...`
+          );
           retryAttempts++;
-          await new Promise(resolve => setTimeout(resolve, delayBetweenBatchesMs));
+          await new Promise((resolve) =>
+            setTimeout(resolve, delayBetweenBatchesMs)
+          );
         }
       }
 
       if (retryAttempts === maxRetries) {
-        console.error(`Max retries reached for batch ${batchIndex + 1}, skipping...`);
+        console.error(
+          `Max retries reached for batch ${batchIndex + 1}, skipping...`
+        );
       }
     }
 
@@ -237,7 +279,7 @@ const populateTagSet = async () => {
 
 const createUserTagsWithSession = async (userId, sessionId, tagIds) => {
   try {
-    const batchCreatePromises = tagIds.map(async tagId => {
+    const batchCreatePromises = tagIds.map(async (tagId) => {
       const currTagId = tagId.tagId;
       const input = {
         userTagId: v4(),
@@ -246,16 +288,18 @@ const createUserTagsWithSession = async (userId, sessionId, tagIds) => {
         tagId: currTagId,
       };
       await API.graphql(graphqlOperation(createUserTags, { input }));
-      const tagSetResponse = await API.graphql(graphqlOperation(getTagSet, { tagId: currTagId }));
+      const tagSetResponse = await API.graphql(
+        graphqlOperation(getTagSet, { tagId: currTagId })
+      );
       const tag = tagSetResponse.data.getTagSet.tag;
       return { tagId: currTagId, tag: tag };
     });
 
     const addedTags = await Promise.all(batchCreatePromises);
-    console.log('User tags batch added successfully.');
+    console.log("User tags batch added successfully.");
     return addedTags;
   } catch (error) {
-    console.error('Error adding user tags:', error);
+    console.error("Error adding user tags:", error);
     return [];
   }
 };
@@ -268,12 +312,14 @@ const removeUserTagsByTagId = async (userId, sessionId, tagIds) => {
       const tagId = tagIdPair.tagId;
 
       // Fetch the userTagIds and sessionIds using the listUserTags query for the current tagId
-      const response = await API.graphql(graphqlOperation(listUserTags, {
-        filter: {
-          userId: { eq: userId },
-          tagId: { eq: tagId },
-        },
-      }));
+      const response = await API.graphql(
+        graphqlOperation(listUserTags, {
+          filter: {
+            userId: { eq: userId },
+            tagId: { eq: tagId },
+          },
+        })
+      );
 
       const userTags = response.data.listUserTags.items;
 
@@ -283,7 +329,7 @@ const removeUserTagsByTagId = async (userId, sessionId, tagIds) => {
           const input = { userTagId: userTag.userTagId, sessionId: sessionId };
           return await API.graphql(graphqlOperation(deleteUserTags, { input }));
         } catch (error) {
-          console.error('Error deleting user tag:', error);
+          console.error("Error deleting user tag:", error);
           throw error;
         }
       });
@@ -295,66 +341,70 @@ const removeUserTagsByTagId = async (userId, sessionId, tagIds) => {
     // Execute the batch delete operation for all tagIds
     const deleteResults = await Promise.all(deletePromises);
 
-    console.log('User tags removed successfully:', deleteResults);
+    console.log("User tags removed successfully:", deleteResults);
     return deleteResults;
   } catch (error) {
-    console.error('Error removing user tags:', error);
+    console.error("Error removing user tags:", error);
     return [];
   }
 };
 
 async function uploadImageToS3(profilePictureUri) {
-    const filename = v4() + '_profilePhoto.jpeg';
-    const response = await fetch(profilePictureUri);
+  const filename = v4() + "_profilePhoto.jpeg";
+  const response = await fetch(profilePictureUri);
 
-    const profilePictureS3Uri = await Storage.put(filename, response.blob(), {level: 'private', contentType: 'image/jpeg'});
+  const profilePictureS3Uri = await Storage.put(filename, response.blob(), {
+    level: "private",
+    contentType: "image/jpeg",
+  });
 
-    return filename;
+  return filename;
 }
 
 async function updateUserProfileTable(updatedFields) {
-    const updatedUserProfile = await API.graphql(graphqlOperation(updateUserProfile, {input: updatedFields}));
-    await AsyncStorage.removeItem("userProfileData");
-    return updatedUserProfile.data.updateUserProfile;
+  const updatedUserProfile = await API.graphql(
+    graphqlOperation(updateUserProfile, { input: updatedFields })
+  );
+  await AsyncStorage.removeItem("userProfileData");
+  return updatedUserProfile.data.updateUserProfile;
 }
 
 export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-    const [user, setUser] = useState(null);
-      const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const storedUser = await Auth.currentAuthenticatedUser();
+        setUser(storedUser);
+      } catch (error) {
+        setUser(null);
+      }
+      setIsLoading(false);
+    };
 
-      useEffect(() => {
-        const fetchUserData = async () => {
-          try {
-            const storedUser = await Auth.currentAuthenticatedUser();
-            setUser(storedUser);
-          } catch (error) {
-            setUser(null);
-          }
-          setIsLoading(false);
-        };
+    fetchUserData();
 
-        fetchUserData();
+    const authListener = (data) => {
+      switch (data.payload.event) {
+        case "signIn":
+          fetchUserData();
+          break;
+        case "signOut":
+          setUser(null);
+          break;
+        default:
+          break;
+      }
+    };
 
-        const authListener = (data) => {
-          switch (data.payload.event) {
-            case 'signIn':
-              fetchUserData();
-              break;
-            case 'signOut':
-              setUser(null);
-              break;
-            default:
-              break;
-          }
-        };
+    Hub.listen("auth", authListener);
 
-        Hub.listen('auth', authListener);
+    return () => Hub.remove("auth", authListener);
+  }, []);
 
-        return () => Hub.remove('auth', authListener);
-      }, []);
-
-      const isUserLoggedIn = user !== null;
+  const isUserLoggedIn = user !== null;
 
   const fetchUserProfileData = async () => {
     if (user && user.username) {
@@ -387,7 +437,7 @@ export function AuthProvider({ children }) {
     fetchUserProfileData,
     createUserTagsWithSession,
     refreshToken,
-    isUserLoggedIn
+    isUserLoggedIn,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
