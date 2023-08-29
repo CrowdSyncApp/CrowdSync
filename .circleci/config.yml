@@ -13,6 +13,35 @@ jobs:
       - run:
           name: Install dependencies
           command: cd ios && bundle install
+
+      - run:
+          name: Install brew updates
+          command: |
+            brew update
+            brew install node
+            brew install watchman
+            npm install -g react-native-cli
+            yarn install
+
+      - run:
+          name: Deintegrate CocoaPods
+          command: cd ios && pod deintegrate
+
+      - run:
+          name: Gem CocoaPods
+          command: cd ios && gem install cocoapods
+
+      - run:
+          name: Update CocoaPods
+          command: cd ios && pod update
+
+      - run:
+          name: Install CocoaPods
+          command: cd ios && pod install
+
+      - run:
+          name: IOS Dir Look 
+          command: cd ios && ls
             
       - run:
           name: Build and Export IPA
