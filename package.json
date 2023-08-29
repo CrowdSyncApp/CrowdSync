@@ -55,8 +55,5 @@
   },
   "engines": {
     "node": ">=16"
-  },
-  "scripts": {
-    "ios:build": "xcodebuild -workspace ios/CrowdSync.xcworkspace -scheme CrowdSync -destination 'platform=iOS Simulator,name=iPhone 14' clean build"
   }
 }
