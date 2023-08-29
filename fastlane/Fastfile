@@ -3,9 +3,7 @@ platform :ios do
     setup_circle_ci
   end
   lane :increment_build do
-    increment_build_number(
-      build_number: ENV['CIRCLE_BUILD_NUM'] # Use the CircleCI build number
-    )
+    increment_build_number
   end
 
   lane :build_and_export_ipa do
