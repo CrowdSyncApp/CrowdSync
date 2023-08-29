@@ -1,50 +1,25 @@
 version: 2.1
 
 jobs:
-  adhoc:
+  pilot-deploy:
     macos:
       xcode: 14.2.0
     environment:
       FL_OUTPUT_DIR: output
-      FASTLANE_LANE: adhoc
+      FASTLANE_LANE: ios build_and_export_ipa
 
     steps:
       - checkout
       - run: bundle install
       - run:
           name: Install dependencies
-          command: |
-            brew update
-            brew install node
-            brew install watchman
-            npm install -g react-native-cli
-            yarn install
-
-      - run:
-          name: Deintegrate CocoaPods
-          command: cd ios && pod deintegrate
-
-      - run:
-          name: Gem CocoaPods
-          command: cd ios && gem install cocoapods
-
-      - run:
-          name: Update CocoaPods
-          command: cd ios && pod update
-
-      - run:
-          name: Install CocoaPods
-          command: cd ios && pod install
-
-      - run:
-          name: IOS Dir Look 
-          command: cd ios && ls
-
+          command: bundle exec gem install fastlane
+            
       - run:
           name: Build and Export IPA
-          command: fastlane build_and_export_ipa
+          command: bundle exec fastlane $FASTLANE_LANE
 
 workflows:
   build-test-workflow:
     jobs:
-      - adhoc
+      - pilot-deploy
