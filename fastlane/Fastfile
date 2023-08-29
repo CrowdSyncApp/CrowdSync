@@ -13,8 +13,9 @@ platform :ios do
     increment_build # Call the increment_build lane to increment the build number
 	app_store_connect_api_key
 	
+	match(type: "appstore"),
     gym(
-		xcargs: "CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=",
+		xcargs: "CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM="
 		scheme: "CrowdSync"
 	)
 	
