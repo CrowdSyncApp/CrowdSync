@@ -90,6 +90,30 @@
           "resourceName": "crowdsyncea9fc77eCustomMessage"
         }
       ]
+    },
+    "AMPLIFY_storage_crowdsyncb3eaa847_bucketName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "crowdsyncb3eaa847"
+        }
+      ]
+    },
+    "AMPLIFY_storage_crowdsyncb3eaa847_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "crowdsyncb3eaa847"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "crowdsyncb3eaa847": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3",
+      "serviceType": "imported"
     }
   }
 }

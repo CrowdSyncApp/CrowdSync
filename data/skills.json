@@ -1,0 +1,2110 @@
+[
+    {
+        "tag": "Information Technology (IT)",
+        "tagId": "99b09822-7b24-4a5c-88c8-806b0ff37ab6"
+    },
+    {
+        "tag": "Programming Languages",
+        "tagId": "f6ae3d31-5dd3-4857-bfa9-dce106ae3e3a"
+    },
+    {
+        "tag": "Web Development",
+        "tagId": "4fdf0ea9-42db-40e1-84ff-961c64d0bfa3"
+    },
+    {
+        "tag": "Database Management",
+        "tagId": "9f737b26-c44f-4865-a244-1b4bae3647ba"
+    },
+    {
+        "tag": "Cybersecurity",
+        "tagId": "41eabeab-9a09-4580-b872-69920f4afca4"
+    },
+    {
+        "tag": "Cloud Computing",
+        "tagId": "7b12aa07-8c22-4ed1-86bb-420b6437428c"
+    },
+    {
+        "tag": "Networking",
+        "tagId": "19a43594-e28d-40fa-8af3-589ebac6730b"
+    },
+    {
+        "tag": "DevOps",
+        "tagId": "38a6b65c-2a6f-42ab-90c4-6188c063b6d7"
+    },
+    {
+        "tag": "Artificial Intelligence (AI)",
+        "tagId": "4592e4a7-4a53-4eaf-a3c4-d6ac8394a8d3"
+    },
+    {
+        "tag": "User Interface (UI) / User Experience (UX) Design",
+        "tagId": "bca9e708-d16e-4ca8-93c0-ea7d5480bf5e"
+    },
+    {
+        "tag": "Agile Methodologies",
+        "tagId": "9f851d34-dea4-4ed1-83bc-9ba388c518d8"
+    },
+    {
+        "tag": "Healthcare and Medicine",
+        "tagId": "8a205c13-1eaf-4b9c-bbd9-bed5496bedaf"
+    },
+    {
+        "tag": "Medical Diagnosis",
+        "tagId": "1b2a6fe1-2f03-4439-8b19-d79449aede66"
+    },
+    {
+        "tag": "Surgical Skills",
+        "tagId": "43fe4518-1a14-454a-a203-f9c6553be597"
+    },
+    {
+        "tag": "Patient Care",
+        "tagId": "ab18dc87-9570-4e7b-a2a6-ffaa1ef35c5d"
+    },
+    {
+        "tag": "Medical Imaging",
+        "tagId": "2cd53999-359d-4d29-a365-f5974201ad83"
+    },
+    {
+        "tag": "Radiology",
+        "tagId": "261d89ed-3e33-4527-bd2c-1b9a092df48d"
+    },
+    {
+        "tag": "Nursing",
+        "tagId": "45126394-62b4-4d6d-9303-6998ea227c57"
+    },
+    {
+        "tag": "Pharmacology",
+        "tagId": "0d213d05-da5f-4f20-ac73-436b5730a290"
+    },
+    {
+        "tag": "Electronic Health Records (EHR) Management",
+        "tagId": "bf39a00f-d95b-4577-a7ac-cd4ccc8c99ac"
+    },
+    {
+        "tag": "Telemedicine",
+        "tagId": "f6bf568d-8cc9-4e30-acc7-a76af79bd98c"
+    },
+    {
+        "tag": "Medical Research",
+        "tagId": "2906e2ec-d684-4913-8fda-e799d13644cb"
+    },
+    {
+        "tag": "Education and E-Learning",
+        "tagId": "d5255c97-d732-400a-a6bf-3ad846bb415a"
+    },
+    {
+        "tag": "Curriculum Development",
+        "tagId": "c6ef438f-fc64-44ca-b234-bb8911e512c4"
+    },
+    {
+        "tag": "Online Teaching",
+        "tagId": "21edd3fb-762e-4f32-a989-5b2b4c20bef3"
+    },
+    {
+        "tag": "Instructional Design",
+        "tagId": "b4108412-7b70-4d3f-bca5-feb7455566e1"
+    },
+    {
+        "tag": "E-Learning Platforms",
+        "tagId": "5a15e314-c652-43a7-9c25-e6ff9f8c10af"
+    },
+    {
+        "tag": "Assessment Design",
+        "tagId": "87ea0383-2575-4225-b976-a1ae0c23cbce"
+    },
+    {
+        "tag": "Virtual Reality in Education",
+        "tagId": "1f444e02-5cc6-413a-8054-6add3577e6e8"
+    },
+    {
+        "tag": "EdTech Integration",
+        "tagId": "27eaa269-9af6-4c20-a999-6342255259aa"
+    },
+    {
+        "tag": "Personalized Learning",
+        "tagId": "7fefdf83-ca61-41ce-869a-c7925bed5081"
+    },
+    {
+        "tag": "Online Course Creation",
+        "tagId": "50be6c83-a427-47d7-a732-641b3b1e5324"
+    },
+    {
+        "tag": "Education Technology Research",
+        "tagId": "432a1b5e-1321-4790-bdd4-4b7930307753"
+    },
+    {
+        "tag": "Finance and Banking",
+        "tagId": "cd74cb69-d898-419f-9e43-6b05bf8db958"
+    },
+    {
+        "tag": "Financial Analysis",
+        "tagId": "977d6105-24ca-4993-a556-cc88a3037d33"
+    },
+    {
+        "tag": "Investment Management",
+        "tagId": "7cf1205d-6785-4d99-a03f-2bba0905022e"
+    },
+    {
+        "tag": "Accounting and Auditing",
+        "tagId": "5e24e3e9-9031-4fa6-88ab-36ec70cdcfd4"
+    },
+    {
+        "tag": "Banking Operations",
+        "tagId": "21d9fceb-4e67-41c5-8b61-43eccbbd42c0"
+    },
+    {
+        "tag": "Financial Planning",
+        "tagId": "9a6a074a-b877-47ae-9c4b-7c998f9d7c4a"
+    },
+    {
+        "tag": "Corporate Finance",
+        "tagId": "e603db51-6a3b-4e90-92ad-64740600db24"
+    },
+    {
+        "tag": "Risk Management",
+        "tagId": "303264ce-ee27-4519-a9d6-59d315899d3f"
+    },
+    {
+        "tag": "Financial Regulation",
+        "tagId": "ff24aaf9-8481-42f3-bce1-e3c81773146d"
+    },
+    {
+        "tag": "Financial Reporting",
+        "tagId": "0bbb5843-2dce-4e18-acc4-2a2905a0674e"
+    },
+    {
+        "tag": "Blockchain in Finance",
+        "tagId": "7dfb7046-4428-4af1-96e2-c326bde8abe3"
+    },
+    {
+        "tag": "Marketing and Advertising",
+        "tagId": "8fd2a202-9220-4e69-b660-df94d3695be7"
+    },
+    {
+        "tag": "Market Research",
+        "tagId": "ac2b0000-31a9-4041-b19e-cfa4bc7003b9"
+    },
+    {
+        "tag": "Content Creation",
+        "tagId": "ab0079f1-7c9f-4f6f-bece-69e620624d02"
+    },
+    {
+        "tag": "Campaign Management",
+        "tagId": "64925cdf-e20c-46d8-81e7-34871ff35d67"
+    },
+    {
+        "tag": "Social Media Marketing",
+        "tagId": "962bd995-12a1-494e-b60a-81b7e987e2ec"
+    },
+    {
+        "tag": "Search Engine Optimization (SEO)",
+        "tagId": "a4b095f4-5f23-4269-bcae-27965c331eae"
+    },
+    {
+        "tag": "Pay-Per-Click (PPC) Advertising",
+        "tagId": "8bf72895-c55c-45c1-b975-4c67abad0f5f"
+    },
+    {
+        "tag": "Brand Management",
+        "tagId": "4e2e1eee-2e6d-498a-ab9c-61776d7d9db1"
+    },
+    {
+        "tag": "Email Marketing",
+        "tagId": "c6ffb15f-dc6a-4af8-9884-2280d213f01e"
+    },
+    {
+        "tag": "Influencer Collaboration",
+        "tagId": "eec72173-ca7e-41cb-ab73-73ba77149ca3"
+    },
+    {
+        "tag": "Data Analytics in Marketing",
+        "tagId": "e6186bff-649f-46e9-87df-71ac4d09875f"
+    },
+    {
+        "tag": "Retail and E-Commerce",
+        "tagId": "07d4cfe9-be36-490c-9a93-d89597990e30"
+    },
+    {
+        "tag": "Inventory Management",
+        "tagId": "fcec5647-1558-4444-87b5-5e0bc30de159"
+    },
+    {
+        "tag": "E-Commerce Platforms",
+        "tagId": "5918868a-7b55-4d5e-a8f8-cbbd35578b69"
+    },
+    {
+        "tag": "Visual Merchandising",
+        "tagId": "3c882e61-074e-45d8-9755-d1378ff0b55f"
+    },
+    {
+        "tag": "Supply Chain Logistics",
+        "tagId": "ac121db8-892f-4eb5-a08f-d2c03aa0ee76"
+    },
+    {
+        "tag": "Customer Service",
+        "tagId": "692941d1-dcee-4600-b5e2-de705e7ca349"
+    },
+    {
+        "tag": "E-Commerce SEO",
+        "tagId": "7eb599e1-5ce8-46ab-a005-24e28ce4b327"
+    },
+    {
+        "tag": "Online Payment Systems",
+        "tagId": "ae196073-c8c3-4c72-962a-00cfab18ba64"
+    },
+    {
+        "tag": "Retail Analytics",
+        "tagId": "2a8f5a1c-b4ad-4fa2-bcae-13aa258175b8"
+    },
+    {
+        "tag": "Order Fulfillment",
+        "tagId": "6571935a-312b-4509-b63a-90dcabefaa6d"
+    },
+    {
+        "tag": "Omni-Channel Retailing",
+        "tagId": "46cd5cbf-0604-4215-ba0a-355250f01e08"
+    },
+    {
+        "tag": "Manufacturing and Production",
+        "tagId": "2386df24-bf70-49f4-9aa3-1000a53ad97f"
+    },
+    {
+        "tag": "Lean Manufacturing",
+        "tagId": "fe2429fd-f5d1-451f-a476-13b3bfd78701"
+    },
+    {
+        "tag": "Quality Control",
+        "tagId": "22eee4da-1303-4781-892c-125e9288ccac"
+    },
+    {
+        "tag": "Supply Chain Management",
+        "tagId": "340c71b1-ee07-4e45-b743-e8544cd427ac"
+    },
+    {
+        "tag": "Production Planning",
+        "tagId": "e2896931-d1c6-4fbe-973a-81514c0d1202"
+    },
+    {
+        "tag": "Industrial Automation",
+        "tagId": "dfe8fefa-cc37-4110-a3ba-76fc231eb0a6"
+    },
+    {
+        "tag": "Six Sigma Methodology",
+        "tagId": "58a14025-9c37-42c7-94a3-40ba52d18235"
+    },
+    {
+        "tag": "Process Optimization",
+        "tagId": "4fbfbb5b-c38f-4de0-8b9f-ab33622cd8d0"
+    },
+    {
+        "tag": "Product Lifecycle Management",
+        "tagId": "89c562df-063a-4751-b509-2382117c407a"
+    },
+    {
+        "tag": "Materials Handling",
+        "tagId": "3b67a113-c287-434f-a20c-48079542f2f2"
+    },
+    {
+        "tag": "Additive Manufacturing",
+        "tagId": "0c347d13-046a-47df-b6a3-2aabf5302dd2"
+    },
+    {
+        "tag": "Automotive and Transportation",
+        "tagId": "158bcbee-c20c-42ae-881b-e4920b0a36e1"
+    },
+    {
+        "tag": "Vehicle Maintenance",
+        "tagId": "f72f795e-aae6-4533-a20c-a2d4977eb40f"
+    },
+    {
+        "tag": "Auto Repair",
+        "tagId": "74c3e687-d0be-4f2c-8da6-89d2cc851498"
+    },
+    {
+        "tag": "Logistics Management",
+        "tagId": "c70c73f1-a84e-4212-ba7a-35814ef3c399"
+    },
+    {
+        "tag": "Aviation Operations",
+        "tagId": "aa31c0a0-9262-4d6b-96b9-58ef197b5607"
+    },
+    {
+        "tag": "Railway Engineering",
+        "tagId": "bc9332bd-013e-42b7-9302-9b012ceab6fd"
+    },
+    {
+        "tag": "Marine Engineering",
+        "tagId": "ab9b7e5c-89c3-40d9-ace4-0f0689edb95a"
+    },
+    {
+        "tag": "Autonomous Vehicles Technology",
+        "tagId": "a149ecee-56df-4f98-8a0f-d2dd81bd6321"
+    },
+    {
+        "tag": "Aerospace Manufacturing",
+        "tagId": "c97256c4-0559-4109-a131-bdaf8320d98a"
+    },
+    {
+        "tag": "Fleet Management",
+        "tagId": "4bccb53e-0caf-4e06-be2b-388ece561416"
+    },
+    {
+        "tag": "Supply Chain Optimization",
+        "tagId": "c27a0bd7-3aa5-44df-93f3-8e5751ed733d"
+    },
+    {
+        "tag": "Hospitality and Tourism",
+        "tagId": "cd398ed0-e2ad-4bc3-bbd8-a27796030f15"
+    },
+    {
+        "tag": "Customer Service",
+        "tagId": "1552aa16-fdaf-48f4-b87a-5e6fa1110e82"
+    },
+    {
+        "tag": "Hotel Management",
+        "tagId": "2c07846e-7ab2-4e1a-b52d-dc1e4efcd522"
+    },
+    {
+        "tag": "Event Planning and Management",
+        "tagId": "b991af17-40a3-436b-8d4c-96d4af613239"
+    },
+    {
+        "tag": "Food and Beverage Service",
+        "tagId": "9f4d36c9-d0e6-4c57-956c-d8710f2c4c38"
+    },
+    {
+        "tag": "Tourism Marketing",
+        "tagId": "07bbe7e9-718f-4859-90be-1efae13084d0"
+    },
+    {
+        "tag": "Culinary Arts",
+        "tagId": "4366a9ca-cfcc-47f4-9dfb-75e399f96377"
+    },
+    {
+        "tag": "Resort Operations",
+        "tagId": "22da3ee1-a6a9-423a-ac10-46a60e4f36e0"
+    },
+    {
+        "tag": "Travel Coordination",
+        "tagId": "a203c3ca-bbab-41d7-85c2-47e7292cc9c1"
+    },
+    {
+        "tag": "Hospitality Law",
+        "tagId": "3bd4b6a3-8472-4136-b339-5c9bd79708a2"
+    },
+    {
+        "tag": "Hotel Revenue Management",
+        "tagId": "026fa665-fe2d-4df5-8aa8-8a17a81a98f8"
+    },
+    {
+        "tag": "Real Estate and Property Management",
+        "tagId": "2a2110c5-c89b-4b8f-b591-ea774814a1ba"
+    },
+    {
+        "tag": "Property Valuation",
+        "tagId": "237f35d1-494c-4879-8635-ee5f2ba34d5f"
+    },
+    {
+        "tag": "Real Estate Marketing",
+        "tagId": "8ff44131-797b-4f5a-ab13-aa75c2c6b63b"
+    },
+    {
+        "tag": "Property Development",
+        "tagId": "7e102794-ff18-4cdb-92d5-a4078b0d9e95"
+    },
+    {
+        "tag": "Property Appraisal",
+        "tagId": "e94f2b25-5ed8-49a0-88cb-c1d8b0cd84a5"
+    },
+    {
+        "tag": "Lease Management",
+        "tagId": "e15cf297-203c-4c24-a555-54a9a1fac725"
+    },
+    {
+        "tag": "Real Estate Investment",
+        "tagId": "f06d2602-47b4-4b18-83a4-1f0908a9d0c4"
+    },
+    {
+        "tag": "Commercial Property Management",
+        "tagId": "b605a972-7939-4126-a59b-30ae12c0ceb9"
+    },
+    {
+        "tag": "Residential Property Management",
+        "tagId": "c9b9d9be-0a23-4920-8a72-e0b720f99042"
+    },
+    {
+        "tag": "Real Estate Law",
+        "tagId": "12e27ea6-135b-4556-8afc-714be137be8d"
+    },
+    {
+        "tag": "Sustainable Property Development",
+        "tagId": "83373320-a65b-4c48-a5b0-71b7f30aa34f"
+    },
+    {
+        "tag": "Energy and Utilities",
+        "tagId": "cbb91222-ba87-49cc-b744-1c5f265801c0"
+    },
+    {
+        "tag": "Renewable Energy Technologies",
+        "tagId": "e0a07a6f-af70-49e1-a50e-f337c44a6a1c"
+    },
+    {
+        "tag": "Energy Efficiency Management",
+        "tagId": "febe3051-e5eb-4284-98ea-1f912b9f6d1e"
+    },
+    {
+        "tag": "Electric Grid Management",
+        "tagId": "a74a6dab-8739-49fd-b7e8-5d3682c9d2e1"
+    },
+    {
+        "tag": "Oil and Gas Exploration",
+        "tagId": "08b82711-baab-43d9-ac55-5296dfadede6"
+    },
+    {
+        "tag": "Power Plant Operations",
+        "tagId": "30b7ff52-67a4-4bd4-804b-02602a65712a"
+    },
+    {
+        "tag": "Energy Economics",
+        "tagId": "0835a1c4-fc0c-4771-a455-6b92d7cb54d7"
+    },
+    {
+        "tag": "Smart Grid Technology",
+        "tagId": "16fa5219-b732-4407-8523-8322437fce6b"
+    },
+    {
+        "tag": "Nuclear Energy",
+        "tagId": "7482f64b-542a-4c92-b4ab-be37d809061f"
+    },
+    {
+        "tag": "Energy Policy",
+        "tagId": "c519e2e3-df48-4266-b4db-a7bab95d0c3a"
+    },
+    {
+        "tag": "Carbon Emissions Reduction",
+        "tagId": "29ccc3ab-0840-49ba-98bb-819a4a222e6b"
+    },
+    {
+        "tag": "Agriculture and Farming",
+        "tagId": "caa11d4c-c79d-4066-9183-418e19d69179"
+    },
+    {
+        "tag": "Sustainable Agriculture",
+        "tagId": "4b816973-1420-4144-9ea3-a3e9d87ffb14"
+    },
+    {
+        "tag": "Crop Management",
+        "tagId": "f88c003c-5801-488a-a1ad-fb3277858f6c"
+    },
+    {
+        "tag": "Precision Farming",
+        "tagId": "d0bb8339-6560-4162-8add-0b61d67bab5b"
+    },
+    {
+        "tag": "Livestock Management",
+        "tagId": "e4aa495c-1ecd-4bea-a70c-9c4fe1f5e846"
+    },
+    {
+        "tag": "Agribusiness Management",
+        "tagId": "5c1db662-0135-41a6-9704-c93ed0be299d"
+    },
+    {
+        "tag": "Agricultural Equipment Operation",
+        "tagId": "f6b2d3b3-ab4f-4333-9b5b-22cfccc9df10"
+    },
+    {
+        "tag": "Organic Farming",
+        "tagId": "bb4957bc-cacb-4be2-a00b-858fa37fcff0"
+    },
+    {
+        "tag": "Plant Breeding",
+        "tagId": "a61ce9fd-aa5f-463f-a968-0833fe55c6f2"
+    },
+    {
+        "tag": "Hydroponics",
+        "tagId": "7e17f62f-7b2f-499a-b31a-a09be170fdb2"
+    },
+    {
+        "tag": "Agroforestry",
+        "tagId": "38255647-ae1d-4dee-81a5-1b05e20e6c38"
+    },
+    {
+        "tag": "Entertainment and Media",
+        "tagId": "ffc1b2ff-1f7c-4d09-b2c0-a8cf3d00974c"
+    },
+    {
+        "tag": "Film Production",
+        "tagId": "58857e82-06b8-43f5-9101-10b09e1fd33f"
+    },
+    {
+        "tag": "Video Editing",
+        "tagId": "cce367ed-1547-4888-b87b-2cdbbc69c7f1"
+    },
+    {
+        "tag": "Music Composition",
+        "tagId": "2358671b-050b-4887-ad7e-68b051fe79d3"
+    },
+    {
+        "tag": "Screenwriting",
+        "tagId": "77b498ee-5e87-43ed-b653-d1b43b116513"
+    },
+    {
+        "tag": "Broadcast Journalism",
+        "tagId": "759a2fa7-b753-4bc2-94ee-75fb903029ea"
+    },
+    {
+        "tag": "Graphic Design for Media",
+        "tagId": "3d82d6aa-93f1-43fe-a319-490a3633d707"
+    },
+    {
+        "tag": "Entertainment Law",
+        "tagId": "e60d9224-4177-4b73-a346-535f996303bd"
+    },
+    {
+        "tag": "Media Marketing",
+        "tagId": "89b37e3f-bf3e-4aca-aa3c-71b26bc79443"
+    },
+    {
+        "tag": "Animation",
+        "tagId": "f496991d-dc7f-45e1-9380-2f01f868df62"
+    },
+    {
+        "tag": "Game Design",
+        "tagId": "4b44fd78-a771-4385-8a44-482a19d229b8"
+    },
+    {
+        "tag": "Telecommunications",
+        "tagId": "c2f254e9-e15b-4023-8b17-71f843a5f26e"
+    },
+    {
+        "tag": "Network Infrastructure",
+        "tagId": "54861e5c-d124-4368-ac3a-e12df3a7cb93"
+    },
+    {
+        "tag": "Telecom System Integration",
+        "tagId": "7dc09453-a759-436b-9450-e974fcd2f7f2"
+    },
+    {
+        "tag": "Wireless Communication",
+        "tagId": "c53544e0-a165-4876-b149-cca0d04d0c06"
+    },
+    {
+        "tag": "VoIP Implementation",
+        "tagId": "bef779b7-c4d9-4362-9f90-5929089e8b42"
+    },
+    {
+        "tag": "Fiber Optic Technology",
+        "tagId": "6e0a138b-0549-4cfa-a969-842662f02262"
+    },
+    {
+        "tag": "Telecom Regulatory Compliance",
+        "tagId": "26d41095-f74d-4a76-a794-ca35b7998281"
+    },
+    {
+        "tag": "Cybersecurity in Telecom",
+        "tagId": "b4b8dcd0-9890-4bd2-a037-41a343fc9a2a"
+    },
+    {
+        "tag": "Satellite Communication",
+        "tagId": "37ef24fd-a150-48e1-b404-2d55e0193e0b"
+    },
+    {
+        "tag": "5G Technology",
+        "tagId": "6a008ff7-b2e7-4a8d-9756-6bd927e9a8d5"
+    },
+    {
+        "tag": "Network Performance Optimization",
+        "tagId": "8b306b00-f188-453b-8b3f-3912979b1b56"
+    },
+    {
+        "tag": "Aerospace and Aviation",
+        "tagId": "44ac8b18-8b63-4f9c-b315-591bcc5a819c"
+    },
+    {
+        "tag": "Aircraft Maintenance",
+        "tagId": "3707a678-1823-4257-b419-4b4ec5cb85bb"
+    },
+    {
+        "tag": "Aircraft Design and Engineering",
+        "tagId": "28d4d332-2608-42f7-8a39-e6afa9b18ba6"
+    },
+    {
+        "tag": "Aerospace Materials",
+        "tagId": "497f8f94-4b53-46eb-b12c-eb5e62a1388a"
+    },
+    {
+        "tag": "Flight Operations",
+        "tagId": "36cb0b5e-290f-422f-a598-f5d8757fb249"
+    },
+    {
+        "tag": "Aviation Safety",
+        "tagId": "551da8b4-bf5e-4d3a-88aa-f282d5878251"
+    },
+    {
+        "tag": "Air Traffic Control",
+        "tagId": "41aea9e3-ca61-4d6a-b17a-d957cf99f7cb"
+    },
+    {
+        "tag": "Spacecraft Systems Engineering",
+        "tagId": "bd2be245-e29a-4695-a8b4-57038b2248c0"
+    },
+    {
+        "tag": "Aerospace Propulsion Systems",
+        "tagId": "761d478f-d267-4878-a5eb-8160688e1804"
+    },
+    {
+        "tag": "Aerospace Manufacturing",
+        "tagId": "855079a6-e553-4c11-9db6-39e9b4eb6707"
+    },
+    {
+        "tag": "Drone Technology",
+        "tagId": "e13a65f8-da03-43d2-ba69-ae35c1fef724"
+    },
+    {
+        "tag": "Architecture and Construction",
+        "tagId": "d6bf7160-0a60-4f5a-8f0b-7bc4b0b7ea86"
+    },
+    {
+        "tag": "Architectural Design",
+        "tagId": "9db6d956-ad71-4439-b217-c25ad5b023e0"
+    },
+    {
+        "tag": "Construction Management",
+        "tagId": "2fbf0a5a-9c0d-46c9-91c0-c0c28d114559"
+    },
+    {
+        "tag": "Structural Engineering",
+        "tagId": "b1adb057-618c-4f44-aab8-2d1a2299c018"
+    },
+    {
+        "tag": "Interior Design",
+        "tagId": "367f8154-cd97-43ad-85ac-bc53bbb67d23"
+    },
+    {
+        "tag": "Project Planning and Scheduling",
+        "tagId": "107778bc-0e46-4404-8c58-eaf1f484d624"
+    },
+    {
+        "tag": "Building Information Modeling (BIM)",
+        "tagId": "9eea6b31-d818-4b7a-9b82-7bde0b6e7933"
+    },
+    {
+        "tag": "Sustainable Architecture",
+        "tagId": "f670b27a-7cd9-4cf1-94c9-61957f446370"
+    },
+    {
+        "tag": "Urban Planning",
+        "tagId": "fd995356-84d9-4a66-831a-d5c505153d88"
+    },
+    {
+        "tag": "Construction Safety",
+        "tagId": "855a177e-e792-48cb-a71c-eae927e6f7d2"
+    },
+    {
+        "tag": "Site Management",
+        "tagId": "88f2f9fd-080f-4c33-89d8-00fd91e9eaa3"
+    },
+    {
+        "tag": "Environmental and Green Technology",
+        "tagId": "c4007c5d-0926-4ff9-bfc5-1f67bccff65d"
+    },
+    {
+        "tag": "Sustainability Management",
+        "tagId": "e95a8640-5378-49cc-a887-ba89bf54747f"
+    },
+    {
+        "tag": "Environmental Impact Assessment",
+        "tagId": "1e298660-bafc-4a5f-b80a-445fec35c816"
+    },
+    {
+        "tag": "Renewable Energy Development",
+        "tagId": "fc1087f0-5008-440d-a0a8-7026c8867ca3"
+    },
+    {
+        "tag": "Waste Management and Recycling",
+        "tagId": "57acf9b5-75ff-4f82-b3ca-95ac454d07ba"
+    },
+    {
+        "tag": "Green Building Design",
+        "tagId": "ff626632-3bb3-41b7-aec7-c2548e1b97b6"
+    },
+    {
+        "tag": "Water Resource Management",
+        "tagId": "8ce0423d-ab6f-4dc7-8a6f-b27a55d814a9"
+    },
+    {
+        "tag": "Climate Change Adaptation",
+        "tagId": "0c04b689-d688-4f22-abd7-48c67639b8db"
+    },
+    {
+        "tag": "Carbon Footprint Analysis",
+        "tagId": "25613ed5-7c22-4568-ae06-8eac186d9d67"
+    },
+    {
+        "tag": "Eco-friendly Product Development",
+        "tagId": "8d3f613f-129a-406d-987b-fe07c2598e0b"
+    },
+    {
+        "tag": "Environmental Policy",
+        "tagId": "d528cda1-5fd2-4e86-bf15-f2bd6c2ed3d9"
+    },
+    {
+        "tag": "Fashion and Apparel",
+        "tagId": "4a8a14c3-7d48-4c65-ba95-dcfd8fbfb8d8"
+    },
+    {
+        "tag": "Fashion Design",
+        "tagId": "4d455984-5ccd-4657-9200-bdae7f15efe3"
+    },
+    {
+        "tag": "Textile Manufacturing",
+        "tagId": "a70d42e4-34a6-4722-bbda-c6ac266f7eb1"
+    },
+    {
+        "tag": "Fashion Merchandising",
+        "tagId": "96122952-7522-4700-b325-3016ab92b135"
+    },
+    {
+        "tag": "Apparel Pattern Making",
+        "tagId": "c98b39e9-a575-40c0-bf01-320f849637a9"
+    },
+    {
+        "tag": "Styling and Visual Presentation",
+        "tagId": "0ddd7669-28d2-41c5-9540-b7e1a22a5beb"
+    },
+    {
+        "tag": "Fashion Marketing and PR",
+        "tagId": "9a12f0f5-e2bb-4162-bc3e-45dc36234bb4"
+    },
+    {
+        "tag": "Textile Design",
+        "tagId": "5f45b958-8693-47fd-bf55-465f067ccba9"
+    },
+    {
+        "tag": "Fashion Brand Management",
+        "tagId": "a637043f-6575-4d33-a610-f06c61045ecf"
+    },
+    {
+        "tag": "Sustainable Fashion Practices",
+        "tagId": "93665b4c-517e-418b-99cd-d24d84f558da"
+    },
+    {
+        "tag": "E-Commerce in Fashion",
+        "tagId": "4caee080-5c8a-49b0-b90d-40fc05135752"
+    },
+    {
+        "tag": "Food and Beverage",
+        "tagId": "d734ebc5-3acc-4336-9703-0af8b9d89761"
+    },
+    {
+        "tag": "Culinary Arts",
+        "tagId": "af8a8b51-bd23-4fc5-bc14-34b385b63c08"
+    },
+    {
+        "tag": "Culinary Management",
+        "tagId": "1bd16af0-981c-44b2-af7d-49669c84c978"
+    },
+    {
+        "tag": "Food Safety and Sanitation",
+        "tagId": "9eb7ca86-f503-45e6-8133-4359a1d1791f"
+    },
+    {
+        "tag": "Beverage Mixology",
+        "tagId": "2d851160-8c22-4d00-b83c-50ceb20e3c3e"
+    },
+    {
+        "tag": "Menu Planning and Development",
+        "tagId": "e1a5e3df-e29c-4e6c-aca9-70cf7e9d4fb3"
+    },
+    {
+        "tag": "Restaurant Operations",
+        "tagId": "806848aa-a924-4a50-95bb-9fdd2dc46143"
+    },
+    {
+        "tag": "Food Quality Control",
+        "tagId": "20b9c8de-57be-47f6-a9e6-d1768ef0ee3a"
+    },
+    {
+        "tag": "Food Photography",
+        "tagId": "addc72d3-2f7b-4083-8f08-78e769c42d7f"
+    },
+    {
+        "tag": "Gastronomy",
+        "tagId": "41799175-01a3-4c79-a03b-9b48a531e166"
+    },
+    {
+        "tag": "Food Innovation",
+        "tagId": "4aab3c0a-0173-4ee5-933c-cef79048fc2d"
+    },
+    {
+        "tag": "Sports and Fitness",
+        "tagId": "b71b15ea-3d55-4def-8a9d-277864d54046"
+    },
+    {
+        "tag": "Personal Training",
+        "tagId": "af3634c6-4468-499a-9199-1997554ecb22"
+    },
+    {
+        "tag": "Physical Therapy",
+        "tagId": "bc3b6ed0-6556-4451-9805-f2e19808db63"
+    },
+    {
+        "tag": "Sports Coaching",
+        "tagId": "940fddb5-08b0-49d7-b61d-59b9e3a99849"
+    },
+    {
+        "tag": "Sports Management",
+        "tagId": "a51052e4-bd3d-47e0-ae9d-671968711f93"
+    },
+    {
+        "tag": "Strength and Conditioning",
+        "tagId": "480d4a02-e60a-49f3-8402-40c1decae752"
+    },
+    {
+        "tag": "Sports Nutrition",
+        "tagId": "cc645548-6e94-40a5-834c-ec37a55f9c95"
+    },
+    {
+        "tag": "Injury Prevention and Rehabilitation",
+        "tagId": "7b86044a-7c37-44b4-9a5b-4afaa29a34e7"
+    },
+    {
+        "tag": "Sports Psychology",
+        "tagId": "a606b7fb-98cb-42bf-bf26-754592f38e05"
+    },
+    {
+        "tag": "Sports Marketing",
+        "tagId": "3d0a38e0-4b7e-4fca-a3a1-d411b5b53532"
+    },
+    {
+        "tag": "Sports Analytics",
+        "tagId": "b71fa680-e38d-4839-90e9-5b7e4fc989d1"
+    },
+    {
+        "tag": "Art and Design",
+        "tagId": "a5ee9b07-6822-460f-8eb6-9b59bb4819a5"
+    },
+    {
+        "tag": "Graphic Design",
+        "tagId": "bf862532-8e55-4903-924f-5f2e52931969"
+    },
+    {
+        "tag": "Illustration",
+        "tagId": "5d39acbd-10aa-4524-bf7e-cac005ab5e13"
+    },
+    {
+        "tag": "Photography",
+        "tagId": "3f9376bb-31ab-4517-a7c8-a61424a0e429"
+    },
+    {
+        "tag": "Typography",
+        "tagId": "35dd7080-98fc-4bc9-83f5-bdeef3a6f3ac"
+    },
+    {
+        "tag": "Visual Arts",
+        "tagId": "0d514f42-1437-473b-bf97-1d50d8c1878b"
+    },
+    {
+        "tag": "Concept Art",
+        "tagId": "159e421d-e183-490b-87c9-fc837d9b9cc6"
+    },
+    {
+        "tag": "Animation",
+        "tagId": "f0d7c06a-6f35-4fc3-a889-e9d65b7f300c"
+    },
+    {
+        "tag": "Art History",
+        "tagId": "0bf3d863-cc1a-4e9d-9ba8-203e638716a8"
+    },
+    {
+        "tag": "User Experience (UX) Design",
+        "tagId": "05e88168-b68e-4fbe-abc0-b18e9ee00abf"
+    },
+    {
+        "tag": "3D Modeling and Rendering",
+        "tagId": "cb77f517-2fad-4f8c-9543-3335ab7d5c97"
+    },
+    {
+        "tag": "Legal Services",
+        "tagId": "8b39f013-2e10-4d00-8812-e1ec99e443bf"
+    },
+    {
+        "tag": "Legal Research",
+        "tagId": "13040abb-83d5-49a7-99d7-b835f3161252"
+    },
+    {
+        "tag": "Contract Law",
+        "tagId": "0f864131-418d-45fc-9a1d-b59f1162fc72"
+    },
+    {
+        "tag": "Litigation",
+        "tagId": "fb0406ef-56bc-40d3-b6b2-21a07edb3d04"
+    },
+    {
+        "tag": "Intellectual Property Law",
+        "tagId": "dadc1b93-0806-497d-a1d5-7c89c672ca60"
+    },
+    {
+        "tag": "Criminal Law",
+        "tagId": "cfa1437a-ac2b-43f8-9206-c946382e1190"
+    },
+    {
+        "tag": "Corporate Law",
+        "tagId": "88290a41-7bc8-41e3-aace-77a523de971a"
+    },
+    {
+        "tag": "Family Law",
+        "tagId": "9e5ee372-b41e-4cb6-b152-6af968a6e475"
+    },
+    {
+        "tag": "Alternative Dispute Resolution (ADR)",
+        "tagId": "ccb0216f-04d1-4449-a603-c68fb0ef0dff"
+    },
+    {
+        "tag": "Environmental Law",
+        "tagId": "2eb22145-0d7d-453b-af50-9827c371aaaf"
+    },
+    {
+        "tag": "Immigration Law",
+        "tagId": "127a2bbb-bd2d-4261-a42f-2d77d683857b"
+    },
+    {
+        "tag": "Nonprofit and Social Services",
+        "tagId": "53a28d2b-b69c-49fd-8e31-2a245162fff9"
+    },
+    {
+        "tag": "Grant Writing",
+        "tagId": "fedc3a15-4123-4b19-9bc3-e88adc32f8af"
+    },
+    {
+        "tag": "Community Outreach",
+        "tagId": "d607b1ac-6fd4-433b-ac8e-7b12a0576958"
+    },
+    {
+        "tag": "Program Management",
+        "tagId": "ad2e7e9c-8f86-4d44-b3c3-81e606077207"
+    },
+    {
+        "tag": "Nonprofit Marketing",
+        "tagId": "fd2cbc63-f9f7-422f-9a0f-b8298199f252"
+    },
+    {
+        "tag": "Fundraising and Development",
+        "tagId": "966d3d0e-f760-4c79-aafe-3f72b8c5b4ef"
+    },
+    {
+        "tag": "Volunteer Management",
+        "tagId": "e084b23e-b89e-42f3-9cc4-e6363f7d1b6c"
+    },
+    {
+        "tag": "Social Work",
+        "tagId": "a2da46c9-1e18-4b8a-afda-3843c9c53401"
+    },
+    {
+        "tag": "Advocacy and Policy",
+        "tagId": "eb6dbcb2-3463-4144-ad57-81e55077ed30"
+    },
+    {
+        "tag": "Humanitarian Aid Coordination",
+        "tagId": "b367f839-a2a5-4600-bf85-f0d93a7ef27c"
+    },
+    {
+        "tag": "Consulting and Management",
+        "tagId": "6c4db978-7115-4e1c-8dde-30a7f3b57015"
+    },
+    {
+        "tag": "Management Consulting",
+        "tagId": "621308d9-1266-4f31-b841-7502277cf2f4"
+    },
+    {
+        "tag": "Strategic Planning",
+        "tagId": "be1b7c3d-22ee-46c7-b1ff-7981029465c5"
+    },
+    {
+        "tag": "Change Management",
+        "tagId": "66b7a760-5688-42e5-b65c-24c4294689b2"
+    },
+    {
+        "tag": "Performance Improvement",
+        "tagId": "8908454c-a5e2-469f-9ed3-f464e9f4fddf"
+    },
+    {
+        "tag": "Business Process Reengineering",
+        "tagId": "72a8f7fa-720a-44d3-8aa8-2a33a9db51da"
+    },
+    {
+        "tag": "Risk Assessment and Management",
+        "tagId": "a575442c-2700-4089-84c9-e01c40186d4a"
+    },
+    {
+        "tag": "Project Management",
+        "tagId": "e945a0a6-a99a-4115-aee8-a04aeb5925b9"
+    },
+    {
+        "tag": "Financial Consulting",
+        "tagId": "eba5c330-5477-4b62-99d2-322b44443fce"
+    },
+    {
+        "tag": "Human Resources Consulting",
+        "tagId": "abc6cb82-1178-4069-aa15-cc662b74f790"
+    },
+    {
+        "tag": "Data Analytics in Consulting",
+        "tagId": "b347825c-b35a-4474-987f-50e64acbf278"
+    },
+    {
+        "tag": "Pharmaceuticals and Biotechnology",
+        "tagId": "9a30ef49-39cc-45ee-b836-16014dfdbee3"
+    },
+    {
+        "tag": "Drug Discovery and Development",
+        "tagId": "84288cde-3839-4726-9556-b049f4a1c6e5"
+    },
+    {
+        "tag": "Pharmaceutical Regulatory Affairs",
+        "tagId": "e57575df-9ec5-4395-b306-05b1bbb122b1"
+    },
+    {
+        "tag": "Biomedical Research",
+        "tagId": "45908d17-983a-40d7-8f25-a8981dc4c3b9"
+    },
+    {
+        "tag": "Clinical Trials Management",
+        "tagId": "981fff4c-fe58-4356-bb87-d45b1476d864"
+    },
+    {
+        "tag": "Pharmacovigilance",
+        "tagId": "ee20cf93-5353-4e3f-8ee0-a94ab169b8d6"
+    },
+    {
+        "tag": "Bioprocessing",
+        "tagId": "b7e4a4e8-696a-46d9-8385-25e90c57030c"
+    },
+    {
+        "tag": "Bioinformatics",
+        "tagId": "c2865efa-e0fd-4554-8843-c875ea392010"
+    },
+    {
+        "tag": "Genetic Engineering",
+        "tagId": "0d31b0d8-fb69-48b2-b4fd-443cbb458748"
+    },
+    {
+        "tag": "Medical Writing",
+        "tagId": "e96d7400-49ed-4056-80a4-b78c478d4eb9"
+    },
+    {
+        "tag": "Stem Cell Research",
+        "tagId": "913dab49-97b5-4f54-ab18-b1d4ae319558"
+    },
+    {
+        "tag": "Gaming and Esports",
+        "tagId": "fe7606bf-6f03-4c21-b335-4d5666ae871d"
+    },
+    {
+        "tag": "Game Development",
+        "tagId": "4490f998-60f5-41d8-81b5-ee2cd45ae5cb"
+    },
+    {
+        "tag": "Esports Management",
+        "tagId": "86add77b-a2e1-496d-ac1f-45261e059099"
+    },
+    {
+        "tag": "Game Design and Mechanics",
+        "tagId": "aca6a260-0354-4e44-bbc1-0a892b5bae8f"
+    },
+    {
+        "tag": "Monetization Strategies",
+        "tagId": "ecdb73f0-dadf-494f-be7a-0663ece56a4a"
+    },
+    {
+        "tag": "Game Testing and QA",
+        "tagId": "2fe93013-a81d-4e7b-ba58-9c4edb8b9228"
+    },
+    {
+        "tag": "Level Design",
+        "tagId": "36c011b0-4bbb-4879-a237-6d461a1f4522"
+    },
+    {
+        "tag": "Virtual Reality (VR) Gaming",
+        "tagId": "20d4c09e-a6d8-4a17-a25c-92f3e7f371bd"
+    },
+    {
+        "tag": "Esports Marketing",
+        "tagId": "1130c7fd-ac70-413b-b828-88948e7720ff"
+    },
+    {
+        "tag": "Streaming and Content Creation",
+        "tagId": "c44cebfa-c374-42d3-95d4-90677e33f24e"
+    },
+    {
+        "tag": "Narrative Design in Games",
+        "tagId": "1bb3013f-dfe6-4e3d-ae1a-ba008f87697c"
+    },
+    {
+        "tag": "Music and Performing Arts",
+        "tagId": "19c84929-9473-4967-b0f4-fb9ca9dc018b"
+    },
+    {
+        "tag": "Music Composition",
+        "tagId": "a1e87147-29bb-404c-b2dc-d5f2da883b95"
+    },
+    {
+        "tag": "Instrumental Performance",
+        "tagId": "d6632fdb-a430-461d-80b7-508f7fa52db4"
+    },
+    {
+        "tag": "Vocal Performance",
+        "tagId": "787ea3aa-3ca2-450c-89ff-59c525a58af5"
+    },
+    {
+        "tag": "Music Production",
+        "tagId": "ac54d4b0-c4fa-415b-83fc-61b2ad8201ec"
+    },
+    {
+        "tag": "Sound Engineering",
+        "tagId": "1c70db87-7880-406c-b71e-304db67b45a6"
+    },
+    {
+        "tag": "Stage Management",
+        "tagId": "724d0606-d56e-458b-a5cb-20727af17932"
+    },
+    {
+        "tag": "Theater Direction",
+        "tagId": "f54fe962-b326-4d2e-a271-61d907852283"
+    },
+    {
+        "tag": "Choreography",
+        "tagId": "02b46b8d-0bcb-44b0-aac0-83a145ffd727"
+    },
+    {
+        "tag": "Music Theory",
+        "tagId": "240cf8c1-aabc-4ab9-a4a3-af82c7fcfe6e"
+    },
+    {
+        "tag": "Live Event Production",
+        "tagId": "30f9c971-9bf0-4ee7-b6ae-8e6cfa75ecc4"
+    },
+    {
+        "tag": "Government and Public Administration",
+        "tagId": "ae1e6d06-fcb5-4ee9-9bcc-e77301079357"
+    },
+    {
+        "tag": "Policy Analysis",
+        "tagId": "b4b82f73-8c2e-45b4-9e67-603c8d6d0480"
+    },
+    {
+        "tag": "Public Budgeting and Finance",
+        "tagId": "bed555ac-fc8d-4ad8-9fc8-fb94825092e7"
+    },
+    {
+        "tag": "Public Relations",
+        "tagId": "aebe718a-accf-4bf4-b940-163f9079a121"
+    },
+    {
+        "tag": "Government Program Management",
+        "tagId": "5741d83e-5d8a-4fad-bd8c-79c9af64316a"
+    },
+    {
+        "tag": "Public Policy Development",
+        "tagId": "39c1747d-6ec0-4976-8662-d04774f6f40c"
+    },
+    {
+        "tag": "Legislative Affairs",
+        "tagId": "12347e5a-e317-4fc1-a188-9fa2a9aa3aa7"
+    },
+    {
+        "tag": "Public Administration Ethics",
+        "tagId": "58c75ea6-5866-49d0-8103-270eb4a81b47"
+    },
+    {
+        "tag": "Foreign Diplomacy",
+        "tagId": "6eabfdf5-94cf-46e7-9de9-5bbf6fca59ba"
+    },
+    {
+        "tag": "Political Campaign Strategy",
+        "tagId": "e54310b9-9951-44d5-a1ab-1f061aea0b52"
+    },
+    {
+        "tag": "Journalism and Publishing",
+        "tagId": "e5a31d59-2b54-49a3-8d24-c1094382d054"
+    },
+    {
+        "tag": "News Reporting",
+        "tagId": "3ed75b39-9afa-476c-a040-67d6f0d31cee"
+    },
+    {
+        "tag": "Feature Writing",
+        "tagId": "909fb743-847d-4ac2-8252-4fb7af023744"
+    },
+    {
+        "tag": "Editing and Proofreading",
+        "tagId": "54a50f19-5164-46a8-ac07-a3588c7971a2"
+    },
+    {
+        "tag": "Digital Journalism",
+        "tagId": "77b6eabc-dd77-497f-87fe-b728c8c4bc68"
+    },
+    {
+        "tag": "Photojournalism",
+        "tagId": "0c182b2f-a6e2-42c2-ac94-5c5c934256ed"
+    },
+    {
+        "tag": "Investigative Journalism",
+        "tagId": "615f5db4-dad9-4431-8188-37ec156286e9"
+    },
+    {
+        "tag": "Publishing Process Management",
+        "tagId": "dd4c67e4-c680-4c82-97bf-e96dae1f9009"
+    },
+    {
+        "tag": "Journalistic Ethics",
+        "tagId": "eeb5840f-e819-4880-aedf-a9c3cffab042"
+    },
+    {
+        "tag": "Content Strategy",
+        "tagId": "7aac6cee-b619-4366-a7f0-acb595fe29ca"
+    },
+    {
+        "tag": "Media Law and Ethics",
+        "tagId": "62b8e553-653b-4aa5-ae98-7c3cfb1a7018"
+    },
+    {
+        "tag": "Interior Design and Home Improvement",
+        "tagId": "9706e06e-f629-47de-8059-45b1e4d846fa"
+    },
+    {
+        "tag": "Space Planning",
+        "tagId": "73b99918-ccdd-4666-9924-d86ec6176a91"
+    },
+    {
+        "tag": "Color Theory and Selection",
+        "tagId": "49f439ca-4277-4160-951b-fbc95afe9624"
+    },
+    {
+        "tag": "Interior Decoration",
+        "tagId": "6f7645f7-ccc4-477a-8c37-13ebc6e02876"
+    },
+    {
+        "tag": "Residential Design",
+        "tagId": "1ed6e4ea-2811-4633-9f60-4d229e37b408"
+    },
+    {
+        "tag": "Commercial Design",
+        "tagId": "08b80c32-f69d-4630-8bca-47781a36e3bc"
+    },
+    {
+        "tag": "Home Staging",
+        "tagId": "f52c50a7-45b1-441e-8037-4aa6903b44a9"
+    },
+    {
+        "tag": "Materials and Finishes Selection",
+        "tagId": "7fcfb5da-fa78-40b9-900a-d53274cf0225"
+    },
+    {
+        "tag": "Furniture Design",
+        "tagId": "1b9978a5-2e30-4a98-817e-18f6a586d4b6"
+    },
+    {
+        "tag": "Ergonomics in Design",
+        "tagId": "1d9d293f-e167-4d98-a0eb-20a2bb8e89b7"
+    },
+    {
+        "tag": "Renewable Energy",
+        "tagId": "9ed3f19e-99b7-4559-a785-35ae526ad01f"
+    },
+    {
+        "tag": "Solar Photovoltaic Design",
+        "tagId": "1d39f550-271d-4f01-a9ae-e76d17a223d7"
+    },
+    {
+        "tag": "Wind Turbine Maintenance",
+        "tagId": "8509dcaa-0de6-4798-bd7a-ead8d14195b3"
+    },
+    {
+        "tag": "Bioenergy Production",
+        "tagId": "dc47d74a-8595-4380-98e4-f61fd60bd2e5"
+    },
+    {
+        "tag": "Geothermal Energy Technology",
+        "tagId": "7f9709d3-9345-4593-9915-384b1f344339"
+    },
+    {
+        "tag": "Tidal and Wave Energy",
+        "tagId": "984a966f-7d7c-4b57-b659-35dd17794d7a"
+    },
+    {
+        "tag": "Energy Storage Solutions",
+        "tagId": "dd954834-7dd3-4673-8373-e08d6e5c57cf"
+    },
+    {
+        "tag": "Smart Grid Implementation",
+        "tagId": "a409148f-636d-47ea-811c-39be1ab31ab6"
+    },
+    {
+        "tag": "Sustainable Energy Policy",
+        "tagId": "639ea393-c856-4e91-afa2-11503108bc9d"
+    },
+    {
+        "tag": "Hydroelectric Power Generation",
+        "tagId": "06959180-132c-49d0-b57c-2719ea224b18"
+    },
+    {
+        "tag": "Marine and Maritime",
+        "tagId": "72060cc9-b7c9-4e83-b9fb-7af905cd7752"
+    },
+    {
+        "tag": "Marine Engineering",
+        "tagId": "c895b870-8435-40e7-a80c-4bc8f8ec83c0"
+    },
+    {
+        "tag": "Maritime Law",
+        "tagId": "e18cf640-9864-4e6a-97fd-5b89bfe2351c"
+    },
+    {
+        "tag": "Navigation and Seamanship",
+        "tagId": "0d9d24ff-cbab-45f9-b5b2-84da65a6fc8e"
+    },
+    {
+        "tag": "Marine Ecology",
+        "tagId": "cca13807-c33a-4141-bd87-d70f3f5dc99b"
+    },
+    {
+        "tag": "Ship Design and Construction",
+        "tagId": "8485e326-fc40-45d9-8805-bc6111bedcf3"
+    },
+    {
+        "tag": "Marine Safety and Security",
+        "tagId": "8b409a16-d7b2-4e2e-9ac4-5bf57cb9535f"
+    },
+    {
+        "tag": "Port Management",
+        "tagId": "b57e3e8c-00d9-4649-ba01-4b30f4600e28"
+    },
+    {
+        "tag": "Marine Pollution Control",
+        "tagId": "1276deec-72d1-4793-b910-f5de087ee3a8"
+    },
+    {
+        "tag": "Fisheries Management",
+        "tagId": "c14abb96-21ef-441a-a9ab-2f7d0959ab82"
+    },
+    {
+        "tag": "Human Resources and Recruitment",
+        "tagId": "1a718e10-4f46-41d6-8940-312fed52f2d2"
+    },
+    {
+        "tag": "Recruitment and Selection",
+        "tagId": "705d9260-59d8-4a48-90af-bba3cd04e937"
+    },
+    {
+        "tag": "Performance Management",
+        "tagId": "01a3299a-9c81-47df-8092-6ce91d8a649b"
+    },
+    {
+        "tag": "Employee Training and Development",
+        "tagId": "756d1dd3-7781-4a65-b6b9-f5fd10ea9183"
+    },
+    {
+        "tag": "Compensation and Benefits Management",
+        "tagId": "048e3465-f1b8-4386-8c6f-c8ccee5e6ff1"
+    },
+    {
+        "tag": "HR Information Systems",
+        "tagId": "e31b36f9-7d0a-44ab-ad97-f60e13b284dc"
+    },
+    {
+        "tag": "Organizational Development",
+        "tagId": "2269f8c0-ee67-472a-9456-f38575ed77d2"
+    },
+    {
+        "tag": "Labor Law and Compliance",
+        "tagId": "de653705-79e1-45d8-9564-ed75c53c01d1"
+    },
+    {
+        "tag": "Workplace Diversity and Inclusion",
+        "tagId": "0175e563-7f77-4daf-9d36-b84e0afc1f87"
+    },
+    {
+        "tag": "Employee Relations",
+        "tagId": "e9cb6eb8-1692-453c-b2d3-c89b212ea356"
+    },
+    {
+        "tag": "Information Security",
+        "tagId": "9e1d63d1-7c36-45bf-90c8-b27bb236ca3d"
+    },
+    {
+        "tag": "Cyber Threat Analysis",
+        "tagId": "679f00d3-9fcc-454d-b0ff-f6a43383b794"
+    },
+    {
+        "tag": "Incident Response",
+        "tagId": "f1fc9e57-8eef-4dbe-aa02-1a8a7bf148e4"
+    },
+    {
+        "tag": "Network Security",
+        "tagId": "da120672-94f7-4fb5-9557-2442b89e781a"
+    },
+    {
+        "tag": "Security Risk Assessment",
+        "tagId": "2f0fbb02-5bff-4c88-a59e-e5012bd2ddd7"
+    },
+    {
+        "tag": "Cryptography",
+        "tagId": "bc48e5db-992b-4575-b789-6e9c25597d33"
+    },
+    {
+        "tag": "Ethical Hacking",
+        "tagId": "77ba9645-e26c-4b90-b0d9-20368d411270"
+    },
+    {
+        "tag": "Penetration Testing",
+        "tagId": "ed82ccc8-ea47-494a-ba2e-6b229876358a"
+    },
+    {
+        "tag": "Security Awareness Training",
+        "tagId": "ad44725c-29cb-4518-a245-b58892d607c1"
+    },
+    {
+        "tag": "Data Privacy Compliance",
+        "tagId": "6a86eda3-af4e-4856-993f-e9887d60eae1"
+    },
+    {
+        "tag": "Social Media and Influencer Marketing",
+        "tagId": "cf19b792-edb2-4af6-995a-df2047c292e5"
+    },
+    {
+        "tag": "Social Media Strategy",
+        "tagId": "c6154169-17ea-4a25-a519-e3c59ef63b63"
+    },
+    {
+        "tag": "Content Creation and Curation",
+        "tagId": "ac810140-5ce9-49e0-9c3c-3f0b67f29718"
+    },
+    {
+        "tag": "Social Media Advertising",
+        "tagId": "4e412f3e-f6c2-47dd-b95d-225958cbf763"
+    },
+    {
+        "tag": "Influencer Collaboration",
+        "tagId": "1d667190-e44a-465d-a500-57904db92b61"
+    },
+    {
+        "tag": "Community Management",
+        "tagId": "123e5610-c12c-4fcd-bce5-ba4da049db3d"
+    },
+    {
+        "tag": "Data Analytics for Social Media",
+        "tagId": "325b5da3-80ad-4f75-848f-9991d49107b5"
+    },
+    {
+        "tag": "Brand Building on Social Media",
+        "tagId": "84f93652-cb78-4704-9680-8aa1a7f3b8a1"
+    },
+    {
+        "tag": "Viral Marketing",
+        "tagId": "07c5ee41-3a6b-4275-bd99-6292951fbf16"
+    },
+    {
+        "tag": "Crisis Management on Social Media",
+        "tagId": "1052ce90-97f5-47df-ae0b-8236c42f7269"
+    },
+    {
+        "tag": "Software Development",
+        "tagId": "f8594fd8-a06d-43da-83d3-8e9f052a3fe9"
+    },
+    {
+        "tag": "Agile Software Development",
+        "tagId": "ba16007e-720d-4c5e-beeb-5bc18b481c70"
+    },
+    {
+        "tag": "Version Control (Git)",
+        "tagId": "33ada8f8-f277-4b6e-9801-8f9db81598b3"
+    },
+    {
+        "tag": "Software Testing and Quality Assurance",
+        "tagId": "87941366-ef6d-4a6b-831e-a73390b18d9a"
+    },
+    {
+        "tag": "Code Review",
+        "tagId": "34a6b954-88df-42cc-877e-811a83fea00f"
+    },
+    {
+        "tag": "Continuous Integration and Deployment (CI/CD)",
+        "tagId": "ea409d0c-e9de-47f7-a400-fc4c7da24ae9"
+    },
+    {
+        "tag": "Software Architecture and Design",
+        "tagId": "ba61b314-eec3-4603-b2f4-b035dbf87ee7"
+    },
+    {
+        "tag": "Debugging",
+        "tagId": "bfa8e814-670b-4476-8189-8d77a5604e7e"
+    },
+    {
+        "tag": "Software Development Life Cycle (SDLC)",
+        "tagId": "50fd7a1d-d385-4c41-9ab6-67a773643a3c"
+    },
+    {
+        "tag": "API Development",
+        "tagId": "7b5e169a-1c01-4e94-b343-eb653564f842"
+    },
+    {
+        "tag": "Data Analysis and Business Intelligence",
+        "tagId": "5373f06c-38f6-4697-928a-476a12840812"
+    },
+    {
+        "tag": "Data Cleaning and Preprocessing",
+        "tagId": "ff68e618-23fe-4b4c-8ea3-1984958c0c5e"
+    },
+    {
+        "tag": "Data Visualization",
+        "tagId": "ec31ea59-d635-42f4-9b75-895708c127ea"
+    },
+    {
+        "tag": "Statistical Analysis",
+        "tagId": "8882024a-df37-473c-8ca6-eda4b6a4c9d7"
+    },
+    {
+        "tag": "Data Mining",
+        "tagId": "64e9f126-f4a8-45fa-8f0e-535ca9031df5"
+    },
+    {
+        "tag": "Machine Learning",
+        "tagId": "00ef0497-5c68-4987-9cdc-9bf591f9d1ee"
+    },
+    {
+        "tag": "Predictive Analytics",
+        "tagId": "14c41872-b879-4397-a9c7-82068f3744a5"
+    },
+    {
+        "tag": "Big Data Management",
+        "tagId": "c49f8e9d-34f3-483d-b6d1-90152c084290"
+    },
+    {
+        "tag": "Business Intelligence Tools",
+        "tagId": "5360fcba-798c-4982-8471-12e03f5b436b"
+    },
+    {
+        "tag": "Quantitative Data Analysis",
+        "tagId": "485f23fe-d817-4cb2-a0ce-55f895def449"
+    },
+    {
+        "tag": "Artificial Intelligence and Machine Learning",
+        "tagId": "3354d5aa-10bc-4020-ae50-6c30d64fd21a"
+    },
+    {
+        "tag": "Machine Learning Algorithms",
+        "tagId": "e3121102-5ba9-443e-a718-50d995dd06b0"
+    },
+    {
+        "tag": "Natural Language Processing (NLP)",
+        "tagId": "c3ec22e5-1bf3-41ce-b0d2-d7714b5be217"
+    },
+    {
+        "tag": "Computer Vision",
+        "tagId": "5ef411ce-6dc0-43d2-ad23-5d7d91a8c93b"
+    },
+    {
+        "tag": "Reinforcement Learning",
+        "tagId": "aeaa04d3-1fc8-4ef5-acd5-96e723ccffce"
+    },
+    {
+        "tag": "Deep Learning",
+        "tagId": "603e3208-57b4-4268-90d9-9583f008c7a9"
+    },
+    {
+        "tag": "Generative Adversarial Networks (GANs)",
+        "tagId": "2f097fb0-6401-4948-bcc0-a2df8165f983"
+    },
+    {
+        "tag": "AI Ethics and Bias Mitigation",
+        "tagId": "cf06c0f8-bd37-4e4f-ac4c-e6387dd15378"
+    },
+    {
+        "tag": "Transfer Learning",
+        "tagId": "f10d937b-5a75-4972-8926-d5d69bbb44c0"
+    },
+    {
+        "tag": "AI Model Deployment",
+        "tagId": "392cd5a4-5450-44cc-b660-d21da89966ae"
+    },
+    {
+        "tag": "Health and Wellness",
+        "tagId": "b6d59f18-53a2-4bd7-89a1-3c076766ee91"
+    },
+    {
+        "tag": "Nutrition Coaching",
+        "tagId": "384a7feb-9320-49b0-bf59-4ee2e04d94c6"
+    },
+    {
+        "tag": "Fitness Training",
+        "tagId": "b91d3141-0829-4e8a-83a1-bca8928a85ef"
+    },
+    {
+        "tag": "Wellness Coaching",
+        "tagId": "97d5ffd8-646c-4baf-8fee-cac74a249427"
+    },
+    {
+        "tag": "Mental Health Counseling",
+        "tagId": "864e15fa-19c3-44e9-9a3e-c9d4272e4e5c"
+    },
+    {
+        "tag": "Yoga Instruction",
+        "tagId": "ebc0e7e4-1e61-432e-afa6-73aa1e736d21"
+    },
+    {
+        "tag": "Mindfulness Meditation",
+        "tagId": "73f125ad-1bd3-46fb-8f32-a05ba67e7a04"
+    },
+    {
+        "tag": "Alternative Medicine Practices",
+        "tagId": "739bb6a2-52ef-49d3-923c-059abfcdb2fb"
+    },
+    {
+        "tag": "Healthcare Administration",
+        "tagId": "e5111f32-ae02-4e3a-b25b-6d6c6aacba07"
+    },
+    {
+        "tag": "Health Education and Promotion",
+        "tagId": "df4800c8-599d-4f58-90c3-f85520fd8ee0"
+    },
+    {
+        "tag": "Architecture and Urban Planning",
+        "tagId": "faf1c4f4-2e2c-4a2c-b32b-353862fb39af"
+    },
+    {
+        "tag": "Architectural Design",
+        "tagId": "215d2e74-3a3c-4e88-b88d-a02ccd95bdad"
+    },
+    {
+        "tag": "Urban Planning and Design",
+        "tagId": "b114f46b-371b-438b-868d-3a0d56928099"
+    },
+    {
+        "tag": "Landscape Architecture",
+        "tagId": "365f5f37-d127-494f-8a16-27839a787ac6"
+    },
+    {
+        "tag": "Sustainable Urban Development",
+        "tagId": "ab772a6b-9975-46f2-99ab-3276b4fa6c3f"
+    },
+    {
+        "tag": "Historical Preservation",
+        "tagId": "494c936c-d143-4ab5-a53f-d6a043485ea2"
+    },
+    {
+        "tag": "Smart City Planning",
+        "tagId": "e427ce49-722a-4b6c-8be2-6dea5420315a"
+    },
+    {
+        "tag": "Community Engagement in Urban Planning",
+        "tagId": "ab3e2d79-04ac-49ad-ab85-374be352c73b"
+    },
+    {
+        "tag": "Traffic and Transportation Planning",
+        "tagId": "3fb7e4f6-4c4f-4dd4-83ca-702fcb501e04"
+    },
+    {
+        "tag": "Public Space Design",
+        "tagId": "d8eec47f-7fc7-4524-be11-dcc47a3cf383"
+    },
+    {
+        "tag": "Cryptocurrency and Blockchain",
+        "tagId": "a3d0350d-6f06-490a-83e4-1b4a459e7871"
+    },
+    {
+        "tag": "Cryptocurrency Trading",
+        "tagId": "437b2c04-dfbe-4311-9060-af7ee3efee79"
+    },
+    {
+        "tag": "Blockchain Development",
+        "tagId": "bc89693f-e06e-495c-a24f-21ad80480204"
+    },
+    {
+        "tag": "Decentralized Finance (DeFi)",
+        "tagId": "dd156eb1-874a-4325-9ac4-5913e4df6e3b"
+    },
+    {
+        "tag": "Cryptocurrency Mining",
+        "tagId": "7bd7d1ec-ea79-4072-9294-d6df1957e39d"
+    },
+    {
+        "tag": "Smart Contracts Development",
+        "tagId": "e6ef3ca2-e699-4809-80e3-473610336f5e"
+    },
+    {
+        "tag": "Crypto Security and Auditing",
+        "tagId": "aeb60a19-691a-4937-96bf-9fb23fe269e8"
+    },
+    {
+        "tag": "Blockchain Governance",
+        "tagId": "80fef567-e7fb-492f-8f57-a6aa7ece9aae"
+    },
+    {
+        "tag": "Token Economics",
+        "tagId": "a899256a-d8db-4550-8941-66421ebd8b4e"
+    },
+    {
+        "tag": "Crypto Regulation and Compliance",
+        "tagId": "9a27b4a9-cc11-44fb-aabd-e5c1bd168eb5"
+    },
+    {
+        "tag": "Virtual Reality and Augmented Reality",
+        "tagId": "e46b7bd5-02b0-4d13-9a69-bf83fd0898f0"
+    },
+    {
+        "tag": "VR/AR Content Creation",
+        "tagId": "b7a93947-f2c9-456e-a9f6-8fcb6e87c06b"
+    },
+    {
+        "tag": "3D Modeling for VR/AR",
+        "tagId": "fffb0b36-92e9-4ffd-8fd2-cb790a4c067c"
+    },
+    {
+        "tag": "Immersive Experience Design",
+        "tagId": "7f9af8aa-7603-4efc-b8fb-61b61e70238c"
+    },
+    {
+        "tag": "VR/AR Interaction Design",
+        "tagId": "0dbf5cbd-01fe-4787-8cea-04f13f415e92"
+    },
+    {
+        "tag": "VR/AR Development Platforms",
+        "tagId": "9e216423-f7d9-4079-9466-045ebc19d199"
+    },
+    {
+        "tag": "VR/AR for Training and Simulations",
+        "tagId": "bc4d60cd-71dc-46be-8e17-90e09a3e0f5b"
+    },
+    {
+        "tag": "Medical Applications of VR/AR",
+        "tagId": "8a8ff0aa-0b3a-4b7a-a749-e2f3cc368c04"
+    },
+    {
+        "tag": "Education and Training in VR/AR",
+        "tagId": "01376492-a3c6-477c-a78e-658f7e578518"
+    },
+    {
+        "tag": "Entertainment and Gaming in VR/AR",
+        "tagId": "d28b99e6-9ac8-439e-97e6-8c636d1d0ccf"
+    },
+    {
+        "tag": "Automotive Technology",
+        "tagId": "d66bb5d9-8756-46f0-bef3-478d266fe894"
+    },
+    {
+        "tag": "Vehicle Diagnostics and Repair",
+        "tagId": "f7f5e9b4-8066-4c1c-a426-1cd67c2a4277"
+    },
+    {
+        "tag": "Automotive Electronics",
+        "tagId": "f0b74e02-5209-410f-86c8-8b7fd5bbdffd"
+    },
+    {
+        "tag": "Vehicle Software Development",
+        "tagId": "ea26641b-4ea9-4335-a1ef-d9ebee4744d1"
+    },
+    {
+        "tag": "Connected Car Technology",
+        "tagId": "f0a3b8f1-a487-497c-bb26-c6da87023f71"
+    },
+    {
+        "tag": "Advanced Driver Assistance Systems (ADAS)",
+        "tagId": "e2c087d9-6bfa-4bb5-8b6b-40159da55602"
+    },
+    {
+        "tag": "Autonomous Vehicle Technology",
+        "tagId": "4f35aad9-39e3-4b0f-a1b2-cffef617b894"
+    },
+    {
+        "tag": "Electric Vehicle Technology",
+        "tagId": "a92b8a7c-d0df-4227-9638-8b8c5419c80e"
+    },
+    {
+        "tag": "Hybrid Vehicle Technology",
+        "tagId": "095b09d3-901e-42e2-b382-e0c2670e7d8d"
+    },
+    {
+        "tag": "Vehicle Safety Systems",
+        "tagId": "5211079c-1b89-4fcf-b6db-9adfb8a5ae69"
+    },
+    {
+        "tag": "Nanotechnology",
+        "tagId": "95b12d04-a493-4755-a243-9e70c2e63b4c"
+    },
+    {
+        "tag": "Nanomaterials Synthesis",
+        "tagId": "4b2f1d13-fa20-440f-862d-720bf9309622"
+    },
+    {
+        "tag": "Nanodevice Fabrication",
+        "tagId": "abc5ff48-a12f-44bd-b295-7f70717b7d23"
+    },
+    {
+        "tag": "Nanomedicine Applications",
+        "tagId": "b4433280-484d-4e5e-b192-df0a0fc9d3d4"
+    },
+    {
+        "tag": "Nanoelectronics",
+        "tagId": "8435d286-0b48-4d9c-ba80-da718835829c"
+    },
+    {
+        "tag": "Nanophotonics",
+        "tagId": "315f3bed-52ab-43b6-aee0-ade72cada0ef"
+    },
+    {
+        "tag": "Nanofabrication Techniques",
+        "tagId": "5bb4309a-5df9-4f95-906b-658a0f150fce"
+    },
+    {
+        "tag": "Nanotoxicology",
+        "tagId": "b5655506-8a57-4c45-be96-43cfd8287ad9"
+    },
+    {
+        "tag": "Nanoscale Engineering",
+        "tagId": "3665f33d-8171-47cc-9550-5f11088b21e6"
+    },
+    {
+        "tag": "Nanocharacterization Techniques",
+        "tagId": "5d5f7fc4-787e-4838-9ead-89e5b3e43b06"
+    },
+    {
+        "tag": "Space Exploration and Research",
+        "tagId": "b54b5c4a-2675-4d44-ac2e-440acbf9ac63"
+    },
+    {
+        "tag": "Spacecraft Design and Engineering",
+        "tagId": "fd38f401-1781-44c8-9e69-dcff972d3bf8"
+    },
+    {
+        "tag": "Astrophysics Research",
+        "tagId": "9d5cf5ba-44bc-4ad0-9b2e-f4db89f683ab"
+    },
+    {
+        "tag": "Planetary Science",
+        "tagId": "101f2813-fadb-49cc-9a1e-7d35d5f5cbe7"
+    },
+    {
+        "tag": "Space Mission Planning and Execution",
+        "tagId": "f800cc73-25ad-420f-ab1f-3bca3303b542"
+    },
+    {
+        "tag": "Space Robotics",
+        "tagId": "9ed6c1df-3ef5-4262-8546-63851bc68c6e"
+    },
+    {
+        "tag": "Astrobiology Research",
+        "tagId": "54b918dc-d0d7-413e-83c2-82e4172bccef"
+    },
+    {
+        "tag": "Satellite Technology",
+        "tagId": "04e645cf-6221-42e5-b02e-76c341b9843b"
+    },
+    {
+        "tag": "Space Policy and Regulation",
+        "tagId": "4674b81b-dec9-40a8-b9a4-90d043c8bec5"
+    },
+    {
+        "tag": "Extraterrestrial Resource Exploration",
+        "tagId": "1815e901-febc-4a31-9490-88610d602d0d"
+    },
+    {
+        "tag": "Fitness and Personal Training",
+        "tagId": "5b83e8a2-0301-47ca-b9af-85b7adbde7e5"
+    },
+    {
+        "tag": "Personalized Fitness Programming",
+        "tagId": "4463cff6-64eb-4d11-bb7a-fa15c0707748"
+    },
+    {
+        "tag": "Strength Training",
+        "tagId": "1c91ecc1-fff8-4a64-bdf1-63800def117f"
+    },
+    {
+        "tag": "Cardiovascular Conditioning",
+        "tagId": "f15f594b-5e07-4ec6-ae21-a6e4289402fe"
+    },
+    {
+        "tag": "Functional Training",
+        "tagId": "d82b33e0-882f-4c4a-8f89-c94dd00401d9"
+    },
+    {
+        "tag": "Group Fitness Instruction",
+        "tagId": "3077fbdc-ae98-46f2-ba75-e0ca6f28a0c2"
+    },
+    {
+        "tag": "Online Fitness Coaching",
+        "tagId": "43bf5953-3f6e-46bc-8659-e94e9afa5dbf"
+    },
+    {
+        "tag": "Fitness Nutrition Coaching",
+        "tagId": "4303a130-dbaf-46d4-a1ce-de29faa15d21"
+    },
+    {
+        "tag": "Fitness Assessment and Progress Tracking",
+        "tagId": "7e99f21a-8b05-4738-b280-68eec68afed1"
+    },
+    {
+        "tag": "Fitness for Special Populations",
+        "tagId": "5fc41104-bb26-4901-aded-c078ec6b28b3"
+    },
+    {
+        "tag": "Personal Finance and Investment",
+        "tagId": "74023ce1-83de-401d-8e25-1097cf99cb68"
+    },
+    {
+        "tag": "Financial Planning",
+        "tagId": "bba7789a-90f0-47f7-97b6-1e856557d5ea"
+    },
+    {
+        "tag": "Investment Strategies",
+        "tagId": "ebee2d3d-6b9c-46a4-b5f8-2153c4fe7299"
+    },
+    {
+        "tag": "Retirement Planning",
+        "tagId": "ae023c2d-1803-4899-b7b1-b517ce92b776"
+    },
+    {
+        "tag": "Wealth Management",
+        "tagId": "192b4f0c-2ba1-40ae-8dc2-d932b3e7a84f"
+    },
+    {
+        "tag": "Tax Planning and Optimization",
+        "tagId": "f857ff74-5229-4334-893c-8c96f7e06dd8"
+    },
+    {
+        "tag": "Estate Planning",
+        "tagId": "87314b3c-70e0-456d-ac76-2826cf3e265c"
+    },
+    {
+        "tag": "Personal Budgeting",
+        "tagId": "c5fad368-4d3d-4db0-bf53-85d825865bf9"
+    },
+    {
+        "tag": "Stock Market Analysis",
+        "tagId": "15574cef-f9f2-4608-9e0d-f3041c795b5f"
+    },
+    {
+        "tag": "Cryptocurrency Investment",
+        "tagId": "242b5d6e-5a7e-4686-8800-9ce8d1ad0568"
+    },
+    {
+        "tag": "Wedding and Event Planning",
+        "tagId": "09c1ddb5-68af-48d9-bd14-cd5c977913d2"
+    },
+    {
+        "tag": "Event Design and Styling",
+        "tagId": "3c4023e0-7695-492c-a2f4-a30b612cbb3c"
+    },
+    {
+        "tag": "Venue Selection and Management",
+        "tagId": "378e47c8-3f04-49bb-9acb-51554b8b7518"
+    },
+    {
+        "tag": "Event Logistics",
+        "tagId": "91a95227-270c-4f60-b43c-fc8499b9bf5f"
+    },
+    {
+        "tag": "Wedding Coordination",
+        "tagId": "1d54759e-4c4c-436a-ba49-8f0122fc39cd"
+    },
+    {
+        "tag": "Event Marketing and Promotion",
+        "tagId": "f8baa8f0-9f7d-4049-991e-82dea2dbb81c"
+    },
+    {
+        "tag": "Budget Planning for Events",
+        "tagId": "dd6c1c8f-11af-4479-8ea9-9933a9795eee"
+    },
+    {
+        "tag": "Contract Negotiation for Events",
+        "tagId": "e1d4d279-72de-4183-85aa-fd1458f597cd"
+    },
+    {
+        "tag": "Corporate Event Planning",
+        "tagId": "19f999a3-63f2-4c58-87cd-34406c3c04f8"
+    },
+    {
+        "tag": "Nonprofit Event Planning",
+        "tagId": "a1e7602d-6dea-42fe-a4a1-88581e1eadb6"
+    },
+    {
+        "tag": "Photography and Videography",
+        "tagId": "0af01d03-73b6-441a-9156-889451341a96"
+    },
+    {
+        "tag": "Photography Composition and Lighting",
+        "tagId": "c2fd59c5-60fd-40f9-94c3-bcced4bd9dc9"
+    },
+    {
+        "tag": "Photo Editing and Retouching",
+        "tagId": "87e1678e-5ea7-4838-a7f4-822c1b489227"
+    },
+    {
+        "tag": "Portrait Photography",
+        "tagId": "e9f70b44-7149-4959-8cbe-5447deff0c63"
+    },
+    {
+        "tag": "Wedding Photography",
+        "tagId": "10ee2858-78ef-4866-a3e4-f819f454a353"
+    },
+    {
+        "tag": "Landscape Photography",
+        "tagId": "3cacaab6-0375-4f06-b516-21f1fabf9db4"
+    },
+    {
+        "tag": "Commercial Photography",
+        "tagId": "30e480e0-934a-4813-9718-9d0d56236e21"
+    },
+    {
+        "tag": "Video Production",
+        "tagId": "30b3314d-8df2-4877-a482-40a667e81e0f"
+    },
+    {
+        "tag": "Video Editing",
+        "tagId": "4d1d5fb8-c3ea-4116-bc3f-04cec4022c0d"
+    },
+    {
+        "tag": "Cinematography",
+        "tagId": "fcbbd5e3-3158-4a8f-9e78-aecdc8b81a40"
+    },
+    {
+        "tag": "E-learning and Online Courses",
+        "tagId": "fac040cd-c625-4068-b795-612c63498a56"
+    },
+    {
+        "tag": "Course Design and Development",
+        "tagId": "971e56fe-4cca-40a8-9ae9-a0aff3f031a6"
+    },
+    {
+        "tag": "Online Teaching Strategies",
+        "tagId": "a7ec1ac3-d6d0-4430-ae6a-29de733f6d42"
+    },
+    {
+        "tag": "E-learning Platforms and Tools",
+        "tagId": "0dac9c19-b0ae-4d0f-a92b-a3e7d9a0241e"
+    },
+    {
+        "tag": "Assessment and Evaluation in E-learning",
+        "tagId": "0dec73da-4673-4431-9301-efc9005705b6"
+    },
+    {
+        "tag": "Interactive Content Creation",
+        "tagId": "509b373a-2850-4dd2-8201-fd32f8fbf395"
+    },
+    {
+        "tag": "Video Lectures and Screen Recording",
+        "tagId": "36a3b6ed-a0cb-4b0d-90d2-072b1ade63db"
+    },
+    {
+        "tag": "Gamification in E-learning",
+        "tagId": "4c07ba47-d6d1-4939-af9a-9fde56418d32"
+    },
+    {
+        "tag": "Adaptive Learning Technology",
+        "tagId": "57f848ca-3bb8-4fed-b7cb-cd5ea25c6c6f"
+    },
+    {
+        "tag": "Online Course Marketing",
+        "tagId": "16be25ff-591d-4c0a-b1bc-6ff2d7939b98"
+    }
+]

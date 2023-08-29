@@ -10,7 +10,11 @@
       "https://www.linkedin.com/in/johndoe",
       "https://twitter.com/johndoe"
     ],
-    "tags": ["Tech", "Programming", "Web Development"],
+    "tags": [
+      { "tagId": 1, "tag": "Tech" },
+      { "tagId": 2, "tag": "Programming" },
+      { "tagId": 3, "tag": "Web Development" }
+    ],
     "visibility": "VISIBLE"
   },
   {
@@ -24,7 +28,11 @@
       "https://www.linkedin.com/in/janesmith",
       "https://twitter.com/janesmith"
     ],
-    "tags": ["Product Management", "Strategy", "Innovation"],
+    "tags": [
+      { "tagId": 4, "tag": "Product Management" },
+      { "tagId": 5, "tag": "Strategy" },
+      { "tagId": 6, "tag": "Innovation" }
+    ],
     "visibility": "VISIBLE"
   },
   {
@@ -38,7 +46,11 @@
       "https://www.linkedin.com/in/alexjohnson",
       "https://dribbble.com/alexjohnson"
     ],
-    "tags": ["Design", "Illustration", "Branding"],
+    "tags": [
+      { "tagId": 7, "tag": "Design" },
+      { "tagId": 8, "tag": "Illustration" },
+      { "tagId": 9, "tag": "Branding" }
+    ],
     "visibility": "INVISIBLE"
   },
   {
@@ -52,7 +64,11 @@
       "https://www.linkedin.com/in/emilybrown",
       "https://twitter.com/emilybrown"
     ],
-    "tags": ["Marketing", "Digital Strategy", "Content"],
+    "tags": [
+      { "tagId": 10, "tag": "Marketing" },
+      { "tagId": 11, "tag": "Digital Strategy" },
+      { "tagId": 12, "tag": "Content" }
+    ],
     "visibility": "VISIBLE"
   },
   {
@@ -66,7 +82,11 @@
       "https://www.linkedin.com/in/michaelwilson",
       "https://angel.co/michaelwilson"
     ],
-    "tags": ["Startups", "Venture Capital", "Innovation"],
+    "tags": [
+      { "tagId": 13, "tag": "Startups" },
+      { "tagId": 14, "tag": "Venture Capital" },
+      { "tagId": 15, "tag": "Innovation" }
+    ],
     "visibility": "VISIBLE"
   }
 ]

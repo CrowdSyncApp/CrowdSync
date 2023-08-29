@@ -1,44 +1,37 @@
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
+import styles, { palette, fonts } from "./style";
+import CrowdSyncLogo from "../images/Crowdsync_Logo.png";
 
-const SplashScreen = ({ isUserLoggedIn }) => {
+const SplashScreen = () => {
   const navigation = useNavigation();
-  const { fetchUserProfileData } = useAuth();
+  const { isLoading, isUserLoggedIn } = useAuth();
 
   useEffect(() => {
-      // Define an async function to handle fetching user profile data
-      const fetchUserProfileAndNavigate = async () => {
-        if (isUserLoggedIn === true) {
-          // Fetch user data from DynamoDB
-          await fetchUserProfileData();
-
-          // User is logged in, navigate to FindSession screen or other screens
-          navigation.navigate("FindSession");
-        } else if (isUserLoggedIn === false) {
-          // User is not logged in, navigate to Login screen or other screens
-          navigation.navigate("Login");
-        }
-      };
-
-      // Call the async function
-      fetchUserProfileAndNavigate();
-    }, [isUserLoggedIn, navigation]);
+    // Check if isLoading is false and isUserLoggedIn has a value
+    if (!isLoading && isUserLoggedIn !== undefined) {
+      if (isUserLoggedIn) {
+        navigation.navigate("FindSession");
+      } else {
+        navigation.navigate("Login");
+      }
+    }
+  }, [isLoading, isUserLoggedIn, navigation]);
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <ActivityIndicator size="large" />
+    <View style={styles.splash}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Image
+          source={CrowdSyncLogo}
+          resizeMode="contain"
+          style={styles.splashLogo}
+        />
+        <Text style={styles.headerTitle}>CrowdSync</Text>
+      </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
 
 export default SplashScreen;

@@ -1,8 +1,13 @@
 // SessionManager.tsx
-import { API } from 'aws-amplify';
-import { createSessions, updateSessions, createParticipants } from "../src/graphql/mutations";
-import 'react-native-get-random-values';
-import { v4 } from 'uuid';
+import { API, graphqlOperation } from "aws-amplify";
+import {
+  createSessions,
+  updateSessions,
+  createParticipants,
+} from "../src/graphql/mutations";
+import { listParticipants } from "../src/graphql/queries";
+import "react-native-get-random-values";
+import { v4 } from "uuid";
 
 const MAX_RETRY_ATTEMPTS = 5; // Maximum number of retry attempts
 
@@ -10,9 +15,34 @@ const generateUniqueSessionId = () => {
   return v4();
 };
 
+export const getSessionIdForUser = async (userId) => {
+  try {
+    const filter = {
+      userId: { eq: userId },
+      sessionStatus: { ne: "INACTIVE" },
+    };
+
+    const listParticipantsResponse = await API.graphql(
+      graphqlOperation(listParticipants, { filter })
+    );
+    const participants = listParticipantsResponse.data.listParticipants.items;
+
+    if (participants.length === 0) {
+      return "INACTIVE";
+    }
+
+    return participants[0].sessionId;
+  } catch (error) {
+    console.error("Error fetching session ID for user:", error);
+    return "INACTIVE";
+  }
+};
+
 const createSessionWithRetry = async (userId, title, retryAttempt = 1) => {
   if (retryAttempt > MAX_RETRY_ATTEMPTS) {
-    throw new Error(`Failed to create session after ${MAX_RETRY_ATTEMPTS} attempts`);
+    throw new Error(
+      `Failed to create session after ${MAX_RETRY_ATTEMPTS} attempts`
+    );
   }
 
   const now = new Date().toISOString();
@@ -25,7 +55,7 @@ const createSessionWithRetry = async (userId, title, retryAttempt = 1) => {
       startTime: now,
       endTime: null,
       title: title,
-      status: 'ACTIVE',
+      status: "ACTIVE",
     },
   };
 
@@ -37,11 +67,11 @@ const createSessionWithRetry = async (userId, title, retryAttempt = 1) => {
 
     const newSession = response.data.createSessions;
 
-    console.log('Session started:', newSession);
+    console.log("Session started:", newSession);
 
     return newSession; // Optionally, you can return the new session object
   } catch (error) {
-    console.error('Error starting session:', error);
+    console.error("Error starting session:", error);
 
     // Retry with a new session ID
     return createSessionWithRetry(userId, title, retryAttempt + 1);
@@ -58,6 +88,7 @@ const createParticipant = async (userId, fullName, sessionId) => {
       joinedAt: now,
       fullName: fullName,
       visibility: "VISIBLE",
+      sessionStatus: "ACTIVE",
     },
   };
 
@@ -69,9 +100,9 @@ const createParticipant = async (userId, fullName, sessionId) => {
 
     const newParticipant = response.data.createParticipants;
 
-    console.log('Participant created:', newParticipant);
+    console.log("Participant created:", newParticipant);
   } catch (error) {
-    console.error('Error creating participant:', error);
+    console.error("Error creating participant:", error);
     throw error;
   }
 };
@@ -100,7 +131,7 @@ export const endSession = async (sessionId, startTime) => {
         sessionId: sessionId,
         startTime: startTime,
         endTime: now,
-        status: 'INACTIVE', // Set the status to 'INACTIVE' when ending a session
+        status: "INACTIVE", // Set the status to 'INACTIVE' when ending a session
       },
     };
 
@@ -111,10 +142,10 @@ export const endSession = async (sessionId, startTime) => {
 
     const updatedSession = response.data.updateSessions;
 
-    console.log('Session ended:', updatedSession);
+    console.log("Session ended:", updatedSession);
     return updatedSession;
   } catch (error) {
-    console.error('Error ending session:', error);
+    console.error("Error ending session:", error);
     throw error;
   }
 };

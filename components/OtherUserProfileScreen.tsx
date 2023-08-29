@@ -1,64 +1,107 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import React from "react";
+import { View, Text, Image, TouchableOpacity, Pressable } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import styles, { palette, fonts } from "./style";
 
 const OtherUserProfileScreen = () => {
-
   const navigation = useNavigation(); // Get navigation instance
   const route = useRoute(); // Get route object
 
   const { userData } = route.params;
   const myimage = Image.resolveAssetSource(userData.profilePicture);
 
+  console.log("userData", userData.tags);
+
+  const renderSocialLinks = (socialLinks) => {
+    if (socialLinks && socialLinks.length > 0) {
+      return socialLinks.map((link, index) => (
+        <TouchableOpacity key={index} onPress={() => handleLinkPress(link)}>
+          <Text style={styles.detailText}>{link}</Text>
+        </TouchableOpacity>
+      ));
+    } else {
+      return <Text style={styles.detailText}>No social links available.</Text>;
+    }
+  };
+
   // Function to handle opening the chat (you can implement your chat logic here)
   const handleChatPress = () => {
     // Implement your chat logic here
-    navigation.navigate('ChatScreen', { participants: [userData], chatType: "INDIVIDUAL" });
+    navigation.navigate("ChatScreen", {
+      participants: [userData],
+      chatType: "INDIVIDUAL",
+    });
   };
 
   return (
-    <ScrollView style={{ flex: 1 }}>
-      {/* Profile Picture */}
-<Image source={{ uri: userData.profilePicture }} style={{ width: 100, height: 100, borderRadius: 50, alignSelf: 'center', marginTop: 20 }} />
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <View style={styles.index}>
+        <View style={styles.div}>
+          {/* Profile Picture */}
+          <Image
+            source={{ uri: userData.profilePicture }}
+            style={{
+              width: 350,
+              height: 350,
+              borderRadius: 100,
+              resizeMode: "contain",
+            }}
+          />
 
-      {/* User's Name */}
-      <Text style={{ fontSize: 24, fontWeight: 'bold', alignSelf: 'center', marginTop: 10 }}>{userData.fullName}</Text>
+          {/* User's Name */}
+          <View style={{ alignItems: "center" }}>
+            <Text style={styles.headerTitle}>{userData.fullName}</Text>
+          </View>
 
-      {/* Job Title */}
-      <Text style={{ fontSize: 18, alignSelf: 'center', marginTop: 5 }}>{userData.jobTitle}</Text>
+          {/* Job Title and Company */}
+          {userData.jobTitle || userData.company ? (
+            <View style={{ alignItems: "center" }}>
+              <Text style={styles.secondaryHeaderTitle}>
+                {userData.jobTitle}
+                {userData.jobTitle && userData.company ? ", " : ""}
+                {userData.company}
+              </Text>
+            </View>
+          ) : null}
 
-      {/* Address */}
-      <Text style={{ fontSize: 16, alignSelf: 'center', marginTop: 5 }}>{userData.address}</Text>
+          {/* Location and Phone Number */}
+          {userData.jobTitle || userData.company ? (
+            <View style={{ alignItems: "center" }}>
+              <Text style={styles.secondaryHeaderTitle}>
+                {userData.address}
+                {userData.address && userData.phoneNumber ? ", " : ""}
+                {userData.phoneNumber}
+              </Text>
+            </View>
+          ) : null}
 
-      {/* Phone Number */}
-      <Text style={{ fontSize: 16, alignSelf: 'center', marginTop: 5 }}>{userData.phoneNumber}</Text>
+          {/* Social URLs */}
+          <View style={styles.linksContainer}>
+            <Text style={styles.secondaryHeaderTitle}>Social Links:</Text>
+            {renderSocialLinks(userData.socialLinks)}
+          </View>
 
-      {/* Social URLs */}
-      <View style={{ marginTop: 20, paddingHorizontal: 20 }}>
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Social URLs:</Text>
-        {userData.socialUrls.map((url, index) => (
-          <TouchableOpacity key={index} onPress={() => console.log('Open URL: ', url)}>
-            <Text style={{ fontSize: 16, color: 'blue', marginTop: 5 }}>{url}</Text>
-          </TouchableOpacity>
-        ))}
+          {/* User's Tags */}
+          <View>
+            <Text style={styles.secondaryHeaderTitle}>My Tags:</Text>
+            <Text style={styles.detailText}>
+              {userData.tags && userData.tags.length > 0
+                ? userData.tags.map((tag, index) =>
+                    index === userData.tags.length - 1
+                      ? tag.tag
+                      : tag.tag + ", "
+                  )
+                : "No tags available."}
+            </Text>
+          </View>
+
+          {/* Chat Button */}
+          <Pressable style={styles.basicButton} onPress={handleChatPress}>
+            <Text style={styles.buttonText}>Chat</Text>
+          </Pressable>
+        </View>
       </View>
-
-      {/* User's Tags */}
-      <View style={{ marginTop: 20, paddingHorizontal: 20 }}>
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>User's Tags:</Text>
-        {userData.tags.map((tag, index) => (
-          <Text key={index} style={{ fontSize: 16, marginTop: 5 }}>{tag}</Text>
-        ))}
-      </View>
-
-      {/* Chat Button */}
-      <TouchableOpacity
-        onPress={handleChatPress}
-        style={{ backgroundColor: '#007bff', borderRadius: 5, padding: 10, margin: 20 }}
-      >
-        <Text style={{ fontSize: 18, color: 'white', textAlign: 'center' }}>Chat</Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 };

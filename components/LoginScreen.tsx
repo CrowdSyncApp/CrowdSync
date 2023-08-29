@@ -1,25 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, Button } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Button,
+  Image,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Auth } from "aws-amplify";
 import { useAuth } from "../QueryCaching";
+import CrowdSyncLogo from "../images/Crowdsync_Logo.png";
+import styles, { palette, fonts } from "./style";
 
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
-  const { login, fetchUserProfileData } = useAuth();
+  const { login } = useAuth();
 
   const handleLogin = async () => {
     try {
       const user = await login({ username, password });
-
-      // Navigation logic after successful login
-      if (user) {
-        navigation.navigate("FindSession");
-      }
     } catch (error) {
-        throw error;
+      throw error;
     }
   };
 
@@ -29,16 +33,16 @@ const LoginScreen = () => {
   };
 
   const handleGuestSignIn = async () => {
-      try {
-        const anonymousUser = await Auth.currentCredentials(); // Guest account
+    try {
+      const anonymousUser = await Auth.currentCredentials(); // Guest account
 
-        // Navigate to the FindSession screen or any other desired screen
-        navigation.navigate("FindSession");
-      } catch (error) {
-        console.error("Guest Sign In error:", error);
-        alert("Guest Sign In failed. Please try again.");
-      }
-    };
+      // Navigate to the FindSession screen or any other desired screen
+      navigation.navigate("FindSession");
+    } catch (error) {
+      console.error("Guest Sign In error:", error);
+      alert("Guest Sign In failed. Please try again.");
+    }
+  };
 
   const handleForgotUsername = () => {
     // Navigate to the ForgotUsername screen
@@ -51,56 +55,63 @@ const LoginScreen = () => {
   };
 
   return (
-    <View>
-      <Text>Login Screen</Text>
-      <TextInput
-        placeholder="Email or Phone"
-        value={username}
-        onChangeText={setUsername}
-        autoCapitalize="none"
-        keyboardType="email-address"
-        style={{
-          borderColor: "gray",
-          borderWidth: 1,
-          padding: 10,
-          marginBottom: 10,
-        }}
-      />
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={{
-          borderColor: "gray",
-          borderWidth: 1,
-          padding: 10,
-          marginBottom: 10,
-        }}
-      />
-      <TouchableOpacity
-        onPress={handleLogin}
-        style={{ backgroundColor: "blue", padding: 10, marginBottom: 10 }}
-      >
-        <Text style={{ color: "white", textAlign: "center" }}>Log In</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={handleSignUp}
-        style={{ backgroundColor: "green", padding: 10 }}
-      >
-        <Text style={{ color: "white", textAlign: "center" }}>Sign Up</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-              onPress={handleGuestSignIn}
-              style={{ backgroundColor: "orange", padding: 10, marginBottom: 10 }}
-            >
-              <Text style={{ color: "white", textAlign: "center" }}>Guest Sign In</Text>
-            </TouchableOpacity>
-      <TouchableOpacity onPress={handleForgotPassword}>
-        <Text style={{ color: "blue", textAlign: "center", marginTop: 10 }}>
-          Forgot Password?
-        </Text>
-      </TouchableOpacity>
+    <View style={styles.index}>
+      <View style={styles.div}>
+        <View style={styles.titleContainer}>
+          <Image
+            source={CrowdSyncLogo}
+            resizeMode="contain"
+            style={styles.splashLogo}
+          />
+          <Text style={styles.headerTitle}>CrowdSync</Text>
+        </View>
+        <View style={{ paddingVertical: 10 }}>
+          <TextInput
+            placeholder="Email or Phone"
+            value={username}
+            onChangeText={setUsername}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            style={styles.textInput}
+          />
+        </View>
+        <View style={{ paddingVertical: 10 }}>
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            style={styles.textInput}
+          />
+        </View>
+        <View style={styles.flexButtonContainer}>
+          <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
+            <Text style={styles.buttonText}>Log In</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleSignUp} style={styles.signUpButton}>
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{ paddingVertical: 10, paddingHorizontal: 13 }}>
+          <TouchableOpacity
+            onPress={handleGuestSignIn}
+            style={styles.tertiaryButton}
+          >
+            <Text style={styles.buttonText}>Guest Sign In</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity onPress={handleForgotPassword}>
+          <Text
+            style={{
+              color: palette.tertiaryColor,
+              textAlign: "center",
+              marginTop: 10,
+            }}
+          >
+            Forgot Password?
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

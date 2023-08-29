@@ -1,33 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
-import { RNCamera, BarCodeReadEvent } from 'react-native-camera';
-import { useNavigation } from '@react-navigation/native';
-import { useAuth } from '../QueryCaching';
-import { createParticipant } from './SessionManager';
+import React, { useState, useEffect } from "react";
+import { View, Text } from "react-native";
+import { RNCamera, BarCodeReadEvent } from "react-native-camera";
+import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../QueryCaching";
+import { createParticipant } from "./SessionManager";
 
 const QRScannerScreen = () => {
   const [scannedData, setScannedData] = useState<string | null>(null);
   const navigation = useNavigation();
-    const { user, fetchUserProfileData } = useAuth();
+  const { user, fetchUserProfileData } = useAuth();
 
   // Function to handle QR code scanning
   const handleBarCodeScanned = async (event: BarCodeReadEvent) => {
     const { data } = event;
 
     try {
-          const userProfileData = await fetchUserProfileData(user?.userId);
-          const fullName = userProfileData.fullName;
+      const userProfileData = await fetchUserProfileData(user?.username);
+      const fullName = userProfileData.fullName;
 
-          const sessionData = data;
-          await createParticipant(user?.userId, fullName, sessionData.sessionId);
+      const sessionData = data;
+      await createParticipant(user?.userId, fullName, sessionData.sessionId);
 
-          navigation.navigate('SessionHome', { sessionData: sessionData });
-        } catch (error) {
-          // Handle errors, e.g., show an error message to the user
-          console.error('Error joining session:', error);
-        }
+      navigation.navigate("SessionHome", { sessionData: sessionData });
+    } catch (error) {
+      // Handle errors, e.g., show an error message to the user
+      console.error("Error joining session:", error);
+    }
 
-        setScannedData(data);
+    setScannedData(data);
   };
 
   useEffect(() => {
@@ -45,9 +45,9 @@ const QRScannerScreen = () => {
       {scannedData && (
         <View
           style={{
-            backgroundColor: 'white',
+            backgroundColor: "white",
             padding: 16,
-            position: 'absolute',
+            position: "absolute",
             bottom: 0,
             left: 0,
             right: 0,
