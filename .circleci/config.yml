@@ -35,7 +35,12 @@ jobs:
       - run:
           name: IOS Dir Look 
           command: cd ios && ls
-          
+
+      - run:
+          name: Build iOS app
+          command: |
+            yarn ios:build
+
       - run:
           name: Archive the App
           command: |
@@ -45,8 +50,3 @@ jobs:
           name: Upload to TestFlight
           command: |
             xcrun altool --upload-app -f build/CrowdSync.xcarchive -u bcollins@crowdsync.net -p "@keychain:APP_STORE_CONNECT_API_KEY" --verbose
-
-      - run:
-          name: Build iOS app
-          command: |
-            yarn ios:build
