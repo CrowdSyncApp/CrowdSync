@@ -10,10 +10,9 @@ jobs:
 
     steps:
       - checkout
-      - run: bundle install
       - run:
           name: Install dependencies
-          command: bundle exec gem install fastlane
+          command: bundle install
             
       - run:
           name: Build and Export IPA
