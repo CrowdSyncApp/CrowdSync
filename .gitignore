@@ -32,6 +32,8 @@ google-services.json
 # Android Profiling
 *.hprof
 
+vendor/
+
 package-lock.json
 yarn.lock
 
@@ -52,11 +54,6 @@ out/
 .vscode/
 .idea/
 .DS_Store
-
-*.js
-*.js.map
-*.ts
-*.ts.map
 
 .bash_history
 .npmrc
