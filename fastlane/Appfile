@@ -1,0 +1,3 @@
+# fastlane/Appfile
+apple_id "bcollins@crowdsync.net"
+app_identifier "net.crowdsync.crowdsync"
