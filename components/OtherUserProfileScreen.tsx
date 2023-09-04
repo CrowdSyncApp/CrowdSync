@@ -11,8 +11,6 @@ const OtherUserProfileScreen = () => {
   const { userData } = route.params;
   const myimage = Image.resolveAssetSource(userData.profilePicture);
 
-  console.log("userData", userData.tags);
-
   const renderSocialLinks = (socialLinks) => {
     if (socialLinks && socialLinks.length > 0) {
       return socialLinks.map((link, index) => (
@@ -33,6 +31,11 @@ const OtherUserProfileScreen = () => {
       chatType: "INDIVIDUAL",
     });
   };
+
+  const handleLocationPress = () => {
+      // Implement your chat logic here
+      navigation.navigate("UserLocation");
+    };
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -97,9 +100,18 @@ const OtherUserProfileScreen = () => {
           </View>
 
           {/* Chat Button */}
+          <View style={{ paddingVertical: 10 }} />
           <Pressable style={styles.basicButton} onPress={handleChatPress}>
             <Text style={styles.buttonText}>Chat</Text>
           </Pressable>
+
+            {userData.visibility === "VISIBLE" && (
+            <View style={{ paddingVertical: 10 }}>
+            <Pressable style={styles.basicButton} onPress={handleLocationPress}>
+              <Text style={styles.buttonText}>Location</Text>
+            </Pressable>
+            </View>
+              )}
         </View>
       </View>
     </ScrollView>

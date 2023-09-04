@@ -54,6 +54,7 @@ import Header from "./components/Header";
 import HeaderWithBack from "./components/HeaderWithBack";
 import SimplifiedHeader from "./components/SimplifiedHeader";
 import AddTags from "./components/AddTags";
+import UserLocation from "./components/UserLocation";
 
 export const AppContext = React.createContext();
 
@@ -175,12 +176,20 @@ const AppNavigator = () => {
       />
       <Stack.Screen
         name="SessionHome"
-        component={SessionHomeScreen} // Add SessionHomeScreen
+        component={SessionHomeScreen}
         options={{
           title: "Session Home",
           header: () => <Header />,
         }}
       />
+      <Stack.Screen
+          name="UserLocation"
+          component={UserLocation}
+          options={{
+            title: "Location",
+            header: () => <Header />,
+          }}
+        />
       <Stack.Screen name="QRScanner" component={QRScannerScreen} />
       <Stack.Screen
         name="Login"
