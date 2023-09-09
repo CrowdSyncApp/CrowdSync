@@ -41,6 +41,7 @@ const QRScannerScreen = () => {
         style={{ flex: 1 }}
         onBarCodeRead={handleBarCodeScanned}
         barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
+        captureAudio={false}
       />
       {scannedData && (
         <View
