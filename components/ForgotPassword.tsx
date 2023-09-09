@@ -53,6 +53,7 @@ const ForgotPasswordScreen = () => {
             autoCapitalize="none"
             keyboardType="email-address"
             style={styles.textInput}
+            placeholderTextColor="#2a2e30"
           />
           <View style={{ marginTop: 20 }} />
           {!isCodeSent ? (
@@ -69,11 +70,13 @@ const ForgotPasswordScreen = () => {
                 value={verificationCode}
                 onChangeText={setVerificationCode}
                 style={styles.textInput}
+                placeholderTextColor="#2a2e30"
               />
               <TextInput
                 placeholder="New Password"
                 value={newPassword}
                 onChangeText={setNewPassword}
+                placeholderTextColor="#2a2e30"
                 secureTextEntry
                 style={styles.textInput}
               />

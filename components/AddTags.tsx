@@ -114,6 +114,7 @@ const AddTags = ({ route }) => {
           onChangeText={handleSearchTextChange}
           style={styles.textInput}
           placeholder="Search for tags"
+          placeholderTextColor="#2a2e30"
         />
         <View style={{ paddingVertical: 5 }} />
 

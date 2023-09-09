@@ -107,10 +107,12 @@ const SignUpScreen = () => {
                 value={fullName}
                 onChangeText={setFullName}
                 style={styles.textInput}
+                placeholderTextColor="#2a2e30"
               />
               <View style={{ paddingVertical: 10 }} />
               <TextInput
                 placeholder="Email or Phone Number"
+                placeholderTextColor="#2a2e30"
                 value={username}
                 onChangeText={handleUsernameChange}
                 keyboardType={
@@ -121,6 +123,7 @@ const SignUpScreen = () => {
               <View style={{ paddingVertical: 10 }} />
               <TextInput
                 placeholder="Password"
+                placeholderTextColor="#2a2e30"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
@@ -129,6 +132,7 @@ const SignUpScreen = () => {
               <View style={{ paddingVertical: 10 }} />
               <TextInput
                 placeholder="Confirm Password"
+                placeholderTextColor="#2a2e30"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 secureTextEntry

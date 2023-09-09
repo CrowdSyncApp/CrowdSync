@@ -235,6 +235,7 @@ const EditProfileScreen = ({ route }) => {
                   <TextInput
                     style={styles.textInput}
                     placeholder="Add a link"
+                    placeholderTextColor="#2a2e30"
                     value={link}
                     onChangeText={(text) => handleSocialLinkChange(index, text)}
                   />

@@ -246,6 +246,7 @@ const ChatScreen = ({ route }) => {
               onChangeText={setNewMessage}
               placeholder="Type your message..."
               style={styles.textInput}
+              placeholderTextColor="#2a2e30"
             />
             <View style={{ paddingVertical: 5 }} />
 

@@ -48,6 +48,7 @@ const SearchForPeople = () => {
             onChangeText={setSearchQuery}
             placeholder="Search by name, company, or tag..."
             style={styles.textInput}
+            placeholderTextColor="#2a2e30"
           />
 
           {/* Search Button */}

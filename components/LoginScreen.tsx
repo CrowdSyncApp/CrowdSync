@@ -73,6 +73,7 @@ const LoginScreen = () => {
             autoCapitalize="none"
             keyboardType="email-address"
             style={styles.textInput}
+            placeholderTextColor="#2a2e30"
           />
         </View>
         <View style={{ paddingVertical: 10 }}>
@@ -82,6 +83,7 @@ const LoginScreen = () => {
             onChangeText={setPassword}
             secureTextEntry
             style={styles.textInput}
+            placeholderTextColor="#2a2e30"
           />
         </View>
         <View style={styles.flexButtonContainer}>
