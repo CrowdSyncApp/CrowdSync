@@ -111,7 +111,7 @@ const SignUpScreen = () => {
               />
               <View style={{ paddingVertical: 10 }} />
               <TextInput
-                placeholder="Email or Phone Number"
+                placeholder="Email"
                 placeholderTextColor="#2a2e30"
                 value={username}
                 onChangeText={handleUsernameChange}

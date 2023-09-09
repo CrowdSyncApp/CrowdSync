@@ -19,6 +19,15 @@ const LoginScreen = () => {
   const navigation = useNavigation();
   const { login } = useAuth();
 
+  useEffect(() => {
+        navigation.addListener('beforeRemove', nav => {
+            // Prevent going back
+            if (nav.data.action.type === 'GO_BACK') {
+              nav.preventDefault();
+            }
+          });
+   }, [navigation]);
+
   const handleLogin = async () => {
     try {
       const user = await login({ username, password });
@@ -67,7 +76,7 @@ const LoginScreen = () => {
         </View>
         <View style={{ paddingVertical: 10 }}>
           <TextInput
-            placeholder="Email or Phone"
+            placeholder="Email"
             value={username}
             onChangeText={setUsername}
             autoCapitalize="none"
