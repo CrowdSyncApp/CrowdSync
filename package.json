@@ -3,11 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "lint": "eslint .",
-    "start": "react-native start",
-    "test": "jest"
+    "build:ios": "react-native bundle --entry-file='index.ios.js' --bundle-output='./ios/CrowdSync/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'"
   },
   "dependencies": {
     "@aws-amplify/core": "^5.8.0",
@@ -18,7 +14,7 @@
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/stack": "^6.3.17",
     "amazon-cognito-identity-js": "^6.3.1",
-    "aws-amplify": "^5.3.6",
+    "aws-amplify": "^5.3.10",
     "deprecated-react-native-prop-types": "^4.2.1",
     "patch-package": "^8.0.0",
     "qrcode": "^1.5.3",
