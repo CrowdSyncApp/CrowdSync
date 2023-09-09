@@ -24,7 +24,6 @@ const ForgotUsernameScreen = () => {
         value={email}
         onChangeText={setEmail}
         autoCapitalize="none"
-        keyboardType="email-address"
       />
       <TouchableOpacity onPress={handleRetrieveUsername}>
         <Text>Retrieve Username</Text>

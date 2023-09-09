@@ -115,9 +115,6 @@ const SignUpScreen = () => {
                 placeholderTextColor="#2a2e30"
                 value={username}
                 onChangeText={handleUsernameChange}
-                keyboardType={
-                  isEmailFormat(username) ? "email-address" : "phone-pad"
-                }
                 style={styles.textInput}
               />
               <View style={{ paddingVertical: 10 }} />

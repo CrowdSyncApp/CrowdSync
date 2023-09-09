@@ -71,7 +71,6 @@ const LoginScreen = () => {
             value={username}
             onChangeText={setUsername}
             autoCapitalize="none"
-            keyboardType="email-address"
             style={styles.textInput}
             placeholderTextColor="#2a2e30"
           />
