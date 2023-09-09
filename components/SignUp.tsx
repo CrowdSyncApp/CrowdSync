@@ -116,6 +116,7 @@ const SignUpScreen = () => {
                 value={username}
                 onChangeText={handleUsernameChange}
                 style={styles.textInput}
+                placeholderTextColor="#2a2e30"
               />
               <View style={{ paddingVertical: 10 }} />
               <TextInput
