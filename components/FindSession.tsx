@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Pressable,
   View,
@@ -28,6 +28,15 @@ const FindSessionScreen = () => {
   const navigation = useNavigation();
   const { user, fetchUserProfileData, populateTagSet } = useAuth();
   const [sessionTitle, setSessionTitle] = useState("General"); // Default title is General
+
+useEffect(() => {
+        navigation.addListener('beforeRemove', nav => {
+            // Prevent going back
+            if (nav.data.action.type === 'GO_BACK') {
+              nav.preventDefault();
+            }
+          });
+   }, [navigation]);
 
   const handleJoinSessionWithQRCode = () => {
     navigation.navigate("QRScanner");

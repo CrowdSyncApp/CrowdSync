@@ -13,16 +13,21 @@ const SplashScreen = () => {
     // Check if isLoading is false and isUserLoggedIn has a value
     if (!isLoading && isUserLoggedIn !== undefined) {
       if (isUserLoggedIn) {
-        navigation.dispatch(
-          StackActions.replace("FindSession")
-        );
+        navigation.navigate('FindSession');
       } else {
-        navigation.dispatch(
-          StackActions.replace("Login")
-        );
+        navigation.navigate('Login');
       }
     }
   }, [isLoading, isUserLoggedIn, navigation]);
+
+  useEffect(() => {
+          navigation.addListener('beforeRemove', nav => {
+              // Prevent going back
+              if (nav.data.action.type === 'GO_BACK') {
+                nav.preventDefault();
+              }
+            });
+     }, [navigation]);
 
   return (
     <View style={styles.splash}>
