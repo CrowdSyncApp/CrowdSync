@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { View, Text } from "react-native";
-import { RNCamera, BarCodeReadEvent } from "react-native-camera";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
 import { createParticipant } from "./SessionManager";
+import QRCodeScanner from 'react-native-qrcode-scanner';
 
 const QRScannerScreen = () => {
   const [scannedData, setScannedData] = useState<string | null>(null);
-  const [debugText, setDebugText] = useState<string>("");
   const navigation = useNavigation();
   const { user, fetchUserProfileData } = useAuth();
 
   // Function to handle QR code scanning
-  const handleBarCodeScanned = async (event: BarCodeReadEvent) => {
+  const handleBarCodeScanned = async (event) => {
     const { data } = event;
-    setDebugText(data);
 
     try {
       const userProfileData = await fetchUserProfileData(user?.username);
@@ -32,33 +30,9 @@ const QRScannerScreen = () => {
     setScannedData(data);
   };
 
-  useEffect(() => {
-    // Clean up the scanned data when the component unmounts
-    return () => setScannedData(null);
-  }, []);
-
   return (
     <View style={{ flex: 1 }}>
-      <RNCamera
-        style={{ flex: 1 }}
-        onBarCodeRead={handleBarCodeScanned}
-        barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
-        captureAudio={false}
-      />
-      {scannedData && (
-        <View
-          style={{
-            backgroundColor: "white",
-            padding: 16,
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-          }}
-        >
-        <Text>{debugText}</Text>
-        </View>
-      )}
+    <QRCodeScanner onRead={handleBarCodeScanned} captureAudio={false}/>
     </View>
   );
 };

@@ -16,7 +16,7 @@ import {
   createUserTags,
   deleteUserTags,
 } from "./src/graphql/mutations";
-import skillsJson from "./data/skills.json";
+import skillsJson from "./data/new_skills.json";
 
 const AuthContext = createContext();
 

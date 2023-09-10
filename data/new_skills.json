@@ -1,0 +1,202 @@
+[
+    {
+        "tag": "Technology",
+        "tagId": "75b95e53-5094-40ac-ac7d-896f2936db8e"
+    },
+    {
+        "tag": "Healthcare",
+        "tagId": "e34b7241-1daf-4078-803b-6ad591d2d337"
+    },
+    {
+        "tag": "Finance",
+        "tagId": "0c580a80-497f-4c7f-a2e7-0b3854fb02fe"
+    },
+    {
+        "tag": "Marketing",
+        "tagId": "c1be9d5f-487e-4979-a782-a1531fa8206c"
+    },
+    {
+        "tag": "Education",
+        "tagId": "02ed71ee-8ff5-4f57-9b9c-0f25719d2371"
+    },
+    {
+        "tag": "Entrepreneurship",
+        "tagId": "8fe25546-c8d1-4280-9bdf-14ca65a50ce7"
+    },
+    {
+        "tag": "Consulting",
+        "tagId": "9df29417-5c01-4d78-853e-cc77ff1c23ab"
+    },
+    {
+        "tag": "Media and Entertainment",
+        "tagId": "3531ef93-82dd-4edf-8411-c4c232b7ea74"
+    },
+    {
+        "tag": "Engineering",
+        "tagId": "65cac336-e318-49a8-94df-bc6d4476d8a0"
+    },
+    {
+        "tag": "Retail",
+        "tagId": "9b3ee900-95f6-4647-9858-0a80c219007b"
+    },
+    {
+        "tag": "Real Estate",
+        "tagId": "b90b15f2-4d96-4f73-bf4a-0f267831618e"
+    },
+    {
+        "tag": "Legal",
+        "tagId": "cd11f8f5-d36b-43ba-ba5d-93d2301ac40f"
+    },
+    {
+        "tag": "Nonprofit",
+        "tagId": "c064340e-0dbd-466a-abd6-9b32c7d03b87"
+    },
+    {
+        "tag": "Design",
+        "tagId": "a36a95c8-af19-4046-b4b8-58d9a8f18a3d"
+    },
+    {
+        "tag": "Government",
+        "tagId": "9dda8d9e-ca67-415b-be6d-1db089054b7c"
+    },
+    {
+        "tag": "Manufacturing",
+        "tagId": "533d8029-6ee1-4a2f-9790-d79111f9077f"
+    },
+    {
+        "tag": "Energy",
+        "tagId": "fa77c4d7-a5c3-40bc-9a19-2526648eda54"
+    },
+    {
+        "tag": "Hospitality",
+        "tagId": "dd7a1297-8c0b-4c58-b7ce-fda9189b8f25"
+    },
+    {
+        "tag": "Biotechnology",
+        "tagId": "cbfdf8a1-39dd-4be0-86e7-ec5dcd3844a2"
+    },
+    {
+        "tag": "Automotive",
+        "tagId": "6b0edbf8-8038-4e3e-b9b2-93bffa5d120a"
+    },
+    {
+        "tag": "E-commerce",
+        "tagId": "bcd1d969-789f-4275-a101-f47ce6a70b95"
+    },
+    {
+        "tag": "Aerospace",
+        "tagId": "a89d02a1-637d-4ca0-a520-1aafb22d2601"
+    },
+    {
+        "tag": "Agriculture",
+        "tagId": "44febe6f-9adf-4f39-8c98-49465dd5b85a"
+    },
+    {
+        "tag": "Fashion",
+        "tagId": "50509254-a8d3-4bc5-9a5d-052db8b17376"
+    },
+    {
+        "tag": "Pharmaceuticals",
+        "tagId": "aee167c0-3fe5-4fd3-9cd7-2d42359be8d4"
+    },
+    {
+        "tag": "Environmental",
+        "tagId": "58c1043a-6ed2-4360-b709-eec895e99d8e"
+    },
+    {
+        "tag": "Food and Beverage",
+        "tagId": "4749aa87-1ae3-45c5-9127-8541df629e6e"
+    },
+    {
+        "tag": "Sports",
+        "tagId": "a79bb58c-4cca-4c70-af40-9792070baf01"
+    },
+    {
+        "tag": "Transportation",
+        "tagId": "a5e41557-0fb2-4cd0-b947-4df5daaf10b2"
+    },
+    {
+        "tag": "Telecommunications",
+        "tagId": "ac73e126-ece0-4191-b409-a26f5e82ed55"
+    },
+    {
+        "tag": "Architecture",
+        "tagId": "56fa61c3-2046-49c2-83cc-b54e27ddd40b"
+    },
+    {
+        "tag": "Arts and Culture",
+        "tagId": "bd863ab7-be9b-4a17-9eb8-98bbcd6fbc35"
+    },
+    {
+        "tag": "Human Resources",
+        "tagId": "eb0a8881-cb1b-4b27-a801-603948251892"
+    },
+    {
+        "tag": "Insurance",
+        "tagId": "2ed80486-2842-4db3-b351-5cd1ec76ab73"
+    },
+    {
+        "tag": "Logistics",
+        "tagId": "607825de-8615-4658-9131-aee7aa957387"
+    },
+    {
+        "tag": "Social Services",
+        "tagId": "e3eed673-81f9-43dc-b44f-e8eb834cdec2"
+    },
+    {
+        "tag": "Travel and Tourism",
+        "tagId": "1f5201cb-2adb-4efb-9d20-d64865032e1b"
+    },
+    {
+        "tag": "Gaming",
+        "tagId": "709eb848-8169-4f76-b6cf-c5d663c69308"
+    },
+    {
+        "tag": "Renewable Energy",
+        "tagId": "621bdfa5-99cc-4695-98af-f1c4ae61f47d"
+    },
+    {
+        "tag": "Space Exploration",
+        "tagId": "3735380d-5d7a-48c3-a07e-5704c8fe8a2a"
+    },
+    {
+        "tag": "Cryptocurrency",
+        "tagId": "b55fd625-d724-4d5b-9b4e-ce27b40fe0ad"
+    },
+    {
+        "tag": "Artificial Intelligence",
+        "tagId": "221fd327-2a6e-4265-bb7a-308702bfc082"
+    },
+    {
+        "tag": "Robotics",
+        "tagId": "3b84fb14-8ae6-4817-b06c-5094afb108bd"
+    },
+    {
+        "tag": "Augmented Reality",
+        "tagId": "39a8ac87-a942-4ac8-9d35-563564eca041"
+    },
+    {
+        "tag": "Virtual Reality",
+        "tagId": "677626fb-d2a7-42f9-8543-d7fd97574e45"
+    },
+    {
+        "tag": "Cybersecurity",
+        "tagId": "80e05005-7dcc-4c9f-9b1b-805bede23af5"
+    },
+    {
+        "tag": "Data Science",
+        "tagId": "ff4d8ec2-9275-439c-988d-fe9d4b37dbdd"
+    },
+    {
+        "tag": "Clean Energy",
+        "tagId": "238254c6-4f96-4562-ad5b-ec540613161a"
+    },
+    {
+        "tag": "Internet of Things (IoT)",
+        "tagId": "c3d2d358-5fd5-4540-81ab-3367bc50ed40"
+    },
+    {
+        "tag": "Nanotechnology",
+        "tagId": "e98ba5a0-3436-430e-a5f7-e5cc5f5a4a0a"
+    }
+]
