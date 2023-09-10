@@ -2,7 +2,7 @@
   "version": "1",
   "cognitoConfig": {
     "identityPoolName": "crowdsyncea9fc77e_identitypool_ea9fc77e",
-    "allowUnauthenticatedIdentities": false,
+    "allowUnauthenticatedIdentities": true,
     "resourceNameTruncated": "crowdsea9fc77e",
     "userPoolName": "crowdsyncea9fc77e_userpool_ea9fc77e",
     "autoVerifiedAttributes": [
@@ -89,7 +89,9 @@
     "parentStack": {
       "Ref": "AWS::StackId"
     },
-    "authTriggerConnections": "[\n  {\n    \"triggerType\": \"CustomMessage\",\n    \"lambdaFunctionName\": \"crowdsyncea9fc77eCustomMessage\"\n  }\n]",
+    "authTriggerConnections": [
+      "{\"triggerType\":\"CustomMessage\",\"lambdaFunctionName\":\"crowdsyncea9fc77eCustomMessage\"}"
+    ],
     "permissions": []
   }
 }

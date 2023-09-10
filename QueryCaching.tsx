@@ -6,6 +6,7 @@ import {
   listTagSets,
   listUserTags,
   getTagSet,
+  listConnections,
 } from "./src/graphql/queries";
 import { getSessionIdForUser } from "./components/SessionManager";
 import { v4 } from "uuid";
@@ -117,6 +118,39 @@ async function logout() {
     console.error("Logout error:", error);
     throw error;
   }
+}
+
+const fetchConnectionsAndProfiles = async (userId) => {
+    try {
+
+      // Fetch all connections for the current user
+      const connectionsResponse = await API.graphql(
+        graphqlOperation(listConnections, {
+          filter: {
+            userId: { eq: userId },
+          },
+        })
+      );
+
+      // Extract the connections data
+      const connections = connectionsResponse.data.listConnections.items;
+
+      // Fetch user profiles for each connection
+      const profilesPromises = connections.map(async (connection) => {
+        const userProfileResponse = await API.graphql(
+          graphqlOperation(getUserProfile, { userId: connection.otherUserId })
+        );
+
+        return userProfileResponse.data.getUserProfile;
+      });
+
+      // Wait for all profile fetches to complete
+      const profiles = await Promise.all(profilesPromises);
+
+      return profiles;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
 }
 
 const getUserTagsIds = async (userId, sessionId) => {
@@ -433,6 +467,7 @@ export function AuthProvider({ children }) {
     populateTagSet,
     updateUserProfileTable,
     removeUserTagsByTagId,
+    fetchConnectionsAndProfiles,
     fetchUserProfileData,
     createUserTagsWithSession,
     refreshToken,

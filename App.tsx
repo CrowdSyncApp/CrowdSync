@@ -9,7 +9,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { PropsWithChildren } from "react";
-import { Amplify, Auth } from "aws-amplify";
+import { Amplify, Auth, PushNotification } from "aws-amplify";
 import awsmobile from "./src/aws-exports";
 import { AuthProvider, useAuth } from "./QueryCaching";
 import styles, { palette, fonts } from "./components/style";
@@ -77,6 +77,10 @@ function App(): JSX.Element {
 const AppNavigator = () => {
   const auth = useAuth();
   const { isUserLoggedIn, refreshToken } = auth;
+
+  useEffect(() => {
+      configurePushNotifications();
+    }, []);
 
   useEffect(() => {
     const checkTokenFreshness = async () => {
@@ -187,7 +191,7 @@ const AppNavigator = () => {
           component={UserLocation}
           options={{
             title: "Location",
-            header: () => <Header />,
+            header: () => <HeaderWithBack />,
           }}
         />
       <Stack.Screen name="QRScanner" component={QRScannerScreen} />

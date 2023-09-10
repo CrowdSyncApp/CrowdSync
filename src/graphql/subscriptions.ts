@@ -419,3 +419,57 @@ export const onDeleteUserTags = /* GraphQL */ `
     }
   }
 `;
+export const onCreateConnections = /* GraphQL */ `
+  subscription OnCreateConnections(
+    $connectionId: String
+    $userId: String
+    $otherUserId: String
+  ) {
+    onCreateConnections(
+      connectionId: $connectionId
+      userId: $userId
+      otherUserId: $otherUserId
+    ) {
+      connectionId
+      userId
+      otherUserId
+      __typename
+    }
+  }
+`;
+export const onUpdateConnections = /* GraphQL */ `
+  subscription OnUpdateConnections(
+    $connectionId: String
+    $userId: String
+    $otherUserId: String
+  ) {
+    onUpdateConnections(
+      connectionId: $connectionId
+      userId: $userId
+      otherUserId: $otherUserId
+    ) {
+      connectionId
+      userId
+      otherUserId
+      __typename
+    }
+  }
+`;
+export const onDeleteConnections = /* GraphQL */ `
+  subscription OnDeleteConnections(
+    $connectionId: String
+    $userId: String
+    $otherUserId: String
+  ) {
+    onDeleteConnections(
+      connectionId: $connectionId
+      userId: $userId
+      otherUserId: $otherUserId
+    ) {
+      connectionId
+      userId
+      otherUserId
+      __typename
+    }
+  }
+`;
