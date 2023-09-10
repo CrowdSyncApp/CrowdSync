@@ -32,7 +32,7 @@ const Header = () => {
   };
 
   return (
-  <SafeAreaView style={{ flex: 1 }}>
+  <SafeAreaView style={{backgroundColor: palette.primaryBgColor}}>
     <View style={styles.header}>
       <Image
         source={CrowdSyncLogo}
