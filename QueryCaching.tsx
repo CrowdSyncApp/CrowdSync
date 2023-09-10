@@ -51,9 +51,9 @@ async function fetchUserProfileImage(profilePictureFilename) {
 async function fetchUserProfile(userId) {
   try {
     const cachedUserProfile = await AsyncStorage.getItem("userProfileData");
-    //if (cachedUserProfile) {
-    //  return JSON.parse(cachedUserProfile);
-   // }
+    if (cachedUserProfile) {
+      return JSON.parse(cachedUserProfile);
+    }
 
     const { data } = await API.graphql(
       graphqlOperation(getUserProfile, { userId })

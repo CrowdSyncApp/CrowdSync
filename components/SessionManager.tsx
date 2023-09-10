@@ -6,6 +6,7 @@ import {
   createParticipants,
 } from "../src/graphql/mutations";
 import { listParticipants } from "../src/graphql/queries";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import "react-native-get-random-values";
 import { v4 } from "uuid";
 
@@ -13,6 +14,22 @@ const MAX_RETRY_ATTEMPTS = 5; // Maximum number of retry attempts
 
 const generateUniqueSessionId = () => {
   return v4();
+};
+
+async function storeSessionData(sessionData) {
+    await AsyncStorage.setItem(
+        "sessionData",
+        JSON.stringify(sessionData)
+      );
+};
+
+export async function getSessionData() {
+    const sessionData = await AsyncStorage.getItem("sessionData");
+    return sessionData;
+};
+
+async function removeSessionData() {
+    await AsyncStorage.removeItem("sessionData");
 };
 
 export const getSessionIdForUser = async (userId) => {
@@ -115,6 +132,8 @@ export const startSession = async (userProfileData, title) => {
     const newSession = await createSessionWithRetry(userId, title);
     await createParticipant(userId, fullName, newSession.sessionId);
 
+    storeSessionData(newSession);
+
     return newSession;
   } catch (error) {
     // Handle the error as needed
@@ -141,6 +160,7 @@ export const endSession = async (sessionId, startTime) => {
     });
 
     const updatedSession = response.data.updateSessions;
+    removeSessionData();
 
     console.log("Session ended:", updatedSession);
     return updatedSession;

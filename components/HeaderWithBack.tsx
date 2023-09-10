@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import styles, { palette, fonts } from "./style";
 import participantsData from "../dummies/dummy_accounts.json";
 import CrowdSyncBackArrow from "../images/CrowdSync_Back_Arrow.png";
+import { getSessionData } from "./SessionManager";
 
 const Header = () => {
   const navigation = useNavigation();
@@ -25,6 +26,16 @@ const Header = () => {
     };
     getUserProfileData();
   }, [user]);
+
+  const handleTitlePress = async () => {
+       const sessionData = await getSessionData();
+
+       if (sessionData) {
+          navigation.navigate("SessionHome", { sessionData: sessionData });
+       } else {
+          navigation.navigate("FindSession");
+       }
+    };
 
   const handleProfilePress = async () => {
     // Navigate to the ProfileScreen and pass the user profile data as params
@@ -48,7 +59,9 @@ const Header = () => {
           }}
         />
       </TouchableOpacity>
+      <TouchableOpacity onPress={handleTitlePress}>
       <Text style={styles.headerTitle}>CrowdSync</Text>
+      </TouchableOpacity>
       <TouchableOpacity onPress={handleProfilePress}>
         <Image
           source={{ uri: userProfileData?.profilePictureUri }}
