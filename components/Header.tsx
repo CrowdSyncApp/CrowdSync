@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, Image, TouchableOpacity } from "react-native";
+import { Text, View, Image, TouchableOpacity, SafeAreaView } from "react-native";
 import { Auth } from "aws-amplify";
 import { useAuth } from "../QueryCaching";
 import { useNavigation } from "@react-navigation/native";
@@ -32,6 +32,7 @@ const Header = () => {
   };
 
   return (
+  <SafeAreaView style={{ flex: 1 }}>
     <View style={styles.header}>
       <Image
         source={CrowdSyncLogo}
@@ -53,6 +54,7 @@ const Header = () => {
         />
       </TouchableOpacity>
     </View>
+   </SafeAreaView>
   );
 };
 

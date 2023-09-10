@@ -33,8 +33,6 @@ async function fetchUserProfileImage(profilePictureFilename) {
       profilePictureFilename = "CrowdSync_Temp_Profile.png";
       getLevel = "public";
     }
-    profilePictureFilename = "CrowdSync_Temp_Profile.png"; // TODO remove, temporary
-    getLevel = "public"; // TODO remove, temporary
 
     // Fetch the profile image URL from S3 using Amplify's Storage API
     const imageKey = await Storage.get(profilePictureFilename, {
