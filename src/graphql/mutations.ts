@@ -245,3 +245,33 @@ export const deleteUserTags = /* GraphQL */ `
     }
   }
 `;
+export const createConnections = /* GraphQL */ `
+  mutation CreateConnections($input: CreateConnectionsInput!) {
+    createConnections(input: $input) {
+      connectionId
+      userId
+      otherUserId
+      __typename
+    }
+  }
+`;
+export const updateConnections = /* GraphQL */ `
+  mutation UpdateConnections($input: UpdateConnectionsInput!) {
+    updateConnections(input: $input) {
+      connectionId
+      userId
+      otherUserId
+      __typename
+    }
+  }
+`;
+export const deleteConnections = /* GraphQL */ `
+  mutation DeleteConnections($input: DeleteConnectionsInput!) {
+    deleteConnections(input: $input) {
+      connectionId
+      userId
+      otherUserId
+      __typename
+    }
+  }
+`;

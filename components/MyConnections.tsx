@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,13 +8,27 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../QueryCaching";
 import participantsData from "../dummies/dummy_accounts.json";
 import styles, { palette, fonts } from "./style";
 
-const MyConnections = ({ navigation }) => {
-  // Function to handle when a connection is pressed
+const MyConnections = ({ route }) => {
+  const navigation = useNavigation();
+  const { fetchConnectionsAndProfiles } = useAuth();
+  const { userProfileData } = route.params;
+  const [connectionsData, setConnectionsData] = useState([]);
+
+  useEffect(() => {
+        const getConnections = async () => {
+          const profiles = await fetchConnectionsAndProfiles(userProfileData.userId);
+          const mergedData = [...participantsData, ...profiles];
+          setConnectionsData(mergedData);
+         }
+         getConnections();
+    }, []);
+
   const handleConnectionPress = (connectionData: string) => {
-    // Handle the action when a connection is pressed (e.g., navigate to their profile)
     navigation.navigate("OtherUserProfile", { userData: connectionData });
   };
 
@@ -27,7 +41,7 @@ const MyConnections = ({ navigation }) => {
         <View style={styles.div}>
           {/* List of Connections */}
           <FlatList
-            data={participantsData}
+            data={connectionsData}
             keyExtractor={(item) => item.userId} // Use a unique identifier from your data
             renderItem={({ item }) => (
               <TouchableOpacity onPress={() => handleConnectionPress(item)}>

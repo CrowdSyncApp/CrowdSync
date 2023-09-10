@@ -207,6 +207,30 @@ export type DeleteUserTagsInput = {
   userTagId: string,
 };
 
+export type CreateConnectionsInput = {
+  connectionId: string,
+  userId: string,
+  otherUserId: string,
+};
+
+export type Connections = {
+  __typename: "Connections",
+  connectionId: string,
+  userId: string,
+  otherUserId: string,
+};
+
+export type UpdateConnectionsInput = {
+  connectionId: string,
+  userId: string,
+  otherUserId?: string | null,
+};
+
+export type DeleteConnectionsInput = {
+  connectionId: string,
+  userId: string,
+};
+
 export type TableUserProfileFilterInput = {
   userId?: TableIDFilterInput | null,
   fullName?: TableStringFilterInput | null,
@@ -335,6 +359,18 @@ export type TableUserTagsFilterInput = {
 export type UserTagsConnection = {
   __typename: "UserTagsConnection",
   items?:  Array<UserTags | null > | null,
+  nextToken?: string | null,
+};
+
+export type TableConnectionsFilterInput = {
+  connectionId?: TableStringFilterInput | null,
+  userId?: TableStringFilterInput | null,
+  otherUserId?: TableStringFilterInput | null,
+};
+
+export type ConnectionsConnection = {
+  __typename: "ConnectionsConnection",
+  items?:  Array<Connections | null > | null,
   nextToken?: string | null,
 };
 
@@ -635,6 +671,45 @@ export type DeleteUserTagsMutation = {
   } | null,
 };
 
+export type CreateConnectionsMutationVariables = {
+  input: CreateConnectionsInput,
+};
+
+export type CreateConnectionsMutation = {
+  createConnections?:  {
+    __typename: "Connections",
+    connectionId: string,
+    userId: string,
+    otherUserId: string,
+  } | null,
+};
+
+export type UpdateConnectionsMutationVariables = {
+  input: UpdateConnectionsInput,
+};
+
+export type UpdateConnectionsMutation = {
+  updateConnections?:  {
+    __typename: "Connections",
+    connectionId: string,
+    userId: string,
+    otherUserId: string,
+  } | null,
+};
+
+export type DeleteConnectionsMutationVariables = {
+  input: DeleteConnectionsInput,
+};
+
+export type DeleteConnectionsMutation = {
+  deleteConnections?:  {
+    __typename: "Connections",
+    connectionId: string,
+    userId: string,
+    otherUserId: string,
+  } | null,
+};
+
 export type GetUserProfileQueryVariables = {
   userId: string,
 };
@@ -868,6 +943,39 @@ export type ListUserTagsQuery = {
       userTagId: string,
       userId: string,
       tagId: string,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetConnectionsQueryVariables = {
+  connectionId: string,
+  userId: string,
+};
+
+export type GetConnectionsQuery = {
+  getConnections?:  {
+    __typename: "Connections",
+    connectionId: string,
+    userId: string,
+    otherUserId: string,
+  } | null,
+};
+
+export type ListConnectionsQueryVariables = {
+  filter?: TableConnectionsFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListConnectionsQuery = {
+  listConnections?:  {
+    __typename: "ConnectionsConnection",
+    items?:  Array< {
+      __typename: "Connections",
+      connectionId: string,
+      userId: string,
+      otherUserId: string,
     } | null > | null,
     nextToken?: string | null,
   } | null,
@@ -1227,5 +1335,50 @@ export type OnDeleteUserTagsSubscription = {
     userTagId: string,
     userId: string,
     tagId: string,
+  } | null,
+};
+
+export type OnCreateConnectionsSubscriptionVariables = {
+  connectionId?: string | null,
+  userId?: string | null,
+  otherUserId?: string | null,
+};
+
+export type OnCreateConnectionsSubscription = {
+  onCreateConnections?:  {
+    __typename: "Connections",
+    connectionId: string,
+    userId: string,
+    otherUserId: string,
+  } | null,
+};
+
+export type OnUpdateConnectionsSubscriptionVariables = {
+  connectionId?: string | null,
+  userId?: string | null,
+  otherUserId?: string | null,
+};
+
+export type OnUpdateConnectionsSubscription = {
+  onUpdateConnections?:  {
+    __typename: "Connections",
+    connectionId: string,
+    userId: string,
+    otherUserId: string,
+  } | null,
+};
+
+export type OnDeleteConnectionsSubscriptionVariables = {
+  connectionId?: string | null,
+  userId?: string | null,
+  otherUserId?: string | null,
+};
+
+export type OnDeleteConnectionsSubscription = {
+  onDeleteConnections?:  {
+    __typename: "Connections",
+    connectionId: string,
+    userId: string,
+    otherUserId: string,
   } | null,
 };

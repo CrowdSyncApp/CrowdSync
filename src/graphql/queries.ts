@@ -215,3 +215,31 @@ export const listUserTags = /* GraphQL */ `
     }
   }
 `;
+export const getConnections = /* GraphQL */ `
+  query GetConnections($connectionId: String!, $userId: String!) {
+    getConnections(connectionId: $connectionId, userId: $userId) {
+      connectionId
+      userId
+      otherUserId
+      __typename
+    }
+  }
+`;
+export const listConnections = /* GraphQL */ `
+  query ListConnections(
+    $filter: TableConnectionsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listConnections(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        connectionId
+        userId
+        otherUserId
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;

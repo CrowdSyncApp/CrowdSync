@@ -1,0 +1,21 @@
+{
+    "appName": "crowdsync",
+    "roleName": "pinpointLambdaRole0b38d10d",
+    "cloudformationPolicyName": "cloudformationPolicy0b38d10d",
+    "cloudWatchPolicyName": "cloudWatchPolicy0b38d10d",
+    "pinpointPolicyName": "pinpointPolicy0b38d10d",
+    "authPolicyName": "pinpoint_amplify_0b38d10d",
+    "unauthPolicyName": "pinpoint_amplify_0b38d10d",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "authRoleArn": {
+        "Fn::GetAtt": [
+            "AuthRole",
+            "Arn"
+        ]
+    }
+}

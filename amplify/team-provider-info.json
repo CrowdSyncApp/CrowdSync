@@ -30,6 +30,21 @@
           "bucketName": "crowdsyncuserprofileimages",
           "region": "us-west-1"
         }
+      },
+      "analytics": {
+        "crowdsync": {},
+        "Pinpoint": {
+          "Name": "crowdsync-dev",
+          "Id": "c29ef46086b54f1987373e9888a3ea7d",
+          "Region": "us-west-2"
+        }
+      },
+      "notifications": {
+        "Pinpoint": {
+          "Name": "crowdsync-dev",
+          "Id": "c29ef46086b54f1987373e9888a3ea7d",
+          "Region": "us-west-2"
+        }
       }
     }
   }
