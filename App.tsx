@@ -79,7 +79,7 @@ const AppNavigator = () => {
   const { isUserLoggedIn, refreshToken } = auth;
 
   useEffect(() => {
-      configurePushNotifications();
+      //configurePushNotifications();
     }, []);
 
   useEffect(() => {

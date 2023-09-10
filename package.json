@@ -55,5 +55,10 @@
   },
   "engines": {
     "node": ">=16"
+  },
+  "overrides": {
+    "react-native-qrcode-scanner": {
+      "react-native-permissions": "^3.9.0"
+    }
   }
 }
