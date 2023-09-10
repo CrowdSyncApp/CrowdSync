@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, Image, TouchableOpacity } from "react-native";
+import { Text, View, Image, TouchableOpacity, SafeAreaView, StatusBar } from "react-native";
 import { Auth } from "aws-amplify";
 import { useAuth } from "../QueryCaching";
 import { useNavigation } from "@react-navigation/native";
@@ -36,6 +36,8 @@ const Header = () => {
   };
 
   return (
+  <View style={{backgroundColor: palette.primaryBgColor}}>
+  <SafeAreaView style={{marginTop: StatusBar.currentHeight }}>
     <View style={styles.header}>
       <TouchableOpacity onPress={handleGoBack}>
         <Image
@@ -59,6 +61,8 @@ const Header = () => {
         />
       </TouchableOpacity>
     </View>
+   </SafeAreaView>
+   </View>
   );
 };
 
