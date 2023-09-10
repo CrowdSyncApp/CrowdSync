@@ -50,9 +50,9 @@ async function fetchUserProfileImage(profilePictureFilename) {
 async function fetchUserProfile(userId) {
   try {
     const cachedUserProfile = await AsyncStorage.getItem("userProfileData");
-    if (cachedUserProfile) {
-      return JSON.parse(cachedUserProfile);
-    }
+    //if (cachedUserProfile) {
+    //  return JSON.parse(cachedUserProfile);
+   // }
 
     const { data } = await API.graphql(
       graphqlOperation(getUserProfile, { userId })
@@ -350,8 +350,9 @@ const removeUserTagsByTagId = async (userId, sessionId, tagIds) => {
 async function uploadImageToS3(profilePictureUri) {
   const filename = v4() + "_profilePhoto.jpeg";
   const response = await fetch(profilePictureUri);
+  const blob = await response.blob();
 
-  const profilePictureS3Uri = await Storage.put(filename, response.blob(), {
+  const profilePictureS3Uri = await Storage.put(filename, blob, {
     level: "private",
     contentType: "image/jpeg",
   });
