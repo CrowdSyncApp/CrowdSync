@@ -95,7 +95,7 @@ const createSessionWithRetry = async (userId, title, retryAttempt = 1) => {
   }
 };
 
-const createParticipant = async (userId, fullName, sessionId) => {
+export const createParticipant = async (userId, fullName, sessionId) => {
   const now = new Date().toISOString();
 
   const input = {

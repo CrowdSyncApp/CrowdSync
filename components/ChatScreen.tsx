@@ -53,7 +53,7 @@ const ChatScreen = ({ route }) => {
     return (
       <View style={chatBubbleStyle}>
         <Text style={textStyle}>{item.messageContent}</Text>
-        <Text style={styles.textDetail}>
+        <Text style={styles.detailText}>
           {formatTimestamp(item.senderIdReceiverIdTimestamp.split("#")[2])}
         </Text>
       </View>
