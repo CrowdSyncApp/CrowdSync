@@ -12,7 +12,7 @@ import { API, graphqlOperation } from "aws-amplify";
 import QRCode from "react-native-qrcode-svg";
 import { useAuth } from "../QueryCaching";
 import { endSession } from "./SessionManager";
-import { getParticipants } from "../src/graphql/queries";
+import { getParticipants, listParticipants } from "../src/graphql/queries";
 import { updateParticipants } from "../src/graphql/mutations";
 import participantsData from "../dummies/dummy_accounts.json";
 import styles, { palette, fonts } from "./style";
@@ -32,7 +32,8 @@ const SessionHomeScreen = ({ route }) => {
   useEffect(() => {
     // Fetch participant data for the current session
     const fetchParticipants = async () => {
-      /*try {
+        let fetchedParticipants;
+      try {
           const response = await API.graphql({
                   query: listParticipants,
                   variables: {
@@ -49,14 +50,14 @@ const SessionHomeScreen = ({ route }) => {
                     },
                   },
                 });
-          const fetchedParticipants = response.data.listParticipants.items;
-          setParticipants(fetchedParticipants);
+          fetchedParticipants = response.data.listParticipants.items;
         } catch (error) {
           console.error('Error fetching participants:', error);
-        }*/
-      const filteredParticipantsList = participantsData.filter(
+        }
+      const filteredFakeParticipants = participantsData.filter(
         (participant) => participant.visibility === "VISIBLE"
       );
+      const filteredParticipantsList = [...fetchedParticipants, ...filteredFakeParticipants];
       setParticipants(filteredParticipantsList);
     };
 
