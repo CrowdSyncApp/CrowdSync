@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { View, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
@@ -6,7 +6,6 @@ import { createParticipant } from "./SessionManager";
 import QRCodeScanner from 'react-native-qrcode-scanner';
 
 const QRScannerScreen = () => {
-  const [scannedData, setScannedData] = useState<string | null>(null);
   const navigation = useNavigation();
   const { user, fetchUserProfileData } = useAuth();
 
@@ -18,16 +17,16 @@ const QRScannerScreen = () => {
       const userProfileData = await fetchUserProfileData(user?.username);
       const fullName = userProfileData.fullName;
 
-      const sessionData = data;
-      await createParticipant(user?.userId, fullName, sessionData.sessionId);
+      const sessionData = JSON.parse(data);
+      const userId = userProfileData.userId;
+      const sessionId = sessionData.sessionId;
+      await createParticipant(userId, fullName, sessionId);
 
       navigation.navigate("SessionHome", { sessionData: sessionData });
     } catch (error) {
       // Handle errors, e.g., show an error message to the user
       console.error("Error joining session:", error);
     }
-
-    setScannedData(data);
   };
 
   return (
