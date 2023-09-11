@@ -8,11 +8,12 @@ import {
   Pressable,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { API } from "aws-amplify";
+import { API, graphqlOperation } from "aws-amplify";
 import QRCode from "react-native-qrcode-svg";
 import { useAuth } from "../QueryCaching";
 import { endSession } from "./SessionManager";
 import { getParticipants } from "../src/graphql/queries";
+import { updateParticipants } from "../src/graphql/mutations";
 import participantsData from "../dummies/dummy_accounts.json";
 import styles, { palette, fonts } from "./style";
 
@@ -127,16 +128,21 @@ const SessionHomeScreen = ({ route }) => {
 
   const handleToggleVisibility = async () => {
     try {
-      // Toggle the visibility in the database
+      const userProfileData = await fetchUserProfileData(user?.username);
       const newVisibility = isVisible ? "INVISIBLE" : "VISIBLE";
-      await API.graphql({
-        query: updateParticipants,
-        variables: {
-          sessionId: sessionData.sessionId,
-          userId: userProfileData.userId,
-          visibility: newVisibility,
-        },
-      });
+      console.log("sessionData.sessionId", sessionData.sessionId);
+      console.log("userProfileData.userId", userProfileData.userId);
+      console.log("newVisibility", newVisibility);
+
+      await API.graphql(
+          graphqlOperation(updateParticipants, {
+              input: {
+                    sessionId: sessionData.sessionId,
+                  userId: userProfileData.userId,
+                  visibility: newVisibility,
+              },
+          })
+      );
 
       // Update the visibility state
       setIsVisible(!isVisible);
