@@ -55,7 +55,7 @@ const SearchForPeople = () => {
           <View style={{ paddingVertical: 10 }} />
 
           <Pressable style={styles.basicButton} onPress={handleSearch}>
-            <Text style={styles.buttonText}>Save Changes</Text>
+            <Text style={styles.buttonText}>Search</Text>
           </Pressable>
 
           {/* Search Results */}

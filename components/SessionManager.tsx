@@ -25,7 +25,10 @@ async function storeSessionData(sessionData) {
 
 export async function getSessionData() {
     const sessionData = await AsyncStorage.getItem("sessionData");
-    return sessionData;
+    if (sessionData) {
+          return JSON.parse(sessionData);
+        }
+    return null;
 };
 
 async function removeSessionData() {

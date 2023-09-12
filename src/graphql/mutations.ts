@@ -149,42 +149,6 @@ export const deleteSessions = /* GraphQL */ `
     }
   }
 `;
-export const createChats = /* GraphQL */ `
-  mutation CreateChats($input: CreateChatsInput!) {
-    createChats(input: $input) {
-      chatId
-      senderIdReceiverIdTimestamp
-      messageContent
-      ttlExpiration
-      chatTypeStatus
-      __typename
-    }
-  }
-`;
-export const updateChats = /* GraphQL */ `
-  mutation UpdateChats($input: UpdateChatsInput!) {
-    updateChats(input: $input) {
-      chatId
-      senderIdReceiverIdTimestamp
-      messageContent
-      ttlExpiration
-      chatTypeStatus
-      __typename
-    }
-  }
-`;
-export const deleteChats = /* GraphQL */ `
-  mutation DeleteChats($input: DeleteChatsInput!) {
-    deleteChats(input: $input) {
-      chatId
-      senderIdReceiverIdTimestamp
-      messageContent
-      ttlExpiration
-      chatTypeStatus
-      __typename
-    }
-  }
-`;
 export const createTagSet = /* GraphQL */ `
   mutation CreateTagSet($input: CreateTagSetInput!) {
     createTagSet(input: $input) {
@@ -245,12 +209,47 @@ export const deleteUserTags = /* GraphQL */ `
     }
   }
 `;
+export const createChats = /* GraphQL */ `
+  mutation CreateChats($input: CreateChatsInput!) {
+    createChats(input: $input) {
+      senderId
+      timestamp
+      receiverId
+      messageContent
+      chatTypeStatus
+      __typename
+    }
+  }
+`;
+export const updateChats = /* GraphQL */ `
+  mutation UpdateChats($input: UpdateChatsInput!) {
+    updateChats(input: $input) {
+      senderId
+      timestamp
+      receiverId
+      messageContent
+      chatTypeStatus
+      __typename
+    }
+  }
+`;
+export const deleteChats = /* GraphQL */ `
+  mutation DeleteChats($input: DeleteChatsInput!) {
+    deleteChats(input: $input) {
+      senderId
+      timestamp
+      receiverId
+      messageContent
+      chatTypeStatus
+      __typename
+    }
+  }
+`;
 export const createConnections = /* GraphQL */ `
   mutation CreateConnections($input: CreateConnectionsInput!) {
     createConnections(input: $input) {
-      connectionId
-      userId
       otherUserId
+      userId
       __typename
     }
   }
@@ -258,9 +257,8 @@ export const createConnections = /* GraphQL */ `
 export const updateConnections = /* GraphQL */ `
   mutation UpdateConnections($input: UpdateConnectionsInput!) {
     updateConnections(input: $input) {
-      connectionId
-      userId
       otherUserId
+      userId
       __typename
     }
   }
@@ -268,9 +266,8 @@ export const updateConnections = /* GraphQL */ `
 export const deleteConnections = /* GraphQL */ `
   mutation DeleteConnections($input: DeleteConnectionsInput!) {
     deleteConnections(input: $input) {
-      connectionId
-      userId
       otherUserId
+      userId
       __typename
     }
   }

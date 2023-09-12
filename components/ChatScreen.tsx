@@ -10,7 +10,8 @@ import {
 } from "react-native";
 import { Auth, API, graphqlOperation } from "aws-amplify";
 import { createChats } from "../src/graphql/mutations";
-import { listChats } from "../src/graphql/queries";
+import { listChatsBetweenUsers } from "../src/graphql/queries";
+import { onCreateChats } from '../src/graphql/subscriptions';
 import "react-native-get-random-values";
 import { v4 } from "uuid";
 import { useAuth } from "../QueryCaching";
@@ -21,6 +22,7 @@ const ChatScreen = ({ route }) => {
   const [newMessage, setNewMessage] = useState("");
   const [senderId, setSenderId] = useState("");
   const [participantsList, setParticipantsList] = useState("");
+  const [participantIdsList, setParticipantIdsList] = useState("");
   const [ttlExpiration, setTtlExpiration] = useState(0);
   const { user, fetchUserProfileData } = useAuth();
   const { participants, chatType } = route.params;
@@ -28,12 +30,34 @@ const ChatScreen = ({ route }) => {
   useEffect(() => {
     setSenderId(user?.attributes.sub);
     setParticipantsList(participants);
+    const participantIds = participants.map(participant => participant.userId);
+    setParticipantIdsList(participantIds);
   }, []);
 
   useEffect(() => {
     // Fetch chat messages when senderId is set
     if (senderId) {
       fetchChatMessages();
+    }
+
+    const subscription = API.graphql(
+          graphqlOperation(onCreateChats, {
+            senderId: user?.attributes.sub
+          })
+        ).subscribe({
+          next: (data) => {
+            // Handle incoming subscription data (new chat messages)
+            const newChatMessage = data.value.data.onCreateChats;
+            console.log("newChatMessage", newChatMessage);
+            setMessages((prevMessages) => [...prevMessages, newChatMessage]);
+          },
+          error: (error) => {
+            console.error('Subscription error:', error);
+          },
+        });
+
+    return () => {
+        subscription.unsubscribe();
     }
   }, [senderId]);
 
@@ -54,7 +78,7 @@ const ChatScreen = ({ route }) => {
       <View style={chatBubbleStyle}>
         <Text style={textStyle}>{item.messageContent}</Text>
         <Text style={styles.detailText}>
-          {formatTimestamp(item.senderIdReceiverIdTimestamp.split("#")[2])}
+          {formatTimestamp(item.timestamp)}
         </Text>
       </View>
     );
@@ -79,10 +103,10 @@ const ChatScreen = ({ route }) => {
               await API.graphql(
                 graphqlOperation(createChats, {
                   input: {
-                    chatId,
-                    senderIdReceiverIdTimestamp: `${senderId}#${participant.userId}#${now}`,
+                    senderId: senderId,
+                    timestamp: now,
+                    receiverId: participant.userId,
                     messageContent: newMessage.trim(),
-                    ttlExpiration,
                     chatTypeStatus,
                   },
                 })
@@ -93,9 +117,6 @@ const ChatScreen = ({ route }) => {
 
         // Wait for all messages to be sent
         await Promise.all(sendMessagePromises);
-
-        // Fetch updated chat messages after sending the new message
-        fetchChatMessages();
 
         // Clear the text input after sending the message
         setNewMessage("");
@@ -116,94 +137,30 @@ const ChatScreen = ({ route }) => {
 
   const fetchChatMessages = async () => {
     try {
-      const response = await API.graphql(graphqlOperation(listChats));
-      const chatMessages = response.data.listChats.items;
 
-      // Filter chat messages based on chatTypeStatus
-      let filteredChatMessages = [];
-      if (chatType === "GROUP") {
-        // Group chat: Get messages for the group by checking senderIdReceiverIdTimestamp
-        const displayedChatMessages = {};
-        filteredChatMessages = chatMessages.filter((chat) => {
-          const [senderId, receiverId] =
-            chat.senderIdReceiverIdTimestamp.split("#");
-          const senderIdString = senderId.toString();
-          const receiverIdString = receiverId.toString();
+    const userId = user?.attributes.sub;
+    const chatTypeStatus = `${chatType}#ACTIVE`;
 
-          const isSenderInParticipants = participants
-            .map((participant) => participant.userId.toString())
-            .includes(senderIdString);
+      const response = await API.graphql(
+        graphqlOperation(listChatsBetweenUsers, {
+            userId: userId,
+            otherUserIds: participantIdsList,
+            chatTypeStatus: chatTypeStatus,
+        })
+      );
+      const chatMessages = response.data.listChatsBetweenUsers.items;
 
-          const isReceiverInParticipants = participants
-            .map((participant) => participant.userId.toString())
-            .includes(receiverIdString);
-
-          const isChatAlreadyDisplayed = displayedChatMessages[chat.chatId];
-
-          const shouldDisplayChat =
-            ((isSenderInParticipants && receiverId === user?.attributes.sub) ||
-              (isReceiverInParticipants &&
-                senderId === user?.attributes.sub)) &&
-            chat.chatTypeStatus === "GROUP#ACTIVE" &&
-            !isChatAlreadyDisplayed;
-
-          if (shouldDisplayChat) {
-            displayedChatMessages[chat.chatId] = true; // Mark chat as displayed
-          }
-
-          return shouldDisplayChat;
-        });
-      } else {
-        const receiverId = participants[0].userId;
-        // Individual chat: Get messages for the receiver
-        filteredChatMessages = chatMessages.filter(
-          (chat) =>
-            (chat.senderIdReceiverIdTimestamp.startsWith(
-              `${senderId}#${receiverId}`
-            ) ||
-              chat.senderIdReceiverIdTimestamp.startsWith(
-                `${receiverId}#${senderId}`
-              )) &&
-            chat.chatTypeStatus === "INDIVIDUAL#ACTIVE"
-        );
-      }
-
-      filteredChatMessages.sort((a, b) => {
+      chatMessages.sort((a, b) => {
         const timestampA = new Date(
-          a.senderIdReceiverIdTimestamp.split("#")[2]
+          a.timestamp
         );
         const timestampB = new Date(
-          b.senderIdReceiverIdTimestamp.split("#")[2]
+          b.timestamp
         );
         return timestampA - timestampB;
       });
 
-      if (!ttlExpiration) {
-        // Find the latest chat message with a valid ttlExpiration
-        const latestChatWithExpiration = filteredChatMessages.find(
-          (chat) => chat.ttlExpiration > 0
-        );
-
-        if (latestChatWithExpiration) {
-          // Use the ttlExpiration from the latest chat message
-          const ttlExpiration = latestChatWithExpiration.ttlExpiration;
-          setTtlExpiration(ttlExpiration); // Update your state with ttlExpiration
-        } else {
-          // Set ttlExpiration to 7 days after now in epoch format
-          const now = new Date();
-          const expirationDate = new Date(
-            now.getTime() + 7 * 24 * 60 * 60 * 1000
-          ); // 7 days in milliseconds
-          setTtlExpiration(Math.floor(expirationDate.getTime() / 1000)); // Convert to seconds
-        }
-      }
-
-      // Update your state with the fetched chat messages
-      const updatedMessages = filteredChatMessages.map((item) => ({
-        ...item, // Copy existing message properties
-        senderId: item.senderIdReceiverIdTimestamp.split("#")[0], // Extract senderId
-      }));
-      setMessages(updatedMessages);
+      setMessages(chatMessages);
     } catch (error) {
       console.error("Error fetching chat messages:", error);
     }

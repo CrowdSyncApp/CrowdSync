@@ -126,9 +126,9 @@ const fetchConnectionsAndProfiles = async (userId) => {
       // Fetch all connections for the current user
       const connectionsResponse = await API.graphql(
         graphqlOperation(listConnections, {
-          filter: {
-            userId: { eq: userId },
-          },
+            filter: {
+                userId: { eq: userId },
+            },
         })
       );
 

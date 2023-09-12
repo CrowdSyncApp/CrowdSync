@@ -29,7 +29,7 @@ const FindSessionScreen = () => {
   const { user, fetchUserProfileData, populateTagSet } = useAuth();
   const [sessionTitle, setSessionTitle] = useState("General"); // Default title is General
 
-useEffect(() => {
+  useEffect(() => {
         navigation.addListener('beforeRemove', nav => {
             // Prevent going back
             if (nav.data.action.type === 'GO_BACK') {

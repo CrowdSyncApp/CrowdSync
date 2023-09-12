@@ -130,36 +130,6 @@ export type DeleteSessionsInput = {
   startTime: string,
 };
 
-export type CreateChatsInput = {
-  chatId: string,
-  senderIdReceiverIdTimestamp: string,
-  messageContent: string,
-  ttlExpiration?: number | null,
-  chatTypeStatus: string,
-};
-
-export type Chats = {
-  __typename: "Chats",
-  chatId: string,
-  senderIdReceiverIdTimestamp: string,
-  messageContent: string,
-  ttlExpiration?: number | null,
-  chatTypeStatus: string,
-};
-
-export type UpdateChatsInput = {
-  chatId: string,
-  senderIdReceiverIdTimestamp: string,
-  messageContent?: string | null,
-  ttlExpiration?: number | null,
-  chatTypeStatus?: string | null,
-};
-
-export type DeleteChatsInput = {
-  chatId: string,
-  senderIdReceiverIdTimestamp: string,
-};
-
 export type CreateTagSetInput = {
   tagId: string,
   tag: string,
@@ -207,27 +177,54 @@ export type DeleteUserTagsInput = {
   userTagId: string,
 };
 
+export type CreateChatsInput = {
+  senderId: string,
+  timestamp: string,
+  receiverId: string,
+  messageContent: string,
+  chatTypeStatus: string,
+};
+
+export type Chats = {
+  __typename: "Chats",
+  senderId: string,
+  timestamp: string,
+  receiverId: string,
+  messageContent: string,
+  chatTypeStatus: string,
+};
+
+export type UpdateChatsInput = {
+  senderId: string,
+  timestamp: string,
+  receiverId?: string | null,
+  messageContent?: string | null,
+  chatTypeStatus?: string | null,
+};
+
+export type DeleteChatsInput = {
+  senderId: string,
+  timestamp: string,
+};
+
 export type CreateConnectionsInput = {
-  connectionId: string,
-  userId: string,
   otherUserId: string,
+  userId: string,
 };
 
 export type Connections = {
   __typename: "Connections",
-  connectionId: string,
-  userId: string,
   otherUserId: string,
+  userId: string,
 };
 
 export type UpdateConnectionsInput = {
-  connectionId: string,
+  otherUserId: string,
   userId: string,
-  otherUserId?: string | null,
 };
 
 export type DeleteConnectionsInput = {
-  connectionId: string,
+  otherUserId: string,
   userId: string,
 };
 
@@ -312,32 +309,6 @@ export type SessionsConnection = {
   nextToken?: string | null,
 };
 
-export type TableChatsFilterInput = {
-  chatId?: TableStringFilterInput | null,
-  senderIdReceiverIdTimestamp?: TableStringFilterInput | null,
-  messageContent?: TableStringFilterInput | null,
-  ttlExpiration?: TableIntFilterInput | null,
-  chatTypeStatus?: TableStringFilterInput | null,
-};
-
-export type TableIntFilterInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  contains?: number | null,
-  notContains?: number | null,
-  between?: Array< number | null > | null,
-};
-
-export type ChatsConnection = {
-  __typename: "ChatsConnection",
-  items?:  Array<Chats | null > | null,
-  nextToken?: string | null,
-};
-
 export type TableTagSetFilterInput = {
   tagId?: TableStringFilterInput | null,
   tag?: TableStringFilterInput | null,
@@ -362,10 +333,23 @@ export type UserTagsConnection = {
   nextToken?: string | null,
 };
 
+export type TableChatsFilterInput = {
+  senderId?: TableStringFilterInput | null,
+  timestamp?: TableStringFilterInput | null,
+  receiverId?: TableStringFilterInput | null,
+  messageContent?: TableStringFilterInput | null,
+  chatTypeStatus?: TableStringFilterInput | null,
+};
+
+export type ChatsConnection = {
+  __typename: "ChatsConnection",
+  items?:  Array<Chats | null > | null,
+  nextToken?: string | null,
+};
+
 export type TableConnectionsFilterInput = {
-  connectionId?: TableStringFilterInput | null,
-  userId?: TableStringFilterInput | null,
   otherUserId?: TableStringFilterInput | null,
+  userId?: TableStringFilterInput | null,
 };
 
 export type ConnectionsConnection = {
@@ -548,51 +532,6 @@ export type DeleteSessionsMutation = {
   } | null,
 };
 
-export type CreateChatsMutationVariables = {
-  input: CreateChatsInput,
-};
-
-export type CreateChatsMutation = {
-  createChats?:  {
-    __typename: "Chats",
-    chatId: string,
-    senderIdReceiverIdTimestamp: string,
-    messageContent: string,
-    ttlExpiration?: number | null,
-    chatTypeStatus: string,
-  } | null,
-};
-
-export type UpdateChatsMutationVariables = {
-  input: UpdateChatsInput,
-};
-
-export type UpdateChatsMutation = {
-  updateChats?:  {
-    __typename: "Chats",
-    chatId: string,
-    senderIdReceiverIdTimestamp: string,
-    messageContent: string,
-    ttlExpiration?: number | null,
-    chatTypeStatus: string,
-  } | null,
-};
-
-export type DeleteChatsMutationVariables = {
-  input: DeleteChatsInput,
-};
-
-export type DeleteChatsMutation = {
-  deleteChats?:  {
-    __typename: "Chats",
-    chatId: string,
-    senderIdReceiverIdTimestamp: string,
-    messageContent: string,
-    ttlExpiration?: number | null,
-    chatTypeStatus: string,
-  } | null,
-};
-
 export type CreateTagSetMutationVariables = {
   input: CreateTagSetInput,
 };
@@ -671,6 +610,51 @@ export type DeleteUserTagsMutation = {
   } | null,
 };
 
+export type CreateChatsMutationVariables = {
+  input: CreateChatsInput,
+};
+
+export type CreateChatsMutation = {
+  createChats?:  {
+    __typename: "Chats",
+    senderId: string,
+    timestamp: string,
+    receiverId: string,
+    messageContent: string,
+    chatTypeStatus: string,
+  } | null,
+};
+
+export type UpdateChatsMutationVariables = {
+  input: UpdateChatsInput,
+};
+
+export type UpdateChatsMutation = {
+  updateChats?:  {
+    __typename: "Chats",
+    senderId: string,
+    timestamp: string,
+    receiverId: string,
+    messageContent: string,
+    chatTypeStatus: string,
+  } | null,
+};
+
+export type DeleteChatsMutationVariables = {
+  input: DeleteChatsInput,
+};
+
+export type DeleteChatsMutation = {
+  deleteChats?:  {
+    __typename: "Chats",
+    senderId: string,
+    timestamp: string,
+    receiverId: string,
+    messageContent: string,
+    chatTypeStatus: string,
+  } | null,
+};
+
 export type CreateConnectionsMutationVariables = {
   input: CreateConnectionsInput,
 };
@@ -678,9 +662,8 @@ export type CreateConnectionsMutationVariables = {
 export type CreateConnectionsMutation = {
   createConnections?:  {
     __typename: "Connections",
-    connectionId: string,
-    userId: string,
     otherUserId: string,
+    userId: string,
   } | null,
 };
 
@@ -691,9 +674,8 @@ export type UpdateConnectionsMutationVariables = {
 export type UpdateConnectionsMutation = {
   updateConnections?:  {
     __typename: "Connections",
-    connectionId: string,
-    userId: string,
     otherUserId: string,
+    userId: string,
   } | null,
 };
 
@@ -704,9 +686,8 @@ export type DeleteConnectionsMutationVariables = {
 export type DeleteConnectionsMutation = {
   deleteConnections?:  {
     __typename: "Connections",
-    connectionId: string,
-    userId: string,
     otherUserId: string,
+    userId: string,
   } | null,
 };
 
@@ -846,43 +827,6 @@ export type ListSessionsQuery = {
   } | null,
 };
 
-export type GetChatsQueryVariables = {
-  chatId: string,
-  senderIdReceiverIdTimestamp: string,
-};
-
-export type GetChatsQuery = {
-  getChats?:  {
-    __typename: "Chats",
-    chatId: string,
-    senderIdReceiverIdTimestamp: string,
-    messageContent: string,
-    ttlExpiration?: number | null,
-    chatTypeStatus: string,
-  } | null,
-};
-
-export type ListChatsQueryVariables = {
-  filter?: TableChatsFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListChatsQuery = {
-  listChats?:  {
-    __typename: "ChatsConnection",
-    items?:  Array< {
-      __typename: "Chats",
-      chatId: string,
-      senderIdReceiverIdTimestamp: string,
-      messageContent: string,
-      ttlExpiration?: number | null,
-      chatTypeStatus: string,
-    } | null > | null,
-    nextToken?: string | null,
-  } | null,
-};
-
 export type GetTagSetQueryVariables = {
   tagId: string,
 };
@@ -948,17 +892,76 @@ export type ListUserTagsQuery = {
   } | null,
 };
 
-export type GetConnectionsQueryVariables = {
-  connectionId: string,
+export type GetChatsQueryVariables = {
+  senderId: string,
+  timestamp: string,
+};
+
+export type GetChatsQuery = {
+  getChats?:  {
+    __typename: "Chats",
+    senderId: string,
+    timestamp: string,
+    receiverId: string,
+    messageContent: string,
+    chatTypeStatus: string,
+  } | null,
+};
+
+export type ListChatsQueryVariables = {
+  filter?: TableChatsFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListChatsQuery = {
+  listChats?:  {
+    __typename: "ChatsConnection",
+    items?:  Array< {
+      __typename: "Chats",
+      senderId: string,
+      timestamp: string,
+      receiverId: string,
+      messageContent: string,
+      chatTypeStatus: string,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListChatsBetweenUsersQueryVariables = {
   userId: string,
+  otherUserIds: Array< string | null >,
+  chatTypeStatus: string,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListChatsBetweenUsersQuery = {
+  listChatsBetweenUsers?:  {
+    __typename: "ChatsConnection",
+    items?:  Array< {
+      __typename: "Chats",
+      senderId: string,
+      timestamp: string,
+      receiverId: string,
+      messageContent: string,
+      chatTypeStatus: string,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetConnectionsQueryVariables = {
+  userId: string,
+  otherUserId: string,
 };
 
 export type GetConnectionsQuery = {
   getConnections?:  {
     __typename: "Connections",
-    connectionId: string,
-    userId: string,
     otherUserId: string,
+    userId: string,
   } | null,
 };
 
@@ -973,9 +976,8 @@ export type ListConnectionsQuery = {
     __typename: "ConnectionsConnection",
     items?:  Array< {
       __typename: "Connections",
-      connectionId: string,
-      userId: string,
       otherUserId: string,
+      userId: string,
     } | null > | null,
     nextToken?: string | null,
   } | null,
@@ -1191,63 +1193,6 @@ export type OnDeleteSessionsSubscription = {
   } | null,
 };
 
-export type OnCreateChatsSubscriptionVariables = {
-  chatId?: string | null,
-  senderIdReceiverIdTimestamp?: string | null,
-  messageContent?: string | null,
-  ttlExpiration?: number | null,
-  chatTypeStatus?: string | null,
-};
-
-export type OnCreateChatsSubscription = {
-  onCreateChats?:  {
-    __typename: "Chats",
-    chatId: string,
-    senderIdReceiverIdTimestamp: string,
-    messageContent: string,
-    ttlExpiration?: number | null,
-    chatTypeStatus: string,
-  } | null,
-};
-
-export type OnUpdateChatsSubscriptionVariables = {
-  chatId?: string | null,
-  senderIdReceiverIdTimestamp?: string | null,
-  messageContent?: string | null,
-  ttlExpiration?: number | null,
-  chatTypeStatus?: string | null,
-};
-
-export type OnUpdateChatsSubscription = {
-  onUpdateChats?:  {
-    __typename: "Chats",
-    chatId: string,
-    senderIdReceiverIdTimestamp: string,
-    messageContent: string,
-    ttlExpiration?: number | null,
-    chatTypeStatus: string,
-  } | null,
-};
-
-export type OnDeleteChatsSubscriptionVariables = {
-  chatId?: string | null,
-  senderIdReceiverIdTimestamp?: string | null,
-  messageContent?: string | null,
-  ttlExpiration?: number | null,
-  chatTypeStatus?: string | null,
-};
-
-export type OnDeleteChatsSubscription = {
-  onDeleteChats?:  {
-    __typename: "Chats",
-    chatId: string,
-    senderIdReceiverIdTimestamp: string,
-    messageContent: string,
-    ttlExpiration?: number | null,
-    chatTypeStatus: string,
-  } | null,
-};
-
 export type OnCreateTagSetSubscriptionVariables = {
   tagId?: string | null,
   tag?: string | null,
@@ -1338,47 +1283,115 @@ export type OnDeleteUserTagsSubscription = {
   } | null,
 };
 
+export type OnCreateChatsSubscriptionVariables = {
+  senderId?: string | null,
+  timestamp?: string | null,
+  receiverId?: string | null,
+  messageContent?: string | null,
+  chatTypeStatus?: string | null,
+};
+
+export type OnCreateChatsSubscription = {
+  onCreateChats?:  {
+    __typename: "Chats",
+    senderId: string,
+    timestamp: string,
+    receiverId: string,
+    messageContent: string,
+    chatTypeStatus: string,
+  } | null,
+};
+
+export type OnSentReceivedChatsSubscriptionVariables = {
+  userId: string,
+  otherUserIds: Array< string | null >,
+  chatTypeStatus: string,
+};
+
+export type OnSentReceivedChatsSubscription = {
+  onSentReceivedChats?:  {
+    __typename: "Chats",
+    senderId: string,
+    timestamp: string,
+    receiverId: string,
+    messageContent: string,
+    chatTypeStatus: string,
+  } | null,
+};
+
+export type OnUpdateChatsSubscriptionVariables = {
+  senderId?: string | null,
+  timestamp?: string | null,
+  receiverId?: string | null,
+  messageContent?: string | null,
+  chatTypeStatus?: string | null,
+};
+
+export type OnUpdateChatsSubscription = {
+  onUpdateChats?:  {
+    __typename: "Chats",
+    senderId: string,
+    timestamp: string,
+    receiverId: string,
+    messageContent: string,
+    chatTypeStatus: string,
+  } | null,
+};
+
+export type OnDeleteChatsSubscriptionVariables = {
+  senderId?: string | null,
+  timestamp?: string | null,
+  receiverId?: string | null,
+  messageContent?: string | null,
+  chatTypeStatus?: string | null,
+};
+
+export type OnDeleteChatsSubscription = {
+  onDeleteChats?:  {
+    __typename: "Chats",
+    senderId: string,
+    timestamp: string,
+    receiverId: string,
+    messageContent: string,
+    chatTypeStatus: string,
+  } | null,
+};
+
 export type OnCreateConnectionsSubscriptionVariables = {
-  connectionId?: string | null,
-  userId?: string | null,
   otherUserId?: string | null,
+  userId?: string | null,
 };
 
 export type OnCreateConnectionsSubscription = {
   onCreateConnections?:  {
     __typename: "Connections",
-    connectionId: string,
-    userId: string,
     otherUserId: string,
+    userId: string,
   } | null,
 };
 
 export type OnUpdateConnectionsSubscriptionVariables = {
-  connectionId?: string | null,
-  userId?: string | null,
   otherUserId?: string | null,
+  userId?: string | null,
 };
 
 export type OnUpdateConnectionsSubscription = {
   onUpdateConnections?:  {
     __typename: "Connections",
-    connectionId: string,
-    userId: string,
     otherUserId: string,
+    userId: string,
   } | null,
 };
 
 export type OnDeleteConnectionsSubscriptionVariables = {
-  connectionId?: string | null,
-  userId?: string | null,
   otherUserId?: string | null,
+  userId?: string | null,
 };
 
 export type OnDeleteConnectionsSubscription = {
   onDeleteConnections?:  {
     __typename: "Connections",
-    connectionId: string,
-    userId: string,
     otherUserId: string,
+    userId: string,
   } | null,
 };

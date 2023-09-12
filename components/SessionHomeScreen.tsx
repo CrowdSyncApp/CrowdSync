@@ -14,6 +14,7 @@ import { useAuth } from "../QueryCaching";
 import { endSession } from "./SessionManager";
 import { getParticipants, listParticipants } from "../src/graphql/queries";
 import { updateParticipants } from "../src/graphql/mutations";
+import { onCreateParticipants } from '../src/graphql/subscriptions';
 import participantsData from "../dummies/dummy_accounts.json";
 import styles, { palette, fonts } from "./style";
 
@@ -27,6 +28,7 @@ const SessionHomeScreen = ({ route }) => {
   const qrCodeData = JSON.stringify({
     sessionId: sessionData.sessionId,
     startTime: sessionData.startTime,
+    title: sessionData.title,
   });
 
   useEffect(() => {
@@ -34,22 +36,19 @@ const SessionHomeScreen = ({ route }) => {
     const fetchParticipants = async () => {
         let fetchedParticipants;
       try {
-          const response = await API.graphql({
-                  query: listParticipants,
-                  variables: {
-                    filter: {
-                      sessionId: {
-                        eq: sessionData.sessionId,
-                      },
-                      visibility: {
-                        eq: 'VISIBLE',
-                      },
-                      userId: {
-                          ne: user?.attributes.sub,
-                        },
-                    },
-                  },
-                });
+          const response = await API.graphql(graphqlOperation(listParticipants, {
+            filter: {
+              sessionId: {
+                eq: sessionData.sessionId,
+              },
+              visibility: {
+                eq: 'VISIBLE',
+              },
+              userId: {
+                ne: user?.attributes.sub,
+              },
+            },
+          }));
           fetchedParticipants = response.data.listParticipants.items;
         } catch (error) {
           console.error('Error fetching participants:', error);
@@ -81,6 +80,22 @@ const SessionHomeScreen = ({ route }) => {
 
     fetchParticipants();
     fetchVisibility();
+
+      const subscription = API.graphql(
+        graphqlOperation(onCreateParticipants, { sessionId: sessionData.sessionId })
+      ).subscribe({
+        next: (response) => {
+          const newParticipant = response.value.data.onCreateParticipants;
+          setParticipants((prevParticipants) => [...prevParticipants, newParticipant]);
+        },
+        error: (error) => {
+          console.error('Error subscribing to participant joined:', error);
+        },
+      });
+
+      return () => {
+        subscription.unsubscribe();
+      };
   }, [sessionData.sessionId]);
 
   const handleProfilePress = async () => {

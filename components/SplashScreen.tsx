@@ -13,9 +13,13 @@ const SplashScreen = () => {
     // Check if isLoading is false and isUserLoggedIn has a value
     if (!isLoading && isUserLoggedIn !== undefined) {
       if (isUserLoggedIn) {
-        navigation.navigate('FindSession');
+        navigation.dispatch(
+          StackActions.replace("FindSession")
+        );
       } else {
-        navigation.navigate('Login');
+        navigation.dispatch(
+          StackActions.replace("Login")
+        );
       }
     }
   }, [isLoading, isUserLoggedIn, navigation]);

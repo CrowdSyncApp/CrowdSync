@@ -30,7 +30,8 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      const user = await login({ username, password });
+      await login({ username, password });
+      navigation.navigate("FindSession");
     } catch (error) {
       throw error;
     }
