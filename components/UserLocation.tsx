@@ -18,6 +18,8 @@ useEffect(() => {
     const fetchUserLocations = async () => {
       try {
        const userId = userData.userId;
+       console.log("userId", userId);
+       console.log("sessionId", sessionId);
         const response = await API.graphql(
           graphqlOperation(getLocations, { userId: userId, sessionId: sessionId })
         );

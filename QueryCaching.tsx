@@ -31,7 +31,7 @@ export function useAuth() {
 async function fetchUserProfileImage(profilePictureFilename) {
   let getLevel;
   try {
-    getLevel = "private";
+    getLevel = "protected";
     if (!profilePictureFilename) {
       // Default image
       profilePictureFilename = "CrowdSync_Temp_Profile.png";
@@ -451,7 +451,7 @@ async function uploadImageToS3(profilePictureUri) {
   const blob = await response.blob();
 
   const profilePictureS3Uri = await Storage.put(filename, blob, {
-    level: "private",
+    level: "protected",
     contentType: "image/jpeg",
   });
 

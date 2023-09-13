@@ -71,8 +71,7 @@ useEffect(() => {
 
   const handleStartSession = async () => {
     const userProfileData = await fetchUserProfileData(user?.userId);
-    //const newSession = await startSession(userProfileData, sessionTitle);
-    const newSession = null;
+    const newSession = await startSession(userProfileData, sessionTitle);
 
     // Check if startSession was successful and navigate to SessionHomeScreen
     if (newSession) {

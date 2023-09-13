@@ -32,13 +32,19 @@ const SessionHomeScreen = ({ route }) => {
   });
 
   useEffect(() => {
-    // Fetch participant data for the current session
-    const participantsList = fetchParticipants();
-      setParticipants(participantsList);
+
+    async function storeParticipantData() {
+        // Fetch participant data for the current session
+    const userId = user?.username;
+        const participantsList = await fetchParticipants(userId);
+          setParticipants(participantsList);
+    };
+    storeParticipantData();
 
       const participantsUpdateInterval = setInterval(async () => {
             try {
-              fetchParticipants();
+              const participantsList = await fetchParticipants();
+              setParticipants(participantsList);
             } catch (error) {
               console.error("Error refreshing participants:", error);
             }

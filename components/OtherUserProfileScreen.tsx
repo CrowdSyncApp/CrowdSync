@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, Pressable } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -14,11 +14,13 @@ const OtherUserProfileScreen = () => {
 
   const [showLocationButton, setShowLocationButton] = useState(false);
 
+  console.log("userData", userData);
+
 useEffect(() => {
     async function checkSessionId() {
       try {
-        const currentUserSessionId = await getSessionData(); // Assuming getSessionData returns the current user's sessionId
-        if (sessionId === currentUserSessionId && sessionId !== "INACTIVE") {
+        const currentUserSessionData = await getSessionData();
+        if (sessionId === currentUserSessionData.sessionId && sessionId !== "INACTIVE") {
           setShowLocationButton(true);
         } else {
           setShowLocationButton(false);

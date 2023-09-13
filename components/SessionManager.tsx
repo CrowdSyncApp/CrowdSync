@@ -1,5 +1,5 @@
 // SessionManager.tsx
-import { API, graphqlOperation } from "aws-amplify";
+import { API, graphqlOperation, Auth } from "aws-amplify";
 import {
   createSessions,
   updateSessions,
@@ -9,6 +9,8 @@ import { listParticipants } from "../src/graphql/queries";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import "react-native-get-random-values";
 import { v4 } from "uuid";
+import { useAuth } from "../QueryCaching.tsx";
+import participantsData from "../dummies/dummy_accounts.json";
 
 const MAX_RETRY_ATTEMPTS = 5; // Maximum number of retry attempts
 
@@ -26,8 +28,8 @@ async function storeSessionData(sessionData) {
 export async function getSessionData() {
     const sessionData = await AsyncStorage.getItem("sessionData");
     if (sessionData) {
-          return JSON.parse(sessionData);
-        }
+      return JSON.parse(sessionData);
+    }
     return null;
 };
 
@@ -57,6 +59,9 @@ async function removeParticipantsData() {
 export const fetchParticipants = async () => {
         let fetchedParticipants;
       try {
+        const user = await Auth.currentAuthenticatedUser();
+        const userId = user?.username;
+        const sessionData = await getSessionData();
           const response = await API.graphql(graphqlOperation(listParticipants, {
             filter: {
               sessionId: {
@@ -66,7 +71,7 @@ export const fetchParticipants = async () => {
                 eq: 'VISIBLE',
               },
               userId: {
-                ne: user?.attributes.sub,
+                ne: userId,
               },
             },
           }));
