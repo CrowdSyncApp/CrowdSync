@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { PermissionsAndroid } from "react-native";
 import { Auth, API, Storage, Hub, graphqlOperation } from "aws-amplify";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -11,12 +12,14 @@ import {
 import { getSessionIdForUser } from "./components/SessionManager";
 import { v4 } from "uuid";
 import {
-  updateParticipants,
+getParticipants,
   updateUserProfile,
   createTagSet,
   createUserTags,
   deleteUserTags,
+  createOrUpdateLocations,
 } from "./src/graphql/mutations";
+import Geolocation from 'react-native-geolocation-service';
 import skillsJson from "./data/new_skills.json";
 
 const AuthContext = createContext();
@@ -28,7 +31,7 @@ export function useAuth() {
 async function fetchUserProfileImage(profilePictureFilename) {
   let getLevel;
   try {
-    getLevel = "private";
+    getLevel = "protected";
     if (!profilePictureFilename) {
       // Default image
       profilePictureFilename = "CrowdSync_Temp_Profile.png";
@@ -87,6 +90,67 @@ async function fetchUserProfile(userId) {
   }
 }
 
+async function refreshLocation(sessionId) {
+  try {
+    // Fetch user data
+    const user = await fetchUser();
+
+    if (!user || !user.username) {
+          console.error("User data or userId is missing.");
+          return [];
+        }
+
+    const userId = user?.username;
+
+    // Request location permission
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+    );
+
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      // Get current location
+      const position = await new Promise((resolve, reject) => {
+        Geolocation.getCurrentPosition(
+          (position) => resolve(position),
+          (error) => reject(error),
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        );
+      });
+
+      const { latitude, longitude } = position.coords;
+      const location = {
+        latitude,
+        longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      };
+
+      const now = new Date().toISOString();
+      const input = {
+          userId: userId,
+          latitude: location.latitude,
+          longitude: location.longitude,
+          sessionId: sessionId,
+          timestamp: now,
+      };
+
+      // Perform GraphQL update operation
+      const response = await API.graphql(
+        graphqlOperation(createOrUpdateLocations, { input: input })
+      );
+
+      return location;
+    } else {
+      // Handle permission denied
+      console.error("Location permission denied");
+      return [];
+    }
+  } catch (error) {
+    console.error("Error refreshing location:", error);
+    return [];
+  }
+}
+
 async function fetchUser() {
   try {
     const storedUser = await Auth.currentAuthenticatedUser();
@@ -126,9 +190,9 @@ const fetchConnectionsAndProfiles = async (userId) => {
       // Fetch all connections for the current user
       const connectionsResponse = await API.graphql(
         graphqlOperation(listConnections, {
-          filter: {
-            userId: { eq: userId },
-          },
+            filter: {
+                userId: { eq: userId },
+            },
         })
       );
 
@@ -387,7 +451,7 @@ async function uploadImageToS3(profilePictureUri) {
   const blob = await response.blob();
 
   const profilePictureS3Uri = await Storage.put(filename, blob, {
-    level: "private",
+    level: "protected",
     contentType: "image/jpeg",
   });
 
@@ -470,6 +534,7 @@ export function AuthProvider({ children }) {
     fetchConnectionsAndProfiles,
     fetchUserProfileData,
     createUserTagsWithSession,
+    refreshLocation,
     refreshToken,
     isUserLoggedIn,
   };

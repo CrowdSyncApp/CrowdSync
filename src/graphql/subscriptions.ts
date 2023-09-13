@@ -257,78 +257,6 @@ export const onDeleteSessions = /* GraphQL */ `
     }
   }
 `;
-export const onCreateChats = /* GraphQL */ `
-  subscription OnCreateChats(
-    $chatId: String
-    $senderIdReceiverIdTimestamp: String
-    $messageContent: String
-    $ttlExpiration: Int
-    $chatTypeStatus: String
-  ) {
-    onCreateChats(
-      chatId: $chatId
-      senderIdReceiverIdTimestamp: $senderIdReceiverIdTimestamp
-      messageContent: $messageContent
-      ttlExpiration: $ttlExpiration
-      chatTypeStatus: $chatTypeStatus
-    ) {
-      chatId
-      senderIdReceiverIdTimestamp
-      messageContent
-      ttlExpiration
-      chatTypeStatus
-      __typename
-    }
-  }
-`;
-export const onUpdateChats = /* GraphQL */ `
-  subscription OnUpdateChats(
-    $chatId: String
-    $senderIdReceiverIdTimestamp: String
-    $messageContent: String
-    $ttlExpiration: Int
-    $chatTypeStatus: String
-  ) {
-    onUpdateChats(
-      chatId: $chatId
-      senderIdReceiverIdTimestamp: $senderIdReceiverIdTimestamp
-      messageContent: $messageContent
-      ttlExpiration: $ttlExpiration
-      chatTypeStatus: $chatTypeStatus
-    ) {
-      chatId
-      senderIdReceiverIdTimestamp
-      messageContent
-      ttlExpiration
-      chatTypeStatus
-      __typename
-    }
-  }
-`;
-export const onDeleteChats = /* GraphQL */ `
-  subscription OnDeleteChats(
-    $chatId: String
-    $senderIdReceiverIdTimestamp: String
-    $messageContent: String
-    $ttlExpiration: Int
-    $chatTypeStatus: String
-  ) {
-    onDeleteChats(
-      chatId: $chatId
-      senderIdReceiverIdTimestamp: $senderIdReceiverIdTimestamp
-      messageContent: $messageContent
-      ttlExpiration: $ttlExpiration
-      chatTypeStatus: $chatTypeStatus
-    ) {
-      chatId
-      senderIdReceiverIdTimestamp
-      messageContent
-      ttlExpiration
-      chatTypeStatus
-      __typename
-    }
-  }
-`;
 export const onCreateTagSet = /* GraphQL */ `
   subscription OnCreateTagSet($tagId: String, $tag: String) {
     onCreateTagSet(tagId: $tagId, tag: $tag) {
@@ -419,56 +347,173 @@ export const onDeleteUserTags = /* GraphQL */ `
     }
   }
 `;
-export const onCreateConnections = /* GraphQL */ `
-  subscription OnCreateConnections(
-    $connectionId: String
-    $userId: String
-    $otherUserId: String
+export const onCreateChats = /* GraphQL */ `
+  subscription OnCreateChats(
+    $senderId: String
+    $timestamp: String
+    $receiverId: String
+    $messageContent: String
+    $chatTypeStatus: String
   ) {
-    onCreateConnections(
-      connectionId: $connectionId
-      userId: $userId
-      otherUserId: $otherUserId
+    onCreateChats(
+      senderId: $senderId
+      timestamp: $timestamp
+      receiverId: $receiverId
+      messageContent: $messageContent
+      chatTypeStatus: $chatTypeStatus
     ) {
-      connectionId
-      userId
+      senderId
+      timestamp
+      receiverId
+      messageContent
+      chatTypeStatus
+      __typename
+    }
+  }
+`;
+export const onUpdateChats = /* GraphQL */ `
+  subscription OnUpdateChats(
+    $senderId: String
+    $timestamp: String
+    $receiverId: String
+    $messageContent: String
+    $chatTypeStatus: String
+  ) {
+    onUpdateChats(
+      senderId: $senderId
+      timestamp: $timestamp
+      receiverId: $receiverId
+      messageContent: $messageContent
+      chatTypeStatus: $chatTypeStatus
+    ) {
+      senderId
+      timestamp
+      receiverId
+      messageContent
+      chatTypeStatus
+      __typename
+    }
+  }
+`;
+export const onDeleteChats = /* GraphQL */ `
+  subscription OnDeleteChats(
+    $senderId: String
+    $timestamp: String
+    $receiverId: String
+    $messageContent: String
+    $chatTypeStatus: String
+  ) {
+    onDeleteChats(
+      senderId: $senderId
+      timestamp: $timestamp
+      receiverId: $receiverId
+      messageContent: $messageContent
+      chatTypeStatus: $chatTypeStatus
+    ) {
+      senderId
+      timestamp
+      receiverId
+      messageContent
+      chatTypeStatus
+      __typename
+    }
+  }
+`;
+export const onCreateConnections = /* GraphQL */ `
+  subscription OnCreateConnections($otherUserId: String, $userId: String) {
+    onCreateConnections(otherUserId: $otherUserId, userId: $userId) {
       otherUserId
+      userId
       __typename
     }
   }
 `;
 export const onUpdateConnections = /* GraphQL */ `
-  subscription OnUpdateConnections(
-    $connectionId: String
-    $userId: String
-    $otherUserId: String
-  ) {
-    onUpdateConnections(
-      connectionId: $connectionId
-      userId: $userId
-      otherUserId: $otherUserId
-    ) {
-      connectionId
-      userId
+  subscription OnUpdateConnections($otherUserId: String, $userId: String) {
+    onUpdateConnections(otherUserId: $otherUserId, userId: $userId) {
       otherUserId
+      userId
       __typename
     }
   }
 `;
 export const onDeleteConnections = /* GraphQL */ `
-  subscription OnDeleteConnections(
-    $connectionId: String
-    $userId: String
-    $otherUserId: String
-  ) {
-    onDeleteConnections(
-      connectionId: $connectionId
-      userId: $userId
-      otherUserId: $otherUserId
-    ) {
-      connectionId
-      userId
+  subscription OnDeleteConnections($otherUserId: String, $userId: String) {
+    onDeleteConnections(otherUserId: $otherUserId, userId: $userId) {
       otherUserId
+      userId
+      __typename
+    }
+  }
+`;
+export const onCreateLocations = /* GraphQL */ `
+  subscription OnCreateLocations(
+    $sessionId: String
+    $userId: String
+    $latitude: Float
+    $longitude: Float
+    $timestamp: String
+  ) {
+    onCreateLocations(
+      sessionId: $sessionId
+      userId: $userId
+      latitude: $latitude
+      longitude: $longitude
+      timestamp: $timestamp
+    ) {
+      sessionId
+      userId
+      latitude
+      longitude
+      timestamp
+      __typename
+    }
+  }
+`;
+export const onUpdateLocations = /* GraphQL */ `
+  subscription OnUpdateLocations(
+    $sessionId: String
+    $userId: String
+    $latitude: Float
+    $longitude: Float
+    $timestamp: String
+  ) {
+    onUpdateLocations(
+      sessionId: $sessionId
+      userId: $userId
+      latitude: $latitude
+      longitude: $longitude
+      timestamp: $timestamp
+    ) {
+      sessionId
+      userId
+      latitude
+      longitude
+      timestamp
+      __typename
+    }
+  }
+`;
+export const onDeleteLocations = /* GraphQL */ `
+  subscription OnDeleteLocations(
+    $sessionId: String
+    $userId: String
+    $latitude: Float
+    $longitude: Float
+    $timestamp: String
+  ) {
+    onDeleteLocations(
+      sessionId: $sessionId
+      userId: $userId
+      latitude: $latitude
+      longitude: $longitude
+      timestamp: $timestamp
+    ) {
+      sessionId
+      userId
+      latitude
+      longitude
+      timestamp
       __typename
     }
   }

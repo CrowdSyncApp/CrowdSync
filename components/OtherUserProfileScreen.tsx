@@ -1,15 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, Pressable } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { getSessionData } from "./SessionManager";
 import styles, { palette, fonts } from "./style";
 
 const OtherUserProfileScreen = () => {
   const navigation = useNavigation(); // Get navigation instance
   const route = useRoute(); // Get route object
 
-  const { userData } = route.params;
+  const { userData, sessionId } = route.params;
   const myimage = Image.resolveAssetSource(userData.profilePicture);
+
+  const [showLocationButton, setShowLocationButton] = useState(false);
+
+  console.log("userData", userData);
+
+useEffect(() => {
+    async function checkSessionId() {
+      try {
+        const currentUserSessionData = await getSessionData();
+        if (sessionId === currentUserSessionData.sessionId && sessionId !== "INACTIVE") {
+          setShowLocationButton(true);
+        } else {
+          setShowLocationButton(false);
+        }
+      } catch (error) {
+        console.error("Error fetching current user's sessionId:", error);
+        setShowLocationButton(false); // Handle the error by not showing the button
+      }
+    }
+
+    checkSessionId();
+  }, [sessionId]);
 
   const renderSocialLinks = (socialLinks) => {
     if (socialLinks && socialLinks.length > 0) {
@@ -34,7 +57,7 @@ const OtherUserProfileScreen = () => {
 
   const handleLocationPress = () => {
       // Implement your chat logic here
-      navigation.navigate("UserLocation");
+      navigation.navigate("UserLocation", { userData: userData, sessionId: sessionId });
     };
 
   return (
@@ -105,12 +128,12 @@ const OtherUserProfileScreen = () => {
             <Text style={styles.buttonText}>Chat</Text>
           </Pressable>
 
-            {userData.visibility === "VISIBLE" && (
-            <View style={{ paddingVertical: 10 }}>
-            <Pressable style={styles.basicButton} onPress={handleLocationPress}>
-              <Text style={styles.buttonText}>Location</Text>
-            </Pressable>
-            </View>
+            {showLocationButton && userData.visibility === "VISIBLE" && (
+                <View style={{ paddingVertical: 10 }}>
+                  <Pressable style={styles.basicButton} onPress={handleLocationPress}>
+                    <Text style={styles.buttonText}>Location</Text>
+                  </Pressable>
+                </View>
               )}
         </View>
       </View>

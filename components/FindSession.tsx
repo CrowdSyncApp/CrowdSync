@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  PermissionsAndroid
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
@@ -18,6 +19,8 @@ import styles, { palette, fonts } from "./style";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { StatusBar } from "react-native";
 import { createTagSet, listTagSets } from "../src/graphql/mutations";
+import MapView, { Marker } from 'react-native-maps';
+import Geolocation from 'react-native-geolocation-service';
 
 import SampleFindSessionMap from "../images/sample_find_session.png";
 
@@ -26,10 +29,34 @@ const FindSessionScreen = () => {
   // https://github.com/ovr/react-native-status-bar-height <-- Might need for IOS
   const keyboardVerticalOffset = StatusBar.currentHeight + headerHeight;
   const navigation = useNavigation();
-  const { user, fetchUserProfileData, populateTagSet } = useAuth();
-  const [sessionTitle, setSessionTitle] = useState("General"); // Default title is General
+  const { user, fetchUserProfileData, populateTagSet, refreshLocation } = useAuth();
+  const [sessionTitle, setSessionTitle] = useState("General");
+  const [location, setLocation] = useState();
 
 useEffect(() => {
+  // Request location permission specifically for Android
+  const requestLocationPermission = async () => {
+    try {
+        const currLocation = await refreshLocation("INACTIVE");
+        setLocation(currLocation);
+    } catch (error) {
+      console.error("Error requesting location permission:", error);
+    }
+  };
+
+  // Call the requestLocationPermission function here
+  requestLocationPermission();
+
+    const locationUpdateInterval = setInterval(async () => {
+      try {
+        requestLocationPermission();
+      } catch (error) {
+        console.error("Error refreshing location:", error);
+      }
+    }, 1 * 60 * 1000);
+}, []);
+
+  useEffect(() => {
         navigation.addListener('beforeRemove', nav => {
             // Prevent going back
             if (nav.data.action.type === 'GO_BACK') {
@@ -94,10 +121,23 @@ useEffect(() => {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.index}>
           <View style={styles.div}>
-            <Image
-              source={SampleFindSessionMap}
-              style={styles.findSessionMap}
-            />
+            {location ? (
+                    <MapView
+                      style={{ flex: 1 }}
+                      initialRegion={location}
+                    >
+                      <Marker
+                        coordinate={{
+                          latitude: location.latitude,
+                          longitude: location.longitude,
+                        }}
+                        title="Your Location"
+                        description="This is your current location"
+                      />
+                    </MapView>
+                  ) : (
+                    <Text>Loading...</Text> // Display a loading indicator while waiting for location
+                  )}
             <View style={styles.buttonContainer}>
               <Pressable
                 style={styles.basicButton}

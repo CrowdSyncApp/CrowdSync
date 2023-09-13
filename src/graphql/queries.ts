@@ -124,41 +124,6 @@ export const listSessions = /* GraphQL */ `
     }
   }
 `;
-export const getChats = /* GraphQL */ `
-  query GetChats($chatId: String!, $senderIdReceiverIdTimestamp: String!) {
-    getChats(
-      chatId: $chatId
-      senderIdReceiverIdTimestamp: $senderIdReceiverIdTimestamp
-    ) {
-      chatId
-      senderIdReceiverIdTimestamp
-      messageContent
-      ttlExpiration
-      chatTypeStatus
-      __typename
-    }
-  }
-`;
-export const listChats = /* GraphQL */ `
-  query ListChats(
-    $filter: TableChatsFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listChats(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        chatId
-        senderIdReceiverIdTimestamp
-        messageContent
-        ttlExpiration
-        chatTypeStatus
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
 export const getTagSet = /* GraphQL */ `
   query GetTagSet($tagId: String!) {
     getTagSet(tagId: $tagId) {
@@ -215,12 +180,71 @@ export const listUserTags = /* GraphQL */ `
     }
   }
 `;
+export const getChats = /* GraphQL */ `
+  query GetChats($senderId: String!, $timestamp: String!) {
+    getChats(senderId: $senderId, timestamp: $timestamp) {
+      senderId
+      timestamp
+      receiverId
+      messageContent
+      chatTypeStatus
+      __typename
+    }
+  }
+`;
+export const listChats = /* GraphQL */ `
+  query ListChats(
+    $filter: TableChatsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listChats(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        senderId
+        timestamp
+        receiverId
+        messageContent
+        chatTypeStatus
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const listChatsBetweenUsers = /* GraphQL */ `
+  query ListChatsBetweenUsers(
+    $userId: String!
+    $otherUserIds: [String]!
+    $chatTypeStatus: String!
+    $limit: Int
+    $nextToken: String
+  ) {
+    listChatsBetweenUsers(
+      userId: $userId
+      otherUserIds: $otherUserIds
+      chatTypeStatus: $chatTypeStatus
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        senderId
+        timestamp
+        receiverId
+        messageContent
+        chatTypeStatus
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
 export const getConnections = /* GraphQL */ `
-  query GetConnections($connectionId: String!, $userId: String!) {
-    getConnections(connectionId: $connectionId, userId: $userId) {
-      connectionId
-      userId
+  query GetConnections($userId: String!, $otherUserId: String!) {
+    getConnections(userId: $userId, otherUserId: $otherUserId) {
       otherUserId
+      userId
       __typename
     }
   }
@@ -233,9 +257,40 @@ export const listConnections = /* GraphQL */ `
   ) {
     listConnections(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
-        connectionId
-        userId
         otherUserId
+        userId
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getLocations = /* GraphQL */ `
+  query GetLocations($userId: String!, $sessionId: String!) {
+    getLocations(userId: $userId, sessionId: $sessionId) {
+      sessionId
+      userId
+      latitude
+      longitude
+      timestamp
+      __typename
+    }
+  }
+`;
+export const listLocations = /* GraphQL */ `
+  query ListLocations(
+    $filter: TableLocationsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listLocations(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        sessionId
+        userId
+        latitude
+        longitude
+        timestamp
         __typename
       }
       nextToken

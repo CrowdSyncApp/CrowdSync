@@ -11,6 +11,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
 import participantsData from "../dummies/dummy_accounts.json";
+import { getSessionIdForUser } from "./SessionManager";
 import styles, { palette, fonts } from "./style";
 
 const MyConnections = ({ route }) => {
@@ -28,8 +29,14 @@ const MyConnections = ({ route }) => {
          getConnections();
     }, []);
 
-  const handleConnectionPress = (connectionData: string) => {
-    navigation.navigate("OtherUserProfile", { userData: connectionData });
+  const handleConnectionPress = async (connectionData: string) => {
+    try {
+      const sessionId = await getSessionIdForUser(connectionData.userId);
+
+      navigation.navigate("OtherUserProfile", { userData: connectionData, sessionId: sessionId });
+    } catch (error) {
+      console.error("Error in handleConnectionPress:", error);
+    }
   };
 
   return (

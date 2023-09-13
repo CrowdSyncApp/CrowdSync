@@ -11,9 +11,10 @@ import { useNavigation } from "@react-navigation/native";
 import { API, graphqlOperation } from "aws-amplify";
 import QRCode from "react-native-qrcode-svg";
 import { useAuth } from "../QueryCaching";
-import { endSession } from "./SessionManager";
+import { endSession, fetchParticipants } from "./SessionManager";
 import { getParticipants, listParticipants } from "../src/graphql/queries";
 import { updateParticipants } from "../src/graphql/mutations";
+import { onCreateParticipants } from '../src/graphql/subscriptions';
 import participantsData from "../dummies/dummy_accounts.json";
 import styles, { palette, fonts } from "./style";
 
@@ -27,39 +28,27 @@ const SessionHomeScreen = ({ route }) => {
   const qrCodeData = JSON.stringify({
     sessionId: sessionData.sessionId,
     startTime: sessionData.startTime,
+    title: sessionData.title,
   });
 
   useEffect(() => {
-    // Fetch participant data for the current session
-    const fetchParticipants = async () => {
-        let fetchedParticipants;
-      try {
-          const response = await API.graphql({
-                  query: listParticipants,
-                  variables: {
-                    filter: {
-                      sessionId: {
-                        eq: sessionData.sessionId,
-                      },
-                      visibility: {
-                        eq: 'VISIBLE',
-                      },
-                      userId: {
-                          ne: user?.attributes.sub,
-                        },
-                    },
-                  },
-                });
-          fetchedParticipants = response.data.listParticipants.items;
-        } catch (error) {
-          console.error('Error fetching participants:', error);
-        }
-      const filteredFakeParticipants = participantsData.filter(
-        (participant) => participant.visibility === "VISIBLE"
-      );
-      const filteredParticipantsList = [...fetchedParticipants, ...filteredFakeParticipants];
-      setParticipants(filteredParticipantsList);
+
+    async function storeParticipantData() {
+        // Fetch participant data for the current session
+    const userId = user?.username;
+        const participantsList = await fetchParticipants(userId);
+          setParticipants(participantsList);
     };
+    storeParticipantData();
+
+      const participantsUpdateInterval = setInterval(async () => {
+            try {
+              const participantsList = await fetchParticipants();
+              setParticipants(participantsList);
+            } catch (error) {
+              console.error("Error refreshing participants:", error);
+            }
+          }, 1 * 60 * 1000);
 
     const fetchVisibility = async () => {
       const userProfileData = await fetchUserProfileData(user?.username);
@@ -79,8 +68,23 @@ const SessionHomeScreen = ({ route }) => {
       }
     };
 
-    fetchParticipants();
     fetchVisibility();
+
+      const subscription = API.graphql(
+        graphqlOperation(onCreateParticipants, { sessionId: sessionData.sessionId })
+      ).subscribe({
+        next: (response) => {
+          const newParticipant = response.value.data.onCreateParticipants;
+          setParticipants((prevParticipants) => [...prevParticipants, newParticipant]);
+        },
+        error: (error) => {
+          console.error('Error subscribing to participant joined:', error);
+        },
+      });
+
+      return () => {
+        subscription.unsubscribe();
+      };
   }, [sessionData.sessionId]);
 
   const handleProfilePress = async () => {
@@ -131,9 +135,6 @@ const SessionHomeScreen = ({ route }) => {
     try {
       const userProfileData = await fetchUserProfileData(user?.username);
       const newVisibility = isVisible ? "INVISIBLE" : "VISIBLE";
-      console.log("sessionData.sessionId", sessionData.sessionId);
-      console.log("userProfileData.userId", userProfileData.userId);
-      console.log("newVisibility", newVisibility);
 
       await API.graphql(
           graphqlOperation(updateParticipants, {
@@ -153,7 +154,7 @@ const SessionHomeScreen = ({ route }) => {
   };
 
   const handleUserProfilePress = (userData) => {
-    navigation.navigate("OtherUserProfile", { userData });
+    navigation.navigate("OtherUserProfile", { userData, sessionId: sessionData.sessionId });
   };
 
   const isAdmin = user?.signInUserSession?.idToken?.payload[
