@@ -228,6 +228,36 @@ export type DeleteConnectionsInput = {
   userId: string,
 };
 
+export type CreateLocationsInput = {
+  sessionId: string,
+  userId: string,
+  latitude: number,
+  longitude: number,
+  timestamp: string,
+};
+
+export type Locations = {
+  __typename: "Locations",
+  sessionId: string,
+  userId: string,
+  latitude: number,
+  longitude: number,
+  timestamp: string,
+};
+
+export type UpdateLocationsInput = {
+  sessionId: string,
+  userId: string,
+  latitude?: number | null,
+  longitude?: number | null,
+  timestamp?: string | null,
+};
+
+export type DeleteLocationsInput = {
+  sessionId: string,
+  userId: string,
+};
+
 export type TableUserProfileFilterInput = {
   userId?: TableIDFilterInput | null,
   fullName?: TableStringFilterInput | null,
@@ -355,6 +385,32 @@ export type TableConnectionsFilterInput = {
 export type ConnectionsConnection = {
   __typename: "ConnectionsConnection",
   items?:  Array<Connections | null > | null,
+  nextToken?: string | null,
+};
+
+export type TableLocationsFilterInput = {
+  sessionId?: TableStringFilterInput | null,
+  userId?: TableStringFilterInput | null,
+  latitude?: TableFloatFilterInput | null,
+  longitude?: TableFloatFilterInput | null,
+  timestamp?: TableStringFilterInput | null,
+};
+
+export type TableFloatFilterInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  contains?: number | null,
+  notContains?: number | null,
+  between?: Array< number | null > | null,
+};
+
+export type LocationsConnection = {
+  __typename: "LocationsConnection",
+  items?:  Array<Locations | null > | null,
   nextToken?: string | null,
 };
 
@@ -691,6 +747,66 @@ export type DeleteConnectionsMutation = {
   } | null,
 };
 
+export type CreateLocationsMutationVariables = {
+  input: CreateLocationsInput,
+};
+
+export type CreateLocationsMutation = {
+  createLocations?:  {
+    __typename: "Locations",
+    sessionId: string,
+    userId: string,
+    latitude: number,
+    longitude: number,
+    timestamp: string,
+  } | null,
+};
+
+export type UpdateLocationsMutationVariables = {
+  input: UpdateLocationsInput,
+};
+
+export type UpdateLocationsMutation = {
+  updateLocations?:  {
+    __typename: "Locations",
+    sessionId: string,
+    userId: string,
+    latitude: number,
+    longitude: number,
+    timestamp: string,
+  } | null,
+};
+
+export type CreateOrUpdateLocationsMutationVariables = {
+  input: UpdateLocationsInput,
+};
+
+export type CreateOrUpdateLocationsMutation = {
+  createOrUpdateLocations?:  {
+    __typename: "Locations",
+    sessionId: string,
+    userId: string,
+    latitude: number,
+    longitude: number,
+    timestamp: string,
+  } | null,
+};
+
+export type DeleteLocationsMutationVariables = {
+  input: DeleteLocationsInput,
+};
+
+export type DeleteLocationsMutation = {
+  deleteLocations?:  {
+    __typename: "Locations",
+    sessionId: string,
+    userId: string,
+    latitude: number,
+    longitude: number,
+    timestamp: string,
+  } | null,
+};
+
 export type GetUserProfileQueryVariables = {
   userId: string,
 };
@@ -978,6 +1094,43 @@ export type ListConnectionsQuery = {
       __typename: "Connections",
       otherUserId: string,
       userId: string,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetLocationsQueryVariables = {
+  userId: string,
+  sessionId: string,
+};
+
+export type GetLocationsQuery = {
+  getLocations?:  {
+    __typename: "Locations",
+    sessionId: string,
+    userId: string,
+    latitude: number,
+    longitude: number,
+    timestamp: string,
+  } | null,
+};
+
+export type ListLocationsQueryVariables = {
+  filter?: TableLocationsFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListLocationsQuery = {
+  listLocations?:  {
+    __typename: "LocationsConnection",
+    items?:  Array< {
+      __typename: "Locations",
+      sessionId: string,
+      userId: string,
+      latitude: number,
+      longitude: number,
+      timestamp: string,
     } | null > | null,
     nextToken?: string | null,
   } | null,
@@ -1302,23 +1455,6 @@ export type OnCreateChatsSubscription = {
   } | null,
 };
 
-export type OnSentReceivedChatsSubscriptionVariables = {
-  userId: string,
-  otherUserIds: Array< string | null >,
-  chatTypeStatus: string,
-};
-
-export type OnSentReceivedChatsSubscription = {
-  onSentReceivedChats?:  {
-    __typename: "Chats",
-    senderId: string,
-    timestamp: string,
-    receiverId: string,
-    messageContent: string,
-    chatTypeStatus: string,
-  } | null,
-};
-
 export type OnUpdateChatsSubscriptionVariables = {
   senderId?: string | null,
   timestamp?: string | null,
@@ -1393,5 +1529,62 @@ export type OnDeleteConnectionsSubscription = {
     __typename: "Connections",
     otherUserId: string,
     userId: string,
+  } | null,
+};
+
+export type OnCreateLocationsSubscriptionVariables = {
+  sessionId?: string | null,
+  userId?: string | null,
+  latitude?: number | null,
+  longitude?: number | null,
+  timestamp?: string | null,
+};
+
+export type OnCreateLocationsSubscription = {
+  onCreateLocations?:  {
+    __typename: "Locations",
+    sessionId: string,
+    userId: string,
+    latitude: number,
+    longitude: number,
+    timestamp: string,
+  } | null,
+};
+
+export type OnUpdateLocationsSubscriptionVariables = {
+  sessionId?: string | null,
+  userId?: string | null,
+  latitude?: number | null,
+  longitude?: number | null,
+  timestamp?: string | null,
+};
+
+export type OnUpdateLocationsSubscription = {
+  onUpdateLocations?:  {
+    __typename: "Locations",
+    sessionId: string,
+    userId: string,
+    latitude: number,
+    longitude: number,
+    timestamp: string,
+  } | null,
+};
+
+export type OnDeleteLocationsSubscriptionVariables = {
+  sessionId?: string | null,
+  userId?: string | null,
+  latitude?: number | null,
+  longitude?: number | null,
+  timestamp?: string | null,
+};
+
+export type OnDeleteLocationsSubscription = {
+  onDeleteLocations?:  {
+    __typename: "Locations",
+    sessionId: string,
+    userId: string,
+    latitude: number,
+    longitude: number,
+    timestamp: string,
   } | null,
 };

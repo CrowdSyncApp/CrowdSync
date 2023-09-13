@@ -266,3 +266,35 @@ export const listConnections = /* GraphQL */ `
     }
   }
 `;
+export const getLocations = /* GraphQL */ `
+  query GetLocations($userId: String!, $sessionId: String!) {
+    getLocations(userId: $userId, sessionId: $sessionId) {
+      sessionId
+      userId
+      latitude
+      longitude
+      timestamp
+      __typename
+    }
+  }
+`;
+export const listLocations = /* GraphQL */ `
+  query ListLocations(
+    $filter: TableLocationsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listLocations(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        sessionId
+        userId
+        latitude
+        longitude
+        timestamp
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;

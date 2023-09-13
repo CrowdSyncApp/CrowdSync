@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { PermissionsAndroid } from "react-native";
 import { Auth, API, Storage, Hub, graphqlOperation } from "aws-amplify";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -11,12 +12,14 @@ import {
 import { getSessionIdForUser } from "./components/SessionManager";
 import { v4 } from "uuid";
 import {
-  updateParticipants,
+getParticipants,
   updateUserProfile,
   createTagSet,
   createUserTags,
   deleteUserTags,
+  createOrUpdateLocations,
 } from "./src/graphql/mutations";
+import Geolocation from 'react-native-geolocation-service';
 import skillsJson from "./data/new_skills.json";
 
 const AuthContext = createContext();
@@ -84,6 +87,67 @@ async function fetchUserProfile(userId) {
   } catch (error) {
     console.error("Error fetching user profile:", error);
     throw error;
+  }
+}
+
+async function refreshLocation(sessionId) {
+  try {
+    // Fetch user data
+    const user = await fetchUser();
+
+    if (!user || !user.username) {
+          console.error("User data or userId is missing.");
+          return [];
+        }
+
+    const userId = user?.username;
+
+    // Request location permission
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+    );
+
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      // Get current location
+      const position = await new Promise((resolve, reject) => {
+        Geolocation.getCurrentPosition(
+          (position) => resolve(position),
+          (error) => reject(error),
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        );
+      });
+
+      const { latitude, longitude } = position.coords;
+      const location = {
+        latitude,
+        longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      };
+
+      const now = new Date().toISOString();
+      const input = {
+          userId: userId,
+          latitude: location.latitude,
+          longitude: location.longitude,
+          sessionId: sessionId,
+          timestamp: now,
+      };
+
+      // Perform GraphQL update operation
+      const response = await API.graphql(
+        graphqlOperation(createOrUpdateLocations, { input: input })
+      );
+
+      return location;
+    } else {
+      // Handle permission denied
+      console.error("Location permission denied");
+      return [];
+    }
+  } catch (error) {
+    console.error("Error refreshing location:", error);
+    return [];
   }
 }
 
@@ -470,6 +534,7 @@ export function AuthProvider({ children }) {
     fetchConnectionsAndProfiles,
     fetchUserProfileData,
     createUserTagsWithSession,
+    refreshLocation,
     refreshToken,
     isUserLoggedIn,
   };

@@ -11,7 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import { API, graphqlOperation } from "aws-amplify";
 import QRCode from "react-native-qrcode-svg";
 import { useAuth } from "../QueryCaching";
-import { endSession } from "./SessionManager";
+import { endSession, fetchParticipants } from "./SessionManager";
 import { getParticipants, listParticipants } from "../src/graphql/queries";
 import { updateParticipants } from "../src/graphql/mutations";
 import { onCreateParticipants } from '../src/graphql/subscriptions';
@@ -33,32 +33,16 @@ const SessionHomeScreen = ({ route }) => {
 
   useEffect(() => {
     // Fetch participant data for the current session
-    const fetchParticipants = async () => {
-        let fetchedParticipants;
-      try {
-          const response = await API.graphql(graphqlOperation(listParticipants, {
-            filter: {
-              sessionId: {
-                eq: sessionData.sessionId,
-              },
-              visibility: {
-                eq: 'VISIBLE',
-              },
-              userId: {
-                ne: user?.attributes.sub,
-              },
-            },
-          }));
-          fetchedParticipants = response.data.listParticipants.items;
-        } catch (error) {
-          console.error('Error fetching participants:', error);
-        }
-      const filteredFakeParticipants = participantsData.filter(
-        (participant) => participant.visibility === "VISIBLE"
-      );
-      const filteredParticipantsList = [...fetchedParticipants, ...filteredFakeParticipants];
-      setParticipants(filteredParticipantsList);
-    };
+    const participantsList = fetchParticipants();
+      setParticipants(participantsList);
+
+      const participantsUpdateInterval = setInterval(async () => {
+            try {
+              fetchParticipants();
+            } catch (error) {
+              console.error("Error refreshing participants:", error);
+            }
+          }, 1 * 60 * 1000);
 
     const fetchVisibility = async () => {
       const userProfileData = await fetchUserProfileData(user?.username);
@@ -78,7 +62,6 @@ const SessionHomeScreen = ({ route }) => {
       }
     };
 
-    fetchParticipants();
     fetchVisibility();
 
       const subscription = API.graphql(
@@ -146,9 +129,6 @@ const SessionHomeScreen = ({ route }) => {
     try {
       const userProfileData = await fetchUserProfileData(user?.username);
       const newVisibility = isVisible ? "INVISIBLE" : "VISIBLE";
-      console.log("sessionData.sessionId", sessionData.sessionId);
-      console.log("userProfileData.userId", userProfileData.userId);
-      console.log("newVisibility", newVisibility);
 
       await API.graphql(
           graphqlOperation(updateParticipants, {
@@ -168,7 +148,7 @@ const SessionHomeScreen = ({ route }) => {
   };
 
   const handleUserProfilePress = (userData) => {
-    navigation.navigate("OtherUserProfile", { userData });
+    navigation.navigate("OtherUserProfile", { userData, sessionId: sessionData.sessionId });
   };
 
   const isAdmin = user?.signInUserSession?.idToken?.payload[

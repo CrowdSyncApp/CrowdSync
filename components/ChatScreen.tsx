@@ -42,14 +42,23 @@ const ChatScreen = ({ route }) => {
 
     const subscription = API.graphql(
           graphqlOperation(onCreateChats, {
-            senderId: user?.attributes.sub
+            chatTypeStatus: `${chatType}#ACTIVE`,
           })
         ).subscribe({
           next: (data) => {
             // Handle incoming subscription data (new chat messages)
             const newChatMessage = data.value.data.onCreateChats;
-            console.log("newChatMessage", newChatMessage);
-            setMessages((prevMessages) => [...prevMessages, newChatMessage]);
+
+            const isMessageValid =
+                  (newChatMessage.senderId === user?.attributes.sub &&
+                    participantIdsList.includes(newChatMessage.receiverId)) ||
+                  (participantIdsList.includes(newChatMessage.senderId) &&
+                    newChatMessage.receiverId === user?.attributes.sub);
+
+            // If the message meets your filtering criteria, update the state
+            if (isMessageValid) {
+              setMessages((prevMessages) => [...prevMessages, newChatMessage]);
+            }
           },
           error: (error) => {
             console.error('Subscription error:', error);

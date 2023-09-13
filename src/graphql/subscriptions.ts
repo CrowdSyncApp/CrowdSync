@@ -371,26 +371,6 @@ export const onCreateChats = /* GraphQL */ `
     }
   }
 `;
-export const onSentReceivedChats = /* GraphQL */ `
-  subscription OnSentReceivedChats(
-    $userId: String!
-    $otherUserIds: [String]!
-    $chatTypeStatus: String!
-  ) {
-    onSentReceivedChats(
-      userId: $userId
-      otherUserIds: $otherUserIds
-      chatTypeStatus: $chatTypeStatus
-    ) {
-      senderId
-      timestamp
-      receiverId
-      messageContent
-      chatTypeStatus
-      __typename
-    }
-  }
-`;
 export const onUpdateChats = /* GraphQL */ `
   subscription OnUpdateChats(
     $senderId: String
@@ -462,6 +442,78 @@ export const onDeleteConnections = /* GraphQL */ `
     onDeleteConnections(otherUserId: $otherUserId, userId: $userId) {
       otherUserId
       userId
+      __typename
+    }
+  }
+`;
+export const onCreateLocations = /* GraphQL */ `
+  subscription OnCreateLocations(
+    $sessionId: String
+    $userId: String
+    $latitude: Float
+    $longitude: Float
+    $timestamp: String
+  ) {
+    onCreateLocations(
+      sessionId: $sessionId
+      userId: $userId
+      latitude: $latitude
+      longitude: $longitude
+      timestamp: $timestamp
+    ) {
+      sessionId
+      userId
+      latitude
+      longitude
+      timestamp
+      __typename
+    }
+  }
+`;
+export const onUpdateLocations = /* GraphQL */ `
+  subscription OnUpdateLocations(
+    $sessionId: String
+    $userId: String
+    $latitude: Float
+    $longitude: Float
+    $timestamp: String
+  ) {
+    onUpdateLocations(
+      sessionId: $sessionId
+      userId: $userId
+      latitude: $latitude
+      longitude: $longitude
+      timestamp: $timestamp
+    ) {
+      sessionId
+      userId
+      latitude
+      longitude
+      timestamp
+      __typename
+    }
+  }
+`;
+export const onDeleteLocations = /* GraphQL */ `
+  subscription OnDeleteLocations(
+    $sessionId: String
+    $userId: String
+    $latitude: Float
+    $longitude: Float
+    $timestamp: String
+  ) {
+    onDeleteLocations(
+      sessionId: $sessionId
+      userId: $userId
+      latitude: $latitude
+      longitude: $longitude
+      timestamp: $timestamp
+    ) {
+      sessionId
+      userId
+      latitude
+      longitude
+      timestamp
       __typename
     }
   }

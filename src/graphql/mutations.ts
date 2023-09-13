@@ -272,3 +272,51 @@ export const deleteConnections = /* GraphQL */ `
     }
   }
 `;
+export const createLocations = /* GraphQL */ `
+  mutation CreateLocations($input: CreateLocationsInput!) {
+    createLocations(input: $input) {
+      sessionId
+      userId
+      latitude
+      longitude
+      timestamp
+      __typename
+    }
+  }
+`;
+export const updateLocations = /* GraphQL */ `
+  mutation UpdateLocations($input: UpdateLocationsInput!) {
+    updateLocations(input: $input) {
+      sessionId
+      userId
+      latitude
+      longitude
+      timestamp
+      __typename
+    }
+  }
+`;
+export const createOrUpdateLocations = /* GraphQL */ `
+  mutation CreateOrUpdateLocations($input: UpdateLocationsInput!) {
+    createOrUpdateLocations(input: $input) {
+      sessionId
+      userId
+      latitude
+      longitude
+      timestamp
+      __typename
+    }
+  }
+`;
+export const deleteLocations = /* GraphQL */ `
+  mutation DeleteLocations($input: DeleteLocationsInput!) {
+    deleteLocations(input: $input) {
+      sessionId
+      userId
+      latitude
+      longitude
+      timestamp
+      __typename
+    }
+  }
+`;

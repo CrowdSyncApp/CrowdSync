@@ -35,6 +35,53 @@ async function removeSessionData() {
     await AsyncStorage.removeItem("sessionData");
 };
 
+async function storeParticipantsData(participantsData) {
+    await AsyncStorage.setItem(
+        "participantsData",
+        JSON.stringify(participantsData)
+      );
+};
+
+export async function getParticipantsData() {
+    const participantsData = await AsyncStorage.getItem("participantsData");
+    if (participantsData) {
+          return JSON.parse(participantsData);
+        }
+    return null;
+};
+
+async function removeParticipantsData() {
+    await AsyncStorage.removeItem("participantsData");
+};
+
+export const fetchParticipants = async () => {
+        let fetchedParticipants;
+      try {
+          const response = await API.graphql(graphqlOperation(listParticipants, {
+            filter: {
+              sessionId: {
+                eq: sessionData.sessionId,
+              },
+              visibility: {
+                eq: 'VISIBLE',
+              },
+              userId: {
+                ne: user?.attributes.sub,
+              },
+            },
+          }));
+          fetchedParticipants = response.data.listParticipants.items;
+        } catch (error) {
+          console.error('Error fetching participants:', error);
+        }
+      const filteredFakeParticipants = participantsData.filter(
+        (participant) => participant.visibility === "VISIBLE"
+      );
+      const filteredParticipantsList = [...fetchedParticipants, ...filteredFakeParticipants];
+
+      return filteredParticipantsList;
+    };
+
 export const getSessionIdForUser = async (userId) => {
   try {
     const filter = {
