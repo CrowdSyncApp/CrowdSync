@@ -10,8 +10,18 @@ import { getSessionData } from "./SessionManager";
 
 const Header = () => {
   const navigation = useNavigation();
-  const { user, fetchUserProfileData } = useAuth();
+  const { user, fetchUserProfileData, fetchUserProfileImage } = useAuth();
   const [userProfileData, setUserProfileData] = useState(null);
+  const [profilePictureUri, setProfilePictureUri] = useState("");
+
+    useEffect(() => {
+            async function getProfileImageUri() {
+                const profilePicture = await fetchUserProfileImage(userData.identityId, userData.profilePicture);
+                setProfilePictureUri(profilePicture);
+            }
+
+            getProfileImageUri();
+        }, []);
 
   useEffect(() => {
     const getUserProfileData = async () => {
@@ -63,15 +73,17 @@ const Header = () => {
       <Text style={styles.headerTitle}>CrowdSync</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={handleProfilePress}>
-        <Image
-          source={{ uri: userProfileData?.profilePictureUri }}
-          style={{
-            width: 50,
-            height: 50,
-            borderRadius: 25,
-            resizeMode: "contain",
-          }}
-        />
+        {profilePictureUri !== '' ? (
+            <Image
+              source={{ uri: profilePictureUri }}
+              style={{
+                width: 350,
+                height: 350,
+                borderRadius: 100,
+                resizeMode: "contain",
+              }}
+            />
+          ) : null}
       </TouchableOpacity>
     </View>
    </SafeAreaView>
