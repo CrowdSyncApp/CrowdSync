@@ -6,7 +6,7 @@
     "jobTitle": "Software Engineer",
     "address": "123 Main St, City, State",
     "phoneNumber": "123-456-7890",
-    "socialUrls": [
+    "socialLinks": [
       "https://www.linkedin.com/in/johndoe",
       "https://twitter.com/johndoe"
     ],
@@ -24,7 +24,7 @@
     "jobTitle": "Product Manager",
     "address": "456 Elm St, City, State",
     "phoneNumber": "987-654-3210",
-    "socialUrls": [
+    "socialLinks": [
       "https://www.linkedin.com/in/janesmith",
       "https://twitter.com/janesmith"
     ],
@@ -42,7 +42,7 @@
     "jobTitle": "Graphic Designer",
     "address": "789 Oak St, City, State",
     "phoneNumber": "555-123-4567",
-    "socialUrls": [
+    "socialLinks": [
       "https://www.linkedin.com/in/alexjohnson",
       "https://dribbble.com/alexjohnson"
     ],
@@ -60,7 +60,7 @@
     "jobTitle": "Marketing Specialist",
     "address": "567 Pine St, City, State",
     "phoneNumber": "777-888-9999",
-    "socialUrls": [
+    "socialLinks": [
       "https://www.linkedin.com/in/emilybrown",
       "https://twitter.com/emilybrown"
     ],
@@ -78,7 +78,7 @@
     "jobTitle": "Entrepreneur",
     "address": "101 Cedar St, City, State",
     "phoneNumber": "444-555-6666",
-    "socialUrls": [
+    "socialLinks": [
       "https://www.linkedin.com/in/michaelwilson",
       "https://angel.co/michaelwilson"
     ],

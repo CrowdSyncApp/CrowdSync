@@ -13,7 +13,6 @@ import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
 import { startSession } from "./SessionManager";
 import { Auth } from "aws-amplify";
-import participantsData from "../dummies/dummy_accounts.json";
 import styles, { palette, fonts } from "./style";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { StatusBar } from "react-native";
@@ -36,7 +35,7 @@ useEffect(() => {
   // Request location permission specifically for Android
   const requestLocationPermission = async () => {
     try {
-        const currLocation = await refreshLocation("INACTIVE");
+        const currLocation = await refreshLocation();
         setLocation(currLocation);
     } catch (error) {
       console.error("Error requesting location permission:", error);
