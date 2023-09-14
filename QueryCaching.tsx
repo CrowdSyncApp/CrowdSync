@@ -4,7 +4,7 @@ import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { Auth, API, Storage, Hub, graphqlOperation } from "aws-amplify";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
-  getUserProfile,
+  getUserProfiles,
   listTagSets,
   listUserTags,
   getTagSet,
@@ -14,7 +14,7 @@ import { getSessionIdForUser } from "./components/SessionManager";
 import { v4 } from "uuid";
 import {
 getParticipants,
-  updateUserProfile,
+updateUserProfiles,
   createTagSet,
   createUserTags,
   deleteUserTags,
@@ -29,7 +29,7 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
-async function fetchUserProfileImage(profilePictureFilename) {
+async function fetchUserProfileImage(identityId, profilePictureFilename) {
   let getLevel;
   try {
     getLevel = "protected";
@@ -38,17 +38,24 @@ async function fetchUserProfileImage(profilePictureFilename) {
       profilePictureFilename = "CrowdSync_Temp_Profile.png";
       getLevel = "public";
     }
+    const id = "us-west-1:" + identityId;  // TODO later might need to automate getting the region
 
     // Fetch the profile image URL from S3 using Amplify's Storage API
     const imageKey = await Storage.get(profilePictureFilename, {
       level: getLevel,
       validateObjectExistence: true,
+      identityId: id,
     });
 
     return imageKey;
   } catch (error) {
     console.error("Error fetching profile image:", error);
-    throw error;
+    profilePictureFilename = "CrowdSync_Temp_Profile.png";
+    const imageKey = await Storage.get(profilePictureFilename, {
+          level: "public",
+          validateObjectExistence: true,
+        });
+    return imageKey;
   }
 }
 
@@ -60,29 +67,40 @@ async function fetchUserProfile(userId) {
     }
 
     const { data } = await API.graphql(
-      graphqlOperation(getUserProfile, { userId })
+      graphqlOperation(getUserProfiles, { userId })
     );
 
-    if (data && data.getUserProfile) {
-      if (!data.getUserProfile.profilePictureUri) {
+    if (data && data.getUserProfiles) {
+
+        let identityId;
+      if (!data.getUserProfiles.identityId) {
+          identityId = await Auth.currentCredentials();
+          data.getUserProfiles.identityId = identityId;
+            await API.graphql(
+                graphqlOperation(updateUserProfiles, { userId, identityId: identityId })
+            );
+      }
+
+      if (!data.getUserProfiles.profilePictureUri) {
         const profileImage = await fetchUserProfileImage(
-          data.getUserProfile.profilePicture
+          identityId,
+          data.getUserProfiles.profilePicture
         );
-        data.getUserProfile.profilePictureUri = profileImage;
+        data.getUserProfiles.profilePictureUri = profileImage;
       }
 
       const currSessionId = await getSessionIdForUser(userId);
-      data.getUserProfile.sessionId = currSessionId;
+      data.getUserProfiles.sessionId = currSessionId;
 
       const userTags = await getAllUserTags(userId, currSessionId);
-      data.getUserProfile.tags = userTags;
+      data.getUserProfiles.tags = userTags;
 
       await AsyncStorage.setItem(
         "userProfileData",
-        JSON.stringify(data.getUserProfile)
+        JSON.stringify(data.getUserProfiles)
       );
 
-      return data.getUserProfile;
+      return data.getUserProfiles;
     }
     return null;
   } catch (error) {
@@ -179,11 +197,11 @@ async function getUserProfileFromId(userId) {
 try {
     // Make the GraphQL API call to fetch the user profile
     const response = await API.graphql(
-      graphqlOperation(getUserProfile, { userId: userId })
+      graphqlOperation(getUserProfiles, { userId: userId })
     );
 
     // Extract the user profile from the response
-    const userProfile = response.data.getUserProfile;
+    const userProfile = response.data.getUserProfiles;
 
     return userProfile;
   } catch (error) {
@@ -228,6 +246,7 @@ async function logout() {
 const fetchConnectionsAndProfiles = async (userId) => {
     try {
 
+      console.log("userId", userId);
       // Fetch all connections for the current user
       const connectionsResponse = await API.graphql(
         graphqlOperation(listConnections, {
@@ -242,11 +261,13 @@ const fetchConnectionsAndProfiles = async (userId) => {
 
       // Fetch user profiles for each connection
       const profilesPromises = connections.map(async (connection) => {
+        console.log("connection", connection.otherUserId);
         const userProfileResponse = await API.graphql(
-          graphqlOperation(getUserProfile, { userId: connection.otherUserId })
+          graphqlOperation(getUserProfiles, { userId: connection.otherUserId })
         );
 
-        return userProfileResponse.data.getUserProfile;
+        console.log("userProfileResponse", userProfileResponse);
+        return userProfileResponse.data.getUserProfiles;
       });
 
       // Wait for all profile fetches to complete
@@ -502,10 +523,10 @@ async function uploadImageToS3(profilePictureUri) {
 
 async function updateUserProfileTable(updatedFields) {
   const updatedUserProfile = await API.graphql(
-    graphqlOperation(updateUserProfile, { input: updatedFields })
+    graphqlOperation(updateUserProfiles, { input: updatedFields })
   );
   await AsyncStorage.removeItem("userProfileData");
-  return updatedUserProfile.data.updateUserProfile;
+  return updatedUserProfile.data.updateUserProfiles;
 }
 
 export function AuthProvider({ children }) {
@@ -577,6 +598,7 @@ export function AuthProvider({ children }) {
     fetchUserProfileData,
     getUserProfileFromId,
     createUserTagsWithSession,
+    fetchUserProfileImage,
     refreshLocation,
     refreshToken,
     isUserLoggedIn,

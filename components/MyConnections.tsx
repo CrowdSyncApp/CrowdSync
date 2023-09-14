@@ -16,24 +16,27 @@ import styles, { palette, fonts } from "./style";
 
 const MyConnections = ({ route }) => {
   const navigation = useNavigation();
-  const { fetchConnectionsAndProfiles } = useAuth();
+  const { fetchConnectionsAndProfiles, getUserProfileFromId } = useAuth();
   const { userProfileData } = route.params;
   const [connectionsData, setConnectionsData] = useState([]);
 
   useEffect(() => {
         const getConnections = async () => {
           const profiles = await fetchConnectionsAndProfiles(userProfileData.userId);
+          console.log("profiles", profiles);
           const mergedData = [...participantsData, ...profiles];
           setConnectionsData(mergedData);
          }
          getConnections();
     }, []);
 
-  const handleConnectionPress = async (connectionData: string) => {
+  const handleConnectionPress = async (connectionData) => {
     try {
+    const userData = await getUserProfileFromId(connectionData.userId);
       const sessionId = await getSessionIdForUser(connectionData.userId);
+      console.log("userData", userData);
 
-      navigation.navigate("OtherUserProfile", { userData: connectionData, sessionId: sessionId });
+      navigation.navigate("OtherUserProfile", { userData: userData, sessionId: sessionId });
     } catch (error) {
       console.error("Error in handleConnectionPress:", error);
     }

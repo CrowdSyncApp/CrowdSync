@@ -20,7 +20,7 @@ import styles, { palette, fonts } from "./style";
 
 const SessionHomeScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { user, fetchUserProfileData } = useAuth();
+  const { user, fetchUserProfileData, getUserProfileFromId } = useAuth();
   const { sessionData } = route.params;
   const [participants, setParticipants] = useState([]);
   const [isVisible, setIsVisible] = useState(true);
@@ -138,7 +138,8 @@ const SessionHomeScreen = ({ route }) => {
     }
   };
 
-  const handleUserProfilePress = (userData) => {
+  const handleUserProfilePress = async (userProfileData) => {
+    const userData = await getUserProfileFromId(userProfileData.userId);
     navigation.navigate("OtherUserProfile", { userData, sessionId: sessionData.sessionId });
   };
 

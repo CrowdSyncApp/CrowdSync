@@ -2,50 +2,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getUserProfile = /* GraphQL */ `
-  query GetUserProfile($userId: ID!) {
-    getUserProfile(userId: $userId) {
-      userId
-      fullName
-      email
-      phoneNumber
-      createdAt
-      updatedAt
-      jobTitle
-      company
-      profilePicture
-      address
-      socialLinks
-      __typename
-    }
-  }
-`;
-export const listUserProfiles = /* GraphQL */ `
-  query ListUserProfiles(
-    $filter: TableUserProfileFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listUserProfiles(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        userId
-        fullName
-        email
-        phoneNumber
-        createdAt
-        updatedAt
-        jobTitle
-        company
-        profilePicture
-        address
-        socialLinks
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
 export const getParticipants = /* GraphQL */ `
   query GetParticipants($sessionId: String!, $userId: String!) {
     getParticipants(sessionId: $sessionId, userId: $userId) {
@@ -293,6 +249,52 @@ export const listUserTags = /* GraphQL */ `
         userId
         tagId
         fullName
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getUserProfiles = /* GraphQL */ `
+  query GetUserProfiles($userId: String!) {
+    getUserProfiles(userId: $userId) {
+      userId
+      fullName
+      email
+      identityId
+      phoneNumber
+      createdAt
+      updatedAt
+      jobTitle
+      company
+      profilePicture
+      location
+      socialLinks
+      __typename
+    }
+  }
+`;
+export const listUserProfiles = /* GraphQL */ `
+  query ListUserProfiles(
+    $filter: TableUserProfilesFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUserProfiles(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        userId
+        fullName
+        email
+        identityId
+        phoneNumber
+        createdAt
+        updatedAt
+        jobTitle
+        company
+        profilePicture
+        location
+        socialLinks
         __typename
       }
       nextToken

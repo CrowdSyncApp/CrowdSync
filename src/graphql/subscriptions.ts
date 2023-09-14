@@ -2,96 +2,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateUserProfile = /* GraphQL */ `
-  subscription OnCreateUserProfile(
-    $userId: ID
-    $fullName: String
-    $email: AWSEmail
-    $phoneNumber: AWSPhone
-    $createdAt: AWSDateTime
-  ) {
-    onCreateUserProfile(
-      userId: $userId
-      fullName: $fullName
-      email: $email
-      phoneNumber: $phoneNumber
-      createdAt: $createdAt
-    ) {
-      userId
-      fullName
-      email
-      phoneNumber
-      createdAt
-      updatedAt
-      jobTitle
-      company
-      profilePicture
-      address
-      socialLinks
-      __typename
-    }
-  }
-`;
-export const onUpdateUserProfile = /* GraphQL */ `
-  subscription OnUpdateUserProfile(
-    $userId: ID
-    $fullName: String
-    $email: AWSEmail
-    $phoneNumber: AWSPhone
-    $createdAt: AWSDateTime
-  ) {
-    onUpdateUserProfile(
-      userId: $userId
-      fullName: $fullName
-      email: $email
-      phoneNumber: $phoneNumber
-      createdAt: $createdAt
-    ) {
-      userId
-      fullName
-      email
-      phoneNumber
-      createdAt
-      updatedAt
-      jobTitle
-      company
-      profilePicture
-      address
-      socialLinks
-      __typename
-    }
-  }
-`;
-export const onDeleteUserProfile = /* GraphQL */ `
-  subscription OnDeleteUserProfile(
-    $userId: ID
-    $fullName: String
-    $email: AWSEmail
-    $phoneNumber: AWSPhone
-    $createdAt: AWSDateTime
-  ) {
-    onDeleteUserProfile(
-      userId: $userId
-      fullName: $fullName
-      email: $email
-      phoneNumber: $phoneNumber
-      createdAt: $createdAt
-    ) {
-      userId
-      fullName
-      email
-      phoneNumber
-      createdAt
-      updatedAt
-      jobTitle
-      company
-      profilePicture
-      address
-      socialLinks
-      __typename
-    }
-  }
-`;
 export const onCreateParticipants = /* GraphQL */ `
   subscription OnCreateParticipants(
     $sessionId: String
@@ -523,6 +433,99 @@ export const onDeleteUserTags = /* GraphQL */ `
       userId
       tagId
       fullName
+      __typename
+    }
+  }
+`;
+export const onCreateUserProfiles = /* GraphQL */ `
+  subscription OnCreateUserProfiles(
+    $userId: String
+    $fullName: String
+    $email: AWSEmail
+    $identityId: String
+    $phoneNumber: AWSPhone
+  ) {
+    onCreateUserProfiles(
+      userId: $userId
+      fullName: $fullName
+      email: $email
+      identityId: $identityId
+      phoneNumber: $phoneNumber
+    ) {
+      userId
+      fullName
+      email
+      identityId
+      phoneNumber
+      createdAt
+      updatedAt
+      jobTitle
+      company
+      profilePicture
+      location
+      socialLinks
+      __typename
+    }
+  }
+`;
+export const onUpdateUserProfiles = /* GraphQL */ `
+  subscription OnUpdateUserProfiles(
+    $userId: String
+    $fullName: String
+    $email: AWSEmail
+    $identityId: String
+    $phoneNumber: AWSPhone
+  ) {
+    onUpdateUserProfiles(
+      userId: $userId
+      fullName: $fullName
+      email: $email
+      identityId: $identityId
+      phoneNumber: $phoneNumber
+    ) {
+      userId
+      fullName
+      email
+      identityId
+      phoneNumber
+      createdAt
+      updatedAt
+      jobTitle
+      company
+      profilePicture
+      location
+      socialLinks
+      __typename
+    }
+  }
+`;
+export const onDeleteUserProfiles = /* GraphQL */ `
+  subscription OnDeleteUserProfiles(
+    $userId: String
+    $fullName: String
+    $email: AWSEmail
+    $identityId: String
+    $phoneNumber: AWSPhone
+  ) {
+    onDeleteUserProfiles(
+      userId: $userId
+      fullName: $fullName
+      email: $email
+      identityId: $identityId
+      phoneNumber: $phoneNumber
+    ) {
+      userId
+      fullName
+      email
+      identityId
+      phoneNumber
+      createdAt
+      updatedAt
+      jobTitle
+      company
+      profilePicture
+      location
+      socialLinks
       __typename
     }
   }

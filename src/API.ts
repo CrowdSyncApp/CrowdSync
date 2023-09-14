@@ -2,53 +2,6 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateUserProfileInput = {
-  userId: string,
-  fullName: string,
-  email: string,
-  phoneNumber?: string | null,
-  createdAt?: string | null,
-  updatedAt?: string | null,
-  jobTitle?: string | null,
-  company?: string | null,
-  profilePicture?: string | null,
-  address?: string | null,
-  socialLinks?: Array< string | null > | null,
-};
-
-export type UserProfile = {
-  __typename: "UserProfile",
-  userId: string,
-  fullName: string,
-  email: string,
-  phoneNumber?: string | null,
-  createdAt?: string | null,
-  updatedAt?: string | null,
-  jobTitle?: string | null,
-  company?: string | null,
-  profilePicture?: string | null,
-  address?: string | null,
-  socialLinks?: Array< string | null > | null,
-};
-
-export type UpdateUserProfileInput = {
-  userId: string,
-  fullName?: string | null,
-  email?: string | null,
-  phoneNumber?: string | null,
-  createdAt?: string | null,
-  updatedAt?: string | null,
-  jobTitle?: string | null,
-  company?: string | null,
-  profilePicture?: string | null,
-  address?: string | null,
-  socialLinks?: Array< string | null > | null,
-};
-
-export type DeleteUserProfileInput = {
-  userId: string,
-};
-
 export type CreateParticipantsInput = {
   sessionId: string,
   userId: string,
@@ -261,50 +214,54 @@ export type DeleteUserTagsInput = {
   userTagId: string,
 };
 
-export type TableUserProfileFilterInput = {
-  userId?: TableIDFilterInput | null,
-  fullName?: TableStringFilterInput | null,
-  email?: TableStringFilterInput | null,
-  phoneNumber?: TableStringFilterInput | null,
-  createdAt?: TableStringFilterInput | null,
-  updatedAt?: TableStringFilterInput | null,
-  jobTitle?: TableStringFilterInput | null,
-  company?: TableStringFilterInput | null,
-  profilePicture?: TableStringFilterInput | null,
-  address?: TableStringFilterInput | null,
-  socialLinks?: TableStringFilterInput | null,
+export type CreateUserProfilesInput = {
+  userId: string,
+  fullName: string,
+  email: string,
+  identityId?: string | null,
+  phoneNumber?: string | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+  jobTitle?: string | null,
+  company?: string | null,
+  profilePicture?: string | null,
+  location?: string | null,
+  socialLinks?: Array< string | null > | null,
 };
 
-export type TableIDFilterInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
+export type UserProfiles = {
+  __typename: "UserProfiles",
+  userId: string,
+  fullName: string,
+  email: string,
+  identityId?: string | null,
+  phoneNumber?: string | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+  jobTitle?: string | null,
+  company?: string | null,
+  profilePicture?: string | null,
+  location?: string | null,
+  socialLinks?: Array< string | null > | null,
 };
 
-export type TableStringFilterInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
+export type UpdateUserProfilesInput = {
+  userId: string,
+  fullName?: string | null,
+  email?: string | null,
+  identityId?: string | null,
+  phoneNumber?: string | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+  jobTitle?: string | null,
+  company?: string | null,
+  profilePicture?: string | null,
+  location?: string | null,
+  socialLinks?: Array< string | null > | null,
 };
 
-export type UserProfileConnection = {
-  __typename: "UserProfileConnection",
-  items?:  Array<UserProfile | null > | null,
-  nextToken?: string | null,
+export type DeleteUserProfilesInput = {
+  userId: string,
 };
 
 export type TableParticipantsFilterInput = {
@@ -318,6 +275,19 @@ export type TableParticipantsFilterInput = {
   visibility?: TableStringFilterInput | null,
   tags?: TableStringFilterInput | null,
   sessionStatus?: TableStringFilterInput | null,
+};
+
+export type TableStringFilterInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
 };
 
 export type ParticipantsConnection = {
@@ -334,6 +304,19 @@ export type TableSessionsFilterInput = {
   endTime?: TableStringFilterInput | null,
   title?: TableStringFilterInput | null,
   status?: TableStringFilterInput | null,
+};
+
+export type TableIDFilterInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
 };
 
 export type SessionsConnection = {
@@ -418,67 +401,25 @@ export type UserTagsConnection = {
   nextToken?: string | null,
 };
 
-export type CreateUserProfileMutationVariables = {
-  input: CreateUserProfileInput,
+export type TableUserProfilesFilterInput = {
+  userId?: TableStringFilterInput | null,
+  fullName?: TableStringFilterInput | null,
+  email?: TableStringFilterInput | null,
+  identityId?: TableStringFilterInput | null,
+  phoneNumber?: TableStringFilterInput | null,
+  createdAt?: TableStringFilterInput | null,
+  updatedAt?: TableStringFilterInput | null,
+  jobTitle?: TableStringFilterInput | null,
+  company?: TableStringFilterInput | null,
+  profilePicture?: TableStringFilterInput | null,
+  location?: TableStringFilterInput | null,
+  socialLinks?: TableStringFilterInput | null,
 };
 
-export type CreateUserProfileMutation = {
-  createUserProfile?:  {
-    __typename: "UserProfile",
-    userId: string,
-    fullName: string,
-    email: string,
-    phoneNumber?: string | null,
-    createdAt?: string | null,
-    updatedAt?: string | null,
-    jobTitle?: string | null,
-    company?: string | null,
-    profilePicture?: string | null,
-    address?: string | null,
-    socialLinks?: Array< string | null > | null,
-  } | null,
-};
-
-export type UpdateUserProfileMutationVariables = {
-  input: UpdateUserProfileInput,
-};
-
-export type UpdateUserProfileMutation = {
-  updateUserProfile?:  {
-    __typename: "UserProfile",
-    userId: string,
-    fullName: string,
-    email: string,
-    phoneNumber?: string | null,
-    createdAt?: string | null,
-    updatedAt?: string | null,
-    jobTitle?: string | null,
-    company?: string | null,
-    profilePicture?: string | null,
-    address?: string | null,
-    socialLinks?: Array< string | null > | null,
-  } | null,
-};
-
-export type DeleteUserProfileMutationVariables = {
-  input: DeleteUserProfileInput,
-};
-
-export type DeleteUserProfileMutation = {
-  deleteUserProfile?:  {
-    __typename: "UserProfile",
-    userId: string,
-    fullName: string,
-    email: string,
-    phoneNumber?: string | null,
-    createdAt?: string | null,
-    updatedAt?: string | null,
-    jobTitle?: string | null,
-    company?: string | null,
-    profilePicture?: string | null,
-    address?: string | null,
-    socialLinks?: Array< string | null > | null,
-  } | null,
+export type UserProfilesConnection = {
+  __typename: "UserProfilesConnection",
+  items?:  Array<UserProfiles | null > | null,
+  nextToken?: string | null,
 };
 
 export type CreateParticipantsMutationVariables = {
@@ -834,51 +775,69 @@ export type DeleteUserTagsMutation = {
   } | null,
 };
 
-export type GetUserProfileQueryVariables = {
-  userId: string,
+export type CreateUserProfilesMutationVariables = {
+  input: CreateUserProfilesInput,
 };
 
-export type GetUserProfileQuery = {
-  getUserProfile?:  {
-    __typename: "UserProfile",
+export type CreateUserProfilesMutation = {
+  createUserProfiles?:  {
+    __typename: "UserProfiles",
     userId: string,
     fullName: string,
     email: string,
+    identityId?: string | null,
     phoneNumber?: string | null,
     createdAt?: string | null,
     updatedAt?: string | null,
     jobTitle?: string | null,
     company?: string | null,
     profilePicture?: string | null,
-    address?: string | null,
+    location?: string | null,
     socialLinks?: Array< string | null > | null,
   } | null,
 };
 
-export type ListUserProfilesQueryVariables = {
-  filter?: TableUserProfileFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
+export type UpdateUserProfilesMutationVariables = {
+  input: UpdateUserProfilesInput,
 };
 
-export type ListUserProfilesQuery = {
-  listUserProfiles?:  {
-    __typename: "UserProfileConnection",
-    items?:  Array< {
-      __typename: "UserProfile",
-      userId: string,
-      fullName: string,
-      email: string,
-      phoneNumber?: string | null,
-      createdAt?: string | null,
-      updatedAt?: string | null,
-      jobTitle?: string | null,
-      company?: string | null,
-      profilePicture?: string | null,
-      address?: string | null,
-      socialLinks?: Array< string | null > | null,
-    } | null > | null,
-    nextToken?: string | null,
+export type UpdateUserProfilesMutation = {
+  updateUserProfiles?:  {
+    __typename: "UserProfiles",
+    userId: string,
+    fullName: string,
+    email: string,
+    identityId?: string | null,
+    phoneNumber?: string | null,
+    createdAt?: string | null,
+    updatedAt?: string | null,
+    jobTitle?: string | null,
+    company?: string | null,
+    profilePicture?: string | null,
+    location?: string | null,
+    socialLinks?: Array< string | null > | null,
+  } | null,
+};
+
+export type DeleteUserProfilesMutationVariables = {
+  input: DeleteUserProfilesInput,
+};
+
+export type DeleteUserProfilesMutation = {
+  deleteUserProfiles?:  {
+    __typename: "UserProfiles",
+    userId: string,
+    fullName: string,
+    email: string,
+    identityId?: string | null,
+    phoneNumber?: string | null,
+    createdAt?: string | null,
+    updatedAt?: string | null,
+    jobTitle?: string | null,
+    company?: string | null,
+    profilePicture?: string | null,
+    location?: string | null,
+    socialLinks?: Array< string | null > | null,
   } | null,
 };
 
@@ -1165,78 +1124,53 @@ export type ListUserTagsQuery = {
   } | null,
 };
 
-export type OnCreateUserProfileSubscriptionVariables = {
-  userId?: string | null,
-  fullName?: string | null,
-  email?: string | null,
-  phoneNumber?: string | null,
-  createdAt?: string | null,
+export type GetUserProfilesQueryVariables = {
+  userId: string,
 };
 
-export type OnCreateUserProfileSubscription = {
-  onCreateUserProfile?:  {
-    __typename: "UserProfile",
+export type GetUserProfilesQuery = {
+  getUserProfiles?:  {
+    __typename: "UserProfiles",
     userId: string,
     fullName: string,
     email: string,
+    identityId?: string | null,
     phoneNumber?: string | null,
     createdAt?: string | null,
     updatedAt?: string | null,
     jobTitle?: string | null,
     company?: string | null,
     profilePicture?: string | null,
-    address?: string | null,
+    location?: string | null,
     socialLinks?: Array< string | null > | null,
   } | null,
 };
 
-export type OnUpdateUserProfileSubscriptionVariables = {
-  userId?: string | null,
-  fullName?: string | null,
-  email?: string | null,
-  phoneNumber?: string | null,
-  createdAt?: string | null,
+export type ListUserProfilesQueryVariables = {
+  filter?: TableUserProfilesFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
 };
 
-export type OnUpdateUserProfileSubscription = {
-  onUpdateUserProfile?:  {
-    __typename: "UserProfile",
-    userId: string,
-    fullName: string,
-    email: string,
-    phoneNumber?: string | null,
-    createdAt?: string | null,
-    updatedAt?: string | null,
-    jobTitle?: string | null,
-    company?: string | null,
-    profilePicture?: string | null,
-    address?: string | null,
-    socialLinks?: Array< string | null > | null,
-  } | null,
-};
-
-export type OnDeleteUserProfileSubscriptionVariables = {
-  userId?: string | null,
-  fullName?: string | null,
-  email?: string | null,
-  phoneNumber?: string | null,
-  createdAt?: string | null,
-};
-
-export type OnDeleteUserProfileSubscription = {
-  onDeleteUserProfile?:  {
-    __typename: "UserProfile",
-    userId: string,
-    fullName: string,
-    email: string,
-    phoneNumber?: string | null,
-    createdAt?: string | null,
-    updatedAt?: string | null,
-    jobTitle?: string | null,
-    company?: string | null,
-    profilePicture?: string | null,
-    address?: string | null,
-    socialLinks?: Array< string | null > | null,
+export type ListUserProfilesQuery = {
+  listUserProfiles?:  {
+    __typename: "UserProfilesConnection",
+    items?:  Array< {
+      __typename: "UserProfiles",
+      userId: string,
+      fullName: string,
+      email: string,
+      identityId?: string | null,
+      phoneNumber?: string | null,
+      createdAt?: string | null,
+      updatedAt?: string | null,
+      jobTitle?: string | null,
+      company?: string | null,
+      profilePicture?: string | null,
+      location?: string | null,
+      socialLinks?: Array< string | null > | null,
+    } | null > | null,
+    nextToken?: string | null,
   } | null,
 };
 
@@ -1621,5 +1555,83 @@ export type OnDeleteUserTagsSubscription = {
     userId: string,
     tagId: string,
     fullName: string,
+  } | null,
+};
+
+export type OnCreateUserProfilesSubscriptionVariables = {
+  userId?: string | null,
+  fullName?: string | null,
+  email?: string | null,
+  identityId?: string | null,
+  phoneNumber?: string | null,
+};
+
+export type OnCreateUserProfilesSubscription = {
+  onCreateUserProfiles?:  {
+    __typename: "UserProfiles",
+    userId: string,
+    fullName: string,
+    email: string,
+    identityId?: string | null,
+    phoneNumber?: string | null,
+    createdAt?: string | null,
+    updatedAt?: string | null,
+    jobTitle?: string | null,
+    company?: string | null,
+    profilePicture?: string | null,
+    location?: string | null,
+    socialLinks?: Array< string | null > | null,
+  } | null,
+};
+
+export type OnUpdateUserProfilesSubscriptionVariables = {
+  userId?: string | null,
+  fullName?: string | null,
+  email?: string | null,
+  identityId?: string | null,
+  phoneNumber?: string | null,
+};
+
+export type OnUpdateUserProfilesSubscription = {
+  onUpdateUserProfiles?:  {
+    __typename: "UserProfiles",
+    userId: string,
+    fullName: string,
+    email: string,
+    identityId?: string | null,
+    phoneNumber?: string | null,
+    createdAt?: string | null,
+    updatedAt?: string | null,
+    jobTitle?: string | null,
+    company?: string | null,
+    profilePicture?: string | null,
+    location?: string | null,
+    socialLinks?: Array< string | null > | null,
+  } | null,
+};
+
+export type OnDeleteUserProfilesSubscriptionVariables = {
+  userId?: string | null,
+  fullName?: string | null,
+  email?: string | null,
+  identityId?: string | null,
+  phoneNumber?: string | null,
+};
+
+export type OnDeleteUserProfilesSubscription = {
+  onDeleteUserProfiles?:  {
+    __typename: "UserProfiles",
+    userId: string,
+    fullName: string,
+    email: string,
+    identityId?: string | null,
+    phoneNumber?: string | null,
+    createdAt?: string | null,
+    updatedAt?: string | null,
+    jobTitle?: string | null,
+    company?: string | null,
+    profilePicture?: string | null,
+    location?: string | null,
+    socialLinks?: Array< string | null > | null,
   } | null,
 };

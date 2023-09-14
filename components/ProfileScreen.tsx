@@ -96,8 +96,8 @@ const ProfileScreen = ({ route }) => {
           {userProfileData.jobTitle || userProfileData.company ? (
             <View style={{ alignItems: "center" }}>
               <Text style={styles.secondaryHeaderTitle}>
-                {userProfileData.address}
-                {userProfileData.address && userProfileData.phoneNumber
+                {userProfileData.location}
+                {userProfileData.location && userProfileData.phoneNumber
                   ? ", "
                   : ""}
                 {userProfileData.phoneNumber}

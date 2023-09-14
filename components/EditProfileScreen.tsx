@@ -45,7 +45,7 @@ const EditProfileScreen = ({ route }) => {
     userId: userProfileData.userId,
     fullName: userProfileData.fullName,
     jobTitle: userProfileData.jobTitle,
-    address: userProfileData.address,
+    location: userProfileData.location,
     phoneNumber: userProfileData.phoneNumber,
     profilePicture: userProfileData.profilePicture,
     socialLinks: userProfileData.socialLinks || [],
@@ -107,7 +107,7 @@ const EditProfileScreen = ({ route }) => {
         userId: editableFields.userId,
         fullName: editableFields.fullName,
         jobTitle: editableFields.jobTitle,
-        address: editableFields.address,
+        location: editableFields.location,
         phoneNumber: editableFields.phoneNumber,
         profilePicture: profilePictureName || editableFields.profilePicture,
         socialLinks: editableFields.socialLinks,
@@ -209,7 +209,7 @@ const EditProfileScreen = ({ route }) => {
               <Text style={styles.secondaryHeaderTitle}>Address:</Text>
               <TextInput
                 style={styles.textInput}
-                value={editableFields.address}
+                value={editableFields.location}
                 onChangeText={(text) =>
                   setEditableFields({ ...editableFields, address: text })
                 }
