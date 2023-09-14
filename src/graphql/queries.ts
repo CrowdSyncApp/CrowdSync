@@ -150,36 +150,6 @@ export const listTagSets = /* GraphQL */ `
     }
   }
 `;
-export const getUserTags = /* GraphQL */ `
-  query GetUserTags($userTagId: String!, $sessionId: String!) {
-    getUserTags(userTagId: $userTagId, sessionId: $sessionId) {
-      sessionId
-      userTagId
-      userId
-      tagId
-      __typename
-    }
-  }
-`;
-export const listUserTags = /* GraphQL */ `
-  query ListUserTags(
-    $filter: TableUserTagsFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listUserTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        sessionId
-        userTagId
-        userId
-        tagId
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
 export const getChats = /* GraphQL */ `
   query GetChats($senderId: String!, $timestamp: String!) {
     getChats(senderId: $senderId, timestamp: $timestamp) {
@@ -291,6 +261,38 @@ export const listLocations = /* GraphQL */ `
         latitude
         longitude
         timestamp
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getUserTags = /* GraphQL */ `
+  query GetUserTags($userTagId: String!, $sessionId: String!) {
+    getUserTags(userTagId: $userTagId, sessionId: $sessionId) {
+      sessionId
+      userTagId
+      userId
+      tagId
+      fullName
+      __typename
+    }
+  }
+`;
+export const listUserTags = /* GraphQL */ `
+  query ListUserTags(
+    $filter: TableUserTagsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUserTags(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        sessionId
+        userTagId
+        userId
+        tagId
+        fullName
         __typename
       }
       nextToken

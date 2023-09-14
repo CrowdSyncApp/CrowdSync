@@ -176,39 +176,6 @@ export const deleteTagSet = /* GraphQL */ `
     }
   }
 `;
-export const createUserTags = /* GraphQL */ `
-  mutation CreateUserTags($input: CreateUserTagsInput!) {
-    createUserTags(input: $input) {
-      sessionId
-      userTagId
-      userId
-      tagId
-      __typename
-    }
-  }
-`;
-export const updateUserTags = /* GraphQL */ `
-  mutation UpdateUserTags($input: UpdateUserTagsInput!) {
-    updateUserTags(input: $input) {
-      sessionId
-      userTagId
-      userId
-      tagId
-      __typename
-    }
-  }
-`;
-export const deleteUserTags = /* GraphQL */ `
-  mutation DeleteUserTags($input: DeleteUserTagsInput!) {
-    deleteUserTags(input: $input) {
-      sessionId
-      userTagId
-      userId
-      tagId
-      __typename
-    }
-  }
-`;
 export const createChats = /* GraphQL */ `
   mutation CreateChats($input: CreateChatsInput!) {
     createChats(input: $input) {
@@ -316,6 +283,42 @@ export const deleteLocations = /* GraphQL */ `
       latitude
       longitude
       timestamp
+      __typename
+    }
+  }
+`;
+export const createUserTags = /* GraphQL */ `
+  mutation CreateUserTags($input: CreateUserTagsInput!) {
+    createUserTags(input: $input) {
+      sessionId
+      userTagId
+      userId
+      tagId
+      fullName
+      __typename
+    }
+  }
+`;
+export const updateUserTags = /* GraphQL */ `
+  mutation UpdateUserTags($input: UpdateUserTagsInput!) {
+    updateUserTags(input: $input) {
+      sessionId
+      userTagId
+      userId
+      tagId
+      fullName
+      __typename
+    }
+  }
+`;
+export const deleteUserTags = /* GraphQL */ `
+  mutation DeleteUserTags($input: DeleteUserTagsInput!) {
+    deleteUserTags(input: $input) {
+      sessionId
+      userTagId
+      userId
+      tagId
+      fullName
       __typename
     }
   }
