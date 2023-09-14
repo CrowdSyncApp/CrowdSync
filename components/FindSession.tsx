@@ -28,7 +28,7 @@ const FindSessionScreen = () => {
   // https://github.com/ovr/react-native-status-bar-height <-- Might need for IOS
   const keyboardVerticalOffset = StatusBar.currentHeight + headerHeight;
   const navigation = useNavigation();
-  const { user, fetchUserProfileData, populateTagSet, refreshLocation } = useAuth();
+  const { user, fetchUserProfileData, populateTagSet, refreshLocation, storeInterval } = useAuth();
   const [sessionTitle, setSessionTitle] = useState("General");
   const [location, setLocation] = useState();
 
@@ -53,6 +53,11 @@ useEffect(() => {
         console.error("Error refreshing location:", error);
       }
     }, 1 * 60 * 1000);
+
+    const storeLocationIntervalId = async () => {
+        await storeInterval(locationUpdateInterval);
+    }
+    storeLocationIntervalId();
 }, []);
 
   useEffect(() => {

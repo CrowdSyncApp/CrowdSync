@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Button,
   Image,
+  SafeAreaView,
+  StatusBar
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Auth } from "aws-amplify";
@@ -65,8 +67,11 @@ const LoginScreen = () => {
   };
 
   return (
+
     <View style={styles.index}>
       <View style={styles.div}>
+  <View style={{backgroundColor: palette.primaryBgColor}}>
+   <SafeAreaView style={{marginTop: StatusBar.currentHeight }}>
         <View style={styles.titleContainer}>
           <Image
             source={CrowdSyncLogo}
@@ -122,6 +127,9 @@ const LoginScreen = () => {
             Forgot Password?
           </Text>
         </TouchableOpacity>
+   </SafeAreaView>
+   </View>
+
       </View>
     </View>
   );
