@@ -62,6 +62,7 @@ export const fetchParticipants = async () => {
         const user = await Auth.currentAuthenticatedUser();
         const userId = user?.username;
         const sessionData = await getSessionData();
+        console.log("sessionData", sessionData);
           const response = await API.graphql(graphqlOperation(listParticipants, {
             filter: {
               sessionId: {
@@ -75,6 +76,7 @@ export const fetchParticipants = async () => {
               },
             },
           }));
+          console.log("response", response);
           fetchedParticipants = response.data.listParticipants.items;
         } catch (error) {
           console.error('Error fetching participants:', error);
