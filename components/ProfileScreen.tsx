@@ -28,7 +28,7 @@ const ProfileScreen = ({ route }) => {
 
 useEffect(() => {
     async function getProfileImageUri() {
-        const profilePicture = await fetchUserProfileImage(userData.identityId, userData.profilePicture);
+        const profilePicture = await fetchUserProfileImage(userProfileData.identityId, userProfileData.profilePicture);
         setProfilePictureUri(profilePicture);
     }
 
@@ -84,7 +84,7 @@ useEffect(() => {
                   resizeMode: "contain",
                 }}
               />
-            ) : null}
+            ) : <View style={{ width: 350, height: 350 }}/>}
 
           {/* Full Name */}
           <View style={{ alignItems: "center" }}>

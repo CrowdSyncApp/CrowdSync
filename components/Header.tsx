@@ -16,12 +16,13 @@ const Header = () => {
 
 useEffect(() => {
         async function getProfileImageUri() {
-            const profilePicture = await fetchUserProfileImage(userData.identityId, userData.profilePicture);
+        console.log("userProfileData", userProfileData);
+            const profilePicture = await fetchUserProfileImage(userProfileData.identityId, userProfileData.profilePicture);
             setProfilePictureUri(profilePicture);
         }
 
         getProfileImageUri();
-    }, []);
+    }, [userProfileData]);
 
   useEffect(() => {
     const getUserProfileData = async () => {
@@ -71,13 +72,13 @@ useEffect(() => {
             <Image
               source={{ uri: profilePictureUri }}
               style={{
-                width: 350,
-                height: 350,
-                borderRadius: 100,
+                width: 50,
+                height: 50,
+                borderRadius: 25,
                 resizeMode: "contain",
               }}
             />
-          ) : null}
+          ) : <View style={{ width: 50, height: 50 }}/>}
       </TouchableOpacity>
     </View>
    </SafeAreaView>

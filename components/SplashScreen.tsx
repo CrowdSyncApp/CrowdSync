@@ -4,15 +4,18 @@ import { useNavigation, StackActions } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
 import styles, { palette, fonts } from "./style";
 import CrowdSyncLogo from "../images/Crowdsync_Logo.png";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SplashScreen = () => {
   const navigation = useNavigation();
   const { isLoading, isUserLoggedIn } = useAuth();
 
   useEffect(() => {
+    async function checkLogin() {
     // Check if isLoading is false and isUserLoggedIn has a value
     if (!isLoading && isUserLoggedIn !== undefined) {
       if (isUserLoggedIn) {
+      await AsyncStorage.removeItem("userProfileData");
         navigation.dispatch(
           StackActions.replace("FindSession")
         );
@@ -22,6 +25,8 @@ const SplashScreen = () => {
         );
       }
     }
+    }
+    checkLogin();
   }, [isLoading, isUserLoggedIn, navigation]);
 
   useEffect(() => {

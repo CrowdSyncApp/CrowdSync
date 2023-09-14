@@ -229,6 +229,7 @@ async function login(credentials) {
 async function logout() {
   try {
     const response = await Auth.signOut();
+    await AsyncStorage.removeItem("userProfileData");
   } catch (error) {
     console.error("Logout error:", error);
     throw error;
@@ -238,7 +239,6 @@ async function logout() {
 const fetchConnectionsAndProfiles = async (userId) => {
     try {
 
-      console.log("userId", userId);
       // Fetch all connections for the current user
       const connectionsResponse = await API.graphql(
         graphqlOperation(listConnections, {
@@ -253,12 +253,10 @@ const fetchConnectionsAndProfiles = async (userId) => {
 
       // Fetch user profiles for each connection
       const profilesPromises = connections.map(async (connection) => {
-        console.log("connection", connection.otherUserId);
         const userProfileResponse = await API.graphql(
           graphqlOperation(getUserProfiles, { userId: connection.otherUserId })
         );
 
-        console.log("userProfileResponse", userProfileResponse);
         return userProfileResponse.data.getUserProfiles;
       });
 
