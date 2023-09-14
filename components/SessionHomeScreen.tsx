@@ -87,21 +87,6 @@ const SessionHomeScreen = ({ route }) => {
       };
   }, [sessionData.sessionId]);
 
-  const handleProfilePress = async () => {
-    let userProfileData;
-
-    if (user) {
-      userProfileData = await fetchUserProfileData(user?.username);
-    } else {
-      // Pick a random user from participantsData
-      const randomIndex = Math.floor(Math.random() * participantsData.length);
-      userProfileData = participantsData[randomIndex];
-    }
-
-    // Navigate to the ProfileScreen and pass the user profile data as params
-    navigation.navigate("Profile", { userProfileData });
-  };
-
   const handleJoinSessionWithQRCode = () => {
     navigation.navigate("QRScanner");
   };
@@ -110,7 +95,7 @@ const SessionHomeScreen = ({ route }) => {
   const handleSearchForPeople = () => {
     // Handle the action when Search For People button is pressed
     // For now, let's log a message to the console
-    navigation.navigate("SearchForPeople");
+    navigation.navigate("SearchForPeople", { sessionData: sessionData });
   };
 
   // Function to handle pressing the Chat button

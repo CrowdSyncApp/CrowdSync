@@ -130,7 +130,8 @@ const EditProfileScreen = ({ route }) => {
       const addedTags = await createUserTagsWithSession(
         userProfileData.userId,
         userProfileData.sessionId,
-        newTags
+        newTags,
+        updatedUserData.fullName
       );
       let combinedTags = [...userProfileData.tags, ...addedTags];
 

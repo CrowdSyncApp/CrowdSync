@@ -107,7 +107,7 @@ async function refreshLocation(sessionId) {
     try {
         if (Platform.OS === 'ios') {
           // Request location permission using react-native-permissions on iOS.
-          const status = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+          const status = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
 
           if (status === RESULTS.GRANTED) {
             granted = true;
@@ -172,6 +172,23 @@ async function refreshLocation(sessionId) {
   } catch (error) {
     console.error("Error refreshing location:", error);
     return [];
+  }
+}
+
+async function getUserProfileFromId(userId) {
+try {
+    // Make the GraphQL API call to fetch the user profile
+    const response = await API.graphql(
+      graphqlOperation(getUserProfile, { userId: userId })
+    );
+
+    // Extract the user profile from the response
+    const userProfile = response.data.getUserProfile;
+
+    return userProfile;
+  } catch (error) {
+    console.error(`Error fetching user profile for userId ${userId}:`, error);
+    throw error; // You can handle the error as needed
   }
 }
 
@@ -397,7 +414,7 @@ const populateTagSet = async () => {
   }
 };
 
-const createUserTagsWithSession = async (userId, sessionId, tagIds) => {
+const createUserTagsWithSession = async (userId, sessionId, tagIds, fullName) => {
   try {
     const batchCreatePromises = tagIds.map(async (tagId) => {
       const currTagId = tagId.tagId;
@@ -406,6 +423,7 @@ const createUserTagsWithSession = async (userId, sessionId, tagIds) => {
         sessionId: sessionId,
         userId: userId,
         tagId: currTagId,
+        fullName: fullName
       };
       await API.graphql(graphqlOperation(createUserTags, { input }));
       const tagSetResponse = await API.graphql(
@@ -557,6 +575,7 @@ export function AuthProvider({ children }) {
     removeUserTagsByTagId,
     fetchConnectionsAndProfiles,
     fetchUserProfileData,
+    getUserProfileFromId,
     createUserTagsWithSession,
     refreshLocation,
     refreshToken,

@@ -284,69 +284,6 @@ export const onDeleteTagSet = /* GraphQL */ `
     }
   }
 `;
-export const onCreateUserTags = /* GraphQL */ `
-  subscription OnCreateUserTags(
-    $sessionId: String
-    $userTagId: String
-    $userId: String
-    $tagId: String
-  ) {
-    onCreateUserTags(
-      sessionId: $sessionId
-      userTagId: $userTagId
-      userId: $userId
-      tagId: $tagId
-    ) {
-      sessionId
-      userTagId
-      userId
-      tagId
-      __typename
-    }
-  }
-`;
-export const onUpdateUserTags = /* GraphQL */ `
-  subscription OnUpdateUserTags(
-    $sessionId: String
-    $userTagId: String
-    $userId: String
-    $tagId: String
-  ) {
-    onUpdateUserTags(
-      sessionId: $sessionId
-      userTagId: $userTagId
-      userId: $userId
-      tagId: $tagId
-    ) {
-      sessionId
-      userTagId
-      userId
-      tagId
-      __typename
-    }
-  }
-`;
-export const onDeleteUserTags = /* GraphQL */ `
-  subscription OnDeleteUserTags(
-    $sessionId: String
-    $userTagId: String
-    $userId: String
-    $tagId: String
-  ) {
-    onDeleteUserTags(
-      sessionId: $sessionId
-      userTagId: $userTagId
-      userId: $userId
-      tagId: $tagId
-    ) {
-      sessionId
-      userTagId
-      userId
-      tagId
-      __typename
-    }
-  }
-`;
 export const onCreateChats = /* GraphQL */ `
   subscription OnCreateChats(
     $senderId: String
@@ -514,6 +451,78 @@ export const onDeleteLocations = /* GraphQL */ `
       latitude
       longitude
       timestamp
+      __typename
+    }
+  }
+`;
+export const onCreateUserTags = /* GraphQL */ `
+  subscription OnCreateUserTags(
+    $sessionId: String
+    $userTagId: String
+    $userId: String
+    $tagId: String
+    $fullName: String
+  ) {
+    onCreateUserTags(
+      sessionId: $sessionId
+      userTagId: $userTagId
+      userId: $userId
+      tagId: $tagId
+      fullName: $fullName
+    ) {
+      sessionId
+      userTagId
+      userId
+      tagId
+      fullName
+      __typename
+    }
+  }
+`;
+export const onUpdateUserTags = /* GraphQL */ `
+  subscription OnUpdateUserTags(
+    $sessionId: String
+    $userTagId: String
+    $userId: String
+    $tagId: String
+    $fullName: String
+  ) {
+    onUpdateUserTags(
+      sessionId: $sessionId
+      userTagId: $userTagId
+      userId: $userId
+      tagId: $tagId
+      fullName: $fullName
+    ) {
+      sessionId
+      userTagId
+      userId
+      tagId
+      fullName
+      __typename
+    }
+  }
+`;
+export const onDeleteUserTags = /* GraphQL */ `
+  subscription OnDeleteUserTags(
+    $sessionId: String
+    $userTagId: String
+    $userId: String
+    $tagId: String
+    $fullName: String
+  ) {
+    onDeleteUserTags(
+      sessionId: $sessionId
+      userTagId: $userTagId
+      userId: $userId
+      tagId: $tagId
+      fullName: $fullName
+    ) {
+      sessionId
+      userTagId
+      userId
+      tagId
+      fullName
       __typename
     }
   }

@@ -150,33 +150,6 @@ export type DeleteTagSetInput = {
   tagId: string,
 };
 
-export type CreateUserTagsInput = {
-  sessionId: string,
-  userTagId: string,
-  userId: string,
-  tagId: string,
-};
-
-export type UserTags = {
-  __typename: "UserTags",
-  sessionId: string,
-  userTagId: string,
-  userId: string,
-  tagId: string,
-};
-
-export type UpdateUserTagsInput = {
-  sessionId: string,
-  userTagId: string,
-  userId?: string | null,
-  tagId?: string | null,
-};
-
-export type DeleteUserTagsInput = {
-  sessionId: string,
-  userTagId: string,
-};
-
 export type CreateChatsInput = {
   senderId: string,
   timestamp: string,
@@ -256,6 +229,36 @@ export type UpdateLocationsInput = {
 export type DeleteLocationsInput = {
   sessionId: string,
   userId: string,
+};
+
+export type CreateUserTagsInput = {
+  sessionId: string,
+  userTagId: string,
+  userId: string,
+  tagId: string,
+  fullName: string,
+};
+
+export type UserTags = {
+  __typename: "UserTags",
+  sessionId: string,
+  userTagId: string,
+  userId: string,
+  tagId: string,
+  fullName: string,
+};
+
+export type UpdateUserTagsInput = {
+  sessionId: string,
+  userTagId: string,
+  userId?: string | null,
+  tagId?: string | null,
+  fullName?: string | null,
+};
+
+export type DeleteUserTagsInput = {
+  sessionId: string,
+  userTagId: string,
 };
 
 export type TableUserProfileFilterInput = {
@@ -350,19 +353,6 @@ export type TagSetConnection = {
   nextToken?: string | null,
 };
 
-export type TableUserTagsFilterInput = {
-  sessionId?: TableStringFilterInput | null,
-  userTagId?: TableStringFilterInput | null,
-  userId?: TableStringFilterInput | null,
-  tagId?: TableStringFilterInput | null,
-};
-
-export type UserTagsConnection = {
-  __typename: "UserTagsConnection",
-  items?:  Array<UserTags | null > | null,
-  nextToken?: string | null,
-};
-
 export type TableChatsFilterInput = {
   senderId?: TableStringFilterInput | null,
   timestamp?: TableStringFilterInput | null,
@@ -411,6 +401,20 @@ export type TableFloatFilterInput = {
 export type LocationsConnection = {
   __typename: "LocationsConnection",
   items?:  Array<Locations | null > | null,
+  nextToken?: string | null,
+};
+
+export type TableUserTagsFilterInput = {
+  sessionId?: TableStringFilterInput | null,
+  userTagId?: TableStringFilterInput | null,
+  userId?: TableStringFilterInput | null,
+  tagId?: TableStringFilterInput | null,
+  fullName?: TableStringFilterInput | null,
+};
+
+export type UserTagsConnection = {
+  __typename: "UserTagsConnection",
+  items?:  Array<UserTags | null > | null,
   nextToken?: string | null,
 };
 
@@ -624,48 +628,6 @@ export type DeleteTagSetMutation = {
   } | null,
 };
 
-export type CreateUserTagsMutationVariables = {
-  input: CreateUserTagsInput,
-};
-
-export type CreateUserTagsMutation = {
-  createUserTags?:  {
-    __typename: "UserTags",
-    sessionId: string,
-    userTagId: string,
-    userId: string,
-    tagId: string,
-  } | null,
-};
-
-export type UpdateUserTagsMutationVariables = {
-  input: UpdateUserTagsInput,
-};
-
-export type UpdateUserTagsMutation = {
-  updateUserTags?:  {
-    __typename: "UserTags",
-    sessionId: string,
-    userTagId: string,
-    userId: string,
-    tagId: string,
-  } | null,
-};
-
-export type DeleteUserTagsMutationVariables = {
-  input: DeleteUserTagsInput,
-};
-
-export type DeleteUserTagsMutation = {
-  deleteUserTags?:  {
-    __typename: "UserTags",
-    sessionId: string,
-    userTagId: string,
-    userId: string,
-    tagId: string,
-  } | null,
-};
-
 export type CreateChatsMutationVariables = {
   input: CreateChatsInput,
 };
@@ -804,6 +766,51 @@ export type DeleteLocationsMutation = {
     latitude: number,
     longitude: number,
     timestamp: string,
+  } | null,
+};
+
+export type CreateUserTagsMutationVariables = {
+  input: CreateUserTagsInput,
+};
+
+export type CreateUserTagsMutation = {
+  createUserTags?:  {
+    __typename: "UserTags",
+    sessionId: string,
+    userTagId: string,
+    userId: string,
+    tagId: string,
+    fullName: string,
+  } | null,
+};
+
+export type UpdateUserTagsMutationVariables = {
+  input: UpdateUserTagsInput,
+};
+
+export type UpdateUserTagsMutation = {
+  updateUserTags?:  {
+    __typename: "UserTags",
+    sessionId: string,
+    userTagId: string,
+    userId: string,
+    tagId: string,
+    fullName: string,
+  } | null,
+};
+
+export type DeleteUserTagsMutationVariables = {
+  input: DeleteUserTagsInput,
+};
+
+export type DeleteUserTagsMutation = {
+  deleteUserTags?:  {
+    __typename: "UserTags",
+    sessionId: string,
+    userTagId: string,
+    userId: string,
+    tagId: string,
+    fullName: string,
   } | null,
 };
 
@@ -973,41 +980,6 @@ export type ListTagSetsQuery = {
   } | null,
 };
 
-export type GetUserTagsQueryVariables = {
-  userTagId: string,
-  sessionId: string,
-};
-
-export type GetUserTagsQuery = {
-  getUserTags?:  {
-    __typename: "UserTags",
-    sessionId: string,
-    userTagId: string,
-    userId: string,
-    tagId: string,
-  } | null,
-};
-
-export type ListUserTagsQueryVariables = {
-  filter?: TableUserTagsFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListUserTagsQuery = {
-  listUserTags?:  {
-    __typename: "UserTagsConnection",
-    items?:  Array< {
-      __typename: "UserTags",
-      sessionId: string,
-      userTagId: string,
-      userId: string,
-      tagId: string,
-    } | null > | null,
-    nextToken?: string | null,
-  } | null,
-};
-
 export type GetChatsQueryVariables = {
   senderId: string,
   timestamp: string,
@@ -1131,6 +1103,43 @@ export type ListLocationsQuery = {
       latitude: number,
       longitude: number,
       timestamp: string,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetUserTagsQueryVariables = {
+  userTagId: string,
+  sessionId: string,
+};
+
+export type GetUserTagsQuery = {
+  getUserTags?:  {
+    __typename: "UserTags",
+    sessionId: string,
+    userTagId: string,
+    userId: string,
+    tagId: string,
+    fullName: string,
+  } | null,
+};
+
+export type ListUserTagsQueryVariables = {
+  filter?: TableUserTagsFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListUserTagsQuery = {
+  listUserTags?:  {
+    __typename: "UserTagsConnection",
+    items?:  Array< {
+      __typename: "UserTags",
+      sessionId: string,
+      userTagId: string,
+      userId: string,
+      tagId: string,
+      fullName: string,
     } | null > | null,
     nextToken?: string | null,
   } | null,
@@ -1385,57 +1394,6 @@ export type OnDeleteTagSetSubscription = {
   } | null,
 };
 
-export type OnCreateUserTagsSubscriptionVariables = {
-  sessionId?: string | null,
-  userTagId?: string | null,
-  userId?: string | null,
-  tagId?: string | null,
-};
-
-export type OnCreateUserTagsSubscription = {
-  onCreateUserTags?:  {
-    __typename: "UserTags",
-    sessionId: string,
-    userTagId: string,
-    userId: string,
-    tagId: string,
-  } | null,
-};
-
-export type OnUpdateUserTagsSubscriptionVariables = {
-  sessionId?: string | null,
-  userTagId?: string | null,
-  userId?: string | null,
-  tagId?: string | null,
-};
-
-export type OnUpdateUserTagsSubscription = {
-  onUpdateUserTags?:  {
-    __typename: "UserTags",
-    sessionId: string,
-    userTagId: string,
-    userId: string,
-    tagId: string,
-  } | null,
-};
-
-export type OnDeleteUserTagsSubscriptionVariables = {
-  sessionId?: string | null,
-  userTagId?: string | null,
-  userId?: string | null,
-  tagId?: string | null,
-};
-
-export type OnDeleteUserTagsSubscription = {
-  onDeleteUserTags?:  {
-    __typename: "UserTags",
-    sessionId: string,
-    userTagId: string,
-    userId: string,
-    tagId: string,
-  } | null,
-};
-
 export type OnCreateChatsSubscriptionVariables = {
   senderId?: string | null,
   timestamp?: string | null,
@@ -1586,5 +1544,62 @@ export type OnDeleteLocationsSubscription = {
     latitude: number,
     longitude: number,
     timestamp: string,
+  } | null,
+};
+
+export type OnCreateUserTagsSubscriptionVariables = {
+  sessionId?: string | null,
+  userTagId?: string | null,
+  userId?: string | null,
+  tagId?: string | null,
+  fullName?: string | null,
+};
+
+export type OnCreateUserTagsSubscription = {
+  onCreateUserTags?:  {
+    __typename: "UserTags",
+    sessionId: string,
+    userTagId: string,
+    userId: string,
+    tagId: string,
+    fullName: string,
+  } | null,
+};
+
+export type OnUpdateUserTagsSubscriptionVariables = {
+  sessionId?: string | null,
+  userTagId?: string | null,
+  userId?: string | null,
+  tagId?: string | null,
+  fullName?: string | null,
+};
+
+export type OnUpdateUserTagsSubscription = {
+  onUpdateUserTags?:  {
+    __typename: "UserTags",
+    sessionId: string,
+    userTagId: string,
+    userId: string,
+    tagId: string,
+    fullName: string,
+  } | null,
+};
+
+export type OnDeleteUserTagsSubscriptionVariables = {
+  sessionId?: string | null,
+  userTagId?: string | null,
+  userId?: string | null,
+  tagId?: string | null,
+  fullName?: string | null,
+};
+
+export type OnDeleteUserTagsSubscription = {
+  onDeleteUserTags?:  {
+    __typename: "UserTags",
+    sessionId: string,
+    userTagId: string,
+    userId: string,
+    tagId: string,
+    fullName: string,
   } | null,
 };
