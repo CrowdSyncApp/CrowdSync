@@ -34,6 +34,14 @@ useEffect(() => {
     checkSessionId();
   }, [sessionId]);
 
+  const handleLinkPress = (url) => {
+      if (url) {
+        Linking.openURL(url).catch((err) =>
+          console.error("Error opening URL:", err)
+        );
+      }
+    };
+
   const renderSocialLinks = (socialLinks) => {
     if (socialLinks && socialLinks.length > 0) {
       return socialLinks.map((link, index) => (

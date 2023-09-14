@@ -73,6 +73,23 @@ export const createParticipants = /* GraphQL */ `
     }
   }
 `;
+export const createOrUpdateParticipants = /* GraphQL */ `
+  mutation CreateOrUpdateParticipants($input: UpdateParticipantsInput!) {
+    createOrUpdateParticipants(input: $input) {
+      sessionId
+      userId
+      joinedAt
+      role
+      jobTitle
+      fullName
+      company
+      visibility
+      tags
+      sessionStatus
+      __typename
+    }
+  }
+`;
 export const updateParticipants = /* GraphQL */ `
   mutation UpdateParticipants($input: UpdateParticipantsInput!) {
     updateParticipants(input: $input) {
