@@ -208,6 +208,8 @@ const SessionHomeScreen = ({ route }) => {
           >
             <Text style={styles.buttonText}>Search</Text>
           </TouchableOpacity>
+
+          {isVisible && (
           <TouchableOpacity
             style={styles.loginButton}
             onPress={() =>
@@ -219,6 +221,7 @@ const SessionHomeScreen = ({ route }) => {
           >
             <Text style={styles.buttonText}>Chat</Text>
           </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>

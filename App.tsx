@@ -52,6 +52,7 @@ import ForgotPassword from "./components/ForgotPassword";
 import SplashScreen from "./components/SplashScreen";
 import Header from "./components/Header";
 import HeaderWithBack from "./components/HeaderWithBack";
+import HeaderWithBackNoProfile from "./components/HeaderWithBackNoProfile";
 import SimplifiedHeader from "./components/SimplifiedHeader";
 import AddTags from "./components/AddTags";
 import UserLocation from "./components/UserLocation";
@@ -159,7 +160,7 @@ const AppNavigator = () => {
         component={ProfileScreen}
         options={{
           title: "Profile",
-          header: () => <HeaderWithBack />,
+          header: () => <HeaderWithBackNoProfile />,
         }}
       />
       <Stack.Screen
@@ -167,7 +168,7 @@ const AppNavigator = () => {
         component={EditProfileScreen}
         options={{
           title: "Edit Profile",
-          header: () => <HeaderWithBack />,
+          header: () => <HeaderWithBackNoProfile />,
         }}
       />
       <Stack.Screen
