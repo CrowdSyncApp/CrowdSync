@@ -20,7 +20,7 @@ import styles, { palette, fonts } from "./style";
 
 const SessionHomeScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { user, fetchUserProfileData, getUserProfileFromId } = useAuth();
+  const { user, fetchUserProfileData, getUserProfileFromId, storeInterval } = useAuth();
   const { sessionData } = route.params;
   const [participants, setParticipants] = useState([]);
   const [isVisible, setIsVisible] = useState(true);
@@ -49,6 +49,11 @@ const SessionHomeScreen = ({ route }) => {
               console.error("Error refreshing participants:", error);
             }
           }, 1 * 60 * 1000);
+
+          const storeParticipantIntervalId = async () => {
+                  await storeInterval(participantsUpdateInterval);
+              }
+              storeParticipantIntervalId();
 
     const fetchVisibility = async () => {
       const userProfileData = await fetchUserProfileData(user?.username);

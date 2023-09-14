@@ -18,6 +18,27 @@ const generateUniqueSessionId = () => {
   return v4();
 };
 
+async function clearAllIntervals() {
+  try {
+    // Retrieve the list of intervalIds from AsyncStorage
+    const intervalIdsJson = await AsyncStorage.getItem('intervalIds');
+    const intervalIds = intervalIdsJson ? JSON.parse(intervalIdsJson) : [];
+
+    // Clear each interval using clearInterval
+    intervalIds.forEach((intervalId) => {
+      clearInterval(intervalId);
+      console.log(`Interval with ID ${intervalId} cleared.`);
+    });
+
+    // Clear the list of intervalIds from AsyncStorage
+    await AsyncStorage.removeItem('intervalIds');
+
+    console.log('All intervals cleared.');
+  } catch (error) {
+    console.error('Error clearing intervals:', error);
+  }
+}
+
 async function storeSessionData(sessionData) {
     await AsyncStorage.setItem(
         "sessionData",
@@ -218,6 +239,7 @@ export const endSession = async (sessionId, startTime) => {
 
     const updatedSession = response.data.updateSessions;
     removeSessionData();
+    await clearAllIntervals();
 
     console.log("Session ended:", updatedSession);
     return updatedSession;

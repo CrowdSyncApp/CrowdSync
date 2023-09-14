@@ -16,7 +16,6 @@ const Header = () => {
 
 useEffect(() => {
         async function getProfileImageUri() {
-        console.log("userProfileData", userProfileData);
             const profilePicture = await fetchUserProfileImage(userProfileData.identityId, userProfileData.profilePicture);
             setProfilePictureUri(profilePicture);
         }

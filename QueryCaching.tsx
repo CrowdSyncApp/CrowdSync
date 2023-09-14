@@ -28,6 +28,45 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
+async function storeInterval(intervalId) {
+  try {
+    // Retrieve the existing list of intervalIds from AsyncStorage (if any)
+    const existingIntervalIdsJson = await AsyncStorage.getItem('intervalIds');
+    const existingIntervalIds = existingIntervalIdsJson ? JSON.parse(existingIntervalIdsJson) : [];
+
+    // Add the new intervalId to the list
+    existingIntervalIds.push(intervalId);
+
+    // Convert the updated list back to JSON and store it in AsyncStorage
+    await AsyncStorage.setItem('intervalIds', JSON.stringify(existingIntervalIds));
+
+    console.log(`Interval with ID ${intervalId} stored successfully.`);
+  } catch (error) {
+    console.error('Error storing interval ID:', error);
+  }
+}
+
+async function clearAllIntervals() {
+  try {
+    // Retrieve the list of intervalIds from AsyncStorage
+    const intervalIdsJson = await AsyncStorage.getItem('intervalIds');
+    const intervalIds = intervalIdsJson ? JSON.parse(intervalIdsJson) : [];
+
+    // Clear each interval using clearInterval
+    intervalIds.forEach((intervalId) => {
+      clearInterval(intervalId);
+      console.log(`Interval with ID ${intervalId} cleared.`);
+    });
+
+    // Clear the list of intervalIds from AsyncStorage
+    await AsyncStorage.removeItem('intervalIds');
+
+    console.log('All intervals cleared.');
+  } catch (error) {
+    console.error('Error clearing intervals:', error);
+  }
+}
+
 async function fetchUserProfileImage(identityId, profilePictureFilename) {
   let getLevel;
   try {
@@ -228,6 +267,7 @@ async function logout() {
   try {
     const response = await Auth.signOut();
     await AsyncStorage.removeItem("userProfileData");
+    await clearAllIntervals();
   } catch (error) {
     console.error("Logout error:", error);
     throw error;
@@ -585,6 +625,7 @@ export function AuthProvider({ children }) {
     fetchConnectionsAndProfiles,
     fetchUserProfileData,
     getUserProfileFromId,
+    storeInterval,
     createUserTagsWithSession,
     fetchUserProfileImage,
     refreshLocation,
