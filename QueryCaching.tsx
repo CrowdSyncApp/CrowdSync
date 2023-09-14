@@ -1,5 +1,6 @@
+import { PermissionsAndroid, Platform } from 'react-native';
 import { createContext, useContext, useEffect, useState } from "react";
-import { PermissionsAndroid } from "react-native";
+import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { Auth, API, Storage, Hub, graphqlOperation } from "aws-amplify";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -102,12 +103,35 @@ async function refreshLocation(sessionId) {
 
     const userId = user?.username;
 
-    // Request location permission
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-    );
+    let granted = false;
+    try {
+        if (Platform.OS === 'ios') {
+          // Request location permission using react-native-permissions on iOS.
+          const status = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
 
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          if (status === RESULTS.GRANTED) {
+            granted = true;
+          } else {
+            console.error("Location permission denied");
+          }
+        } else if (Platform.OS === 'android') {
+          // Request location permission using PermissionsAndroid on Android.
+          const status = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+          );
+
+          if (status === PermissionsAndroid.RESULTS.GRANTED) {
+            granted = true;
+          } else {
+            // Handle permission denied.
+            console.error("Location permission denied");
+          }
+        }
+      } catch (error) {
+        console.error("Error requesting location permission:", error);
+      }
+
+    if (granted === true) {
       // Get current location
       const position = await new Promise((resolve, reject) => {
         Geolocation.getCurrentPosition(
