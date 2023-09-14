@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, Pressable, Linking } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { getSessionData } from "./SessionManager";
+import { getSessionData, getParticipantVisibility } from "./SessionManager";
 import styles, { palette, fonts } from "./style";
 import { useAuth } from "../QueryCaching";
 
@@ -15,13 +15,33 @@ const OtherUserProfileScreen = () => {
   const { userData, sessionId } = route.params;
 
   const [showLocationButton, setShowLocationButton] = useState(false);
+  const [visible, setVisible] = useState(false);
 
     useEffect(() => {
         async function getProfileImageUri() {
-            const profilePicture = await fetchUserProfileImage(userData.identityId, userData.profilePicture);
+           let profilePicture;
+            if (userData.userId === "1" || userData.userId === "2" || userData.userId === "3" || userData.userId === "4" || userData.userId === "5") {
+                profilePicture = userData.profilePicture;
+            } else {
+                profilePicture = await fetchUserProfileImage(userData.identityId, userData.profilePicture);
+               }
             setProfilePictureUri(profilePicture);
         }
 
+        async function getVisibility() {
+            let visible;
+        if (userData.userId === "1" || userData.userId === "2" || userData.userId === "3" || userData.userId === "4" || userData.userId === "5") {
+            visible = true;
+            if (userData.userId == "3") {
+                visible = false;
+            }
+        } else {
+            visible = await fetchUserProfileImage(userData.userId);
+           }
+           setVisible(visible);
+        }
+
+        getVisibility();
         getProfileImageUri();
     }, []);
 
@@ -147,7 +167,7 @@ useEffect(() => {
             <Text style={styles.buttonText}>Chat</Text>
           </Pressable>
 
-            {showLocationButton && userData.visibility === "VISIBLE" && (
+            {showLocationButton && visible && (
                 <View style={{ paddingVertical: 10 }}>
                   <Pressable style={styles.basicButton} onPress={handleLocationPress}>
                     <Text style={styles.buttonText}>Location</Text>

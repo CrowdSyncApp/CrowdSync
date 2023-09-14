@@ -15,7 +15,6 @@ import { endSession, fetchParticipants } from "./SessionManager";
 import { getParticipants, listParticipants } from "../src/graphql/queries";
 import { updateParticipants } from "../src/graphql/mutations";
 import { onCreateParticipants } from '../src/graphql/subscriptions';
-import participantsData from "../dummies/dummy_accounts.json";
 import styles, { palette, fonts } from "./style";
 
 const SessionHomeScreen = ({ route }) => {
@@ -24,12 +23,18 @@ const SessionHomeScreen = ({ route }) => {
   const { sessionData } = route.params;
   const [participants, setParticipants] = useState([]);
   const [isVisible, setIsVisible] = useState(true);
+  const [participantsUpdateInterval, setParticipantsUpdateInterval] = useState(null);
+    const [subscriptionStatus, setSubscriptionStatus] = useState('Inactive'); // Initialize as 'Inactive'
+
 
   const qrCodeData = JSON.stringify({
     sessionId: sessionData.sessionId,
     startTime: sessionData.startTime,
     title: sessionData.title,
   });
+
+  const userId = user?.username;
+  const sessionId = sessionData.sessionId;
 
   useEffect(() => {
 
@@ -86,7 +91,8 @@ const SessionHomeScreen = ({ route }) => {
           console.error('Error subscribing to participant joined:', error);
         },
       });
-
+setParticipantsUpdateInterval(participantsUpdateInterval);
+    setSubscriptionStatus(subscription ? 'Active' : 'Inactive');
       return () => {
         subscription.unsubscribe();
       };
@@ -144,7 +150,8 @@ const SessionHomeScreen = ({ route }) => {
   };
 
   const handleUserProfilePress = async (userProfileData) => {
-    const userData = await getUserProfileFromId(userProfileData.userId);
+    let userData = await getUserProfileFromId(userProfileData.userId);
+
     navigation.navigate("OtherUserProfile", { userData, sessionId: sessionData.sessionId });
   };
 
@@ -227,6 +234,19 @@ const SessionHomeScreen = ({ route }) => {
             <Text style={styles.buttonText}>Chat</Text>
           </TouchableOpacity>
           )}
+          {/* Display userId */}
+          <View style={styles.div}>
+          <Text style={styles.debugText}>User ID: {userId}</Text>
+
+          {/* Display participantsUpdateInterval */}
+          <Text style={styles.debugText}>Interval ID: {participantsUpdateInterval}</Text>
+
+          {/* Display subscription status */}
+          <Text style={styles.debugText}>Subscription: {subscriptionStatus ? 'Active' : 'Inactive'}</Text>
+
+          {/* Display sessionId */}
+          <Text style={styles.debugText}>Session ID: {sessionId}</Text>
+          </View>
         </View>
       </View>
     </View>

@@ -5,7 +5,7 @@ import {
   updateSessions,
   createOrUpdateParticipants,
 } from "../src/graphql/mutations";
-import { listParticipants } from "../src/graphql/queries";
+import { listParticipants, getParticipants } from "../src/graphql/queries";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import "react-native-get-random-values";
 import { v4 } from "uuid";
@@ -17,6 +17,19 @@ const MAX_RETRY_ATTEMPTS = 5; // Maximum number of retry attempts
 const generateUniqueSessionId = () => {
   return v4();
 };
+
+export async function getParticipantVisibility(userId) {
+    try {
+        const userIdParticipant = await API.graphql(
+            graphqlOperation(getParticipants, { userId: userId })
+        );
+
+    const visibility = userIdParticipant.data.getParticipants.visibility;
+    return visibility == "VISIBLE";
+    } catch (error) {
+        console.error("Error getting participant visibility:", error);
+    }
+}
 
 async function clearAllIntervals() {
   try {
@@ -83,7 +96,6 @@ export const fetchParticipants = async () => {
         const user = await Auth.currentAuthenticatedUser();
         const userId = user?.username;
         const sessionData = await getSessionData();
-        console.log("sessionData", sessionData);
           const response = await API.graphql(graphqlOperation(listParticipants, {
             filter: {
               sessionId: {
@@ -97,7 +109,6 @@ export const fetchParticipants = async () => {
               },
             },
           }));
-          console.log("response", response);
           fetchedParticipants = response.data.listParticipants.items;
         } catch (error) {
           console.error('Error fetching participants:', error);

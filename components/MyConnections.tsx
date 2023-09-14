@@ -33,7 +33,6 @@ const MyConnections = ({ route }) => {
     try {
     const userData = await getUserProfileFromId(connectionData.userId);
       const sessionId = await getSessionIdForUser(connectionData.userId);
-      console.log("userData", userData);
 
       navigation.navigate("OtherUserProfile", { userData: userData, sessionId: sessionId });
     } catch (error) {

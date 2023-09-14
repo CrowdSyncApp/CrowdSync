@@ -9,10 +9,9 @@ import {
   getTagSet,
   listConnections,
 } from "./src/graphql/queries";
-import { getSessionIdForUser } from "./components/SessionManager";
+import { getSessionIdForUser, getSessionData } from "./components/SessionManager";
 import { v4 } from "uuid";
 import {
-getParticipants,
 updateUserProfiles,
   createTagSet,
   createUserTags,
@@ -139,7 +138,7 @@ async function fetchUserProfile(userId) {
   }
 }
 
-async function refreshLocation(sessionId) {
+async function refreshLocation() {
   try {
     // Fetch user data
     const user = await fetchUser();
@@ -148,6 +147,12 @@ async function refreshLocation(sessionId) {
           console.error("User data or userId is missing.");
           return [];
         }
+
+    const sessionData = await getSessionData();
+    let sessionId = sessionData.sessionId;
+    if (!sessionId) {
+        sessionId = "INACTIVE";
+    }
 
     const userId = user?.username;
 
