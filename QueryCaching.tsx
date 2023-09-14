@@ -1,6 +1,5 @@
 import { PermissionsAndroid, Platform } from 'react-native';
 import { createContext, useContext, useEffect, useState } from "react";
-import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { Auth, API, Storage, Hub, graphqlOperation } from "aws-amplify";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -116,10 +115,9 @@ async function refreshLocation(sessionId) {
     let granted = false;
     try {
         if (Platform.OS === 'ios') {
-          // Request location permission using react-native-permissions on iOS.
-          const status = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+          const status = await Geolocation.requestAuthorization('whenInUse');
 
-          if (status === RESULTS.GRANTED) {
+          if (status === "granted") {
             granted = true;
           } else {
             console.error("Location permission denied");
