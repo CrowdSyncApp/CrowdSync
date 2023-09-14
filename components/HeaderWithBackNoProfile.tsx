@@ -62,6 +62,7 @@ const Header = () => {
       <TouchableOpacity onPress={handleTitlePress}>
       <Text style={styles.headerTitle}>CrowdSync</Text>
       </TouchableOpacity>
+      <View style={{width: 50, height: 50}}/>
     </View>
    </SafeAreaView>
    </View>

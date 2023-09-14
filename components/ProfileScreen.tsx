@@ -22,8 +22,18 @@ import styles, { palette, fonts } from "./style";
 const ProfileScreen = ({ route }) => {
   // Extract the user information passed as props from the route object
   const { userProfileData } = route.params;
-  const { logout } = useAuth();
+  const { logout, fetchUserProfileImage } = useAuth();
   const navigation = useNavigation();
+  const [profilePictureUri, setProfilePictureUri] = useState("");
+
+useEffect(() => {
+    async function getProfileImageUri() {
+        const profilePicture = await fetchUserProfileImage(userData.identityId, userData.profilePicture);
+        setProfilePictureUri(profilePicture);
+    }
+
+    getProfileImageUri();
+}, []);
 
   const handleLogout = () => {
     logout();
@@ -64,15 +74,17 @@ const ProfileScreen = ({ route }) => {
       <View style={styles.index}>
         <View style={styles.div}>
           {/* Profile Picture */}
-          <Image
-            source={{ uri: userProfileData?.profilePictureUri }}
-            style={{
-              width: 350,
-              height: 350,
-              borderRadius: 100,
-              resizeMode: "contain",
-            }}
-          />
+          {profilePictureUri !== '' ? (
+              <Image
+                source={{ uri: profilePictureUri }}
+                style={{
+                  width: 350,
+                  height: 350,
+                  borderRadius: 100,
+                  resizeMode: "contain",
+                }}
+              />
+            ) : null}
 
           {/* Full Name */}
           <View style={{ alignItems: "center" }}>

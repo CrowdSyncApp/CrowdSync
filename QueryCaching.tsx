@@ -81,14 +81,6 @@ async function fetchUserProfile(userId) {
             );
       }
 
-      if (!data.getUserProfiles.profilePictureUri) {
-        const profileImage = await fetchUserProfileImage(
-          identityId,
-          data.getUserProfiles.profilePicture
-        );
-        data.getUserProfiles.profilePictureUri = profileImage;
-      }
-
       const currSessionId = await getSessionIdForUser(userId);
       data.getUserProfiles.sessionId = currSessionId;
 
