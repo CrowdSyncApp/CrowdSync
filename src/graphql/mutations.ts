@@ -2,60 +2,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createUserProfile = /* GraphQL */ `
-  mutation CreateUserProfile($input: CreateUserProfileInput!) {
-    createUserProfile(input: $input) {
-      userId
-      fullName
-      email
-      phoneNumber
-      createdAt
-      updatedAt
-      jobTitle
-      company
-      profilePicture
-      address
-      socialLinks
-      __typename
-    }
-  }
-`;
-export const updateUserProfile = /* GraphQL */ `
-  mutation UpdateUserProfile($input: UpdateUserProfileInput!) {
-    updateUserProfile(input: $input) {
-      userId
-      fullName
-      email
-      phoneNumber
-      createdAt
-      updatedAt
-      jobTitle
-      company
-      profilePicture
-      address
-      socialLinks
-      __typename
-    }
-  }
-`;
-export const deleteUserProfile = /* GraphQL */ `
-  mutation DeleteUserProfile($input: DeleteUserProfileInput!) {
-    deleteUserProfile(input: $input) {
-      userId
-      fullName
-      email
-      phoneNumber
-      createdAt
-      updatedAt
-      jobTitle
-      company
-      profilePicture
-      address
-      socialLinks
-      __typename
-    }
-  }
-`;
 export const createParticipants = /* GraphQL */ `
   mutation CreateParticipants($input: CreateParticipantsInput!) {
     createParticipants(input: $input) {
@@ -336,6 +282,63 @@ export const deleteUserTags = /* GraphQL */ `
       userId
       tagId
       fullName
+      __typename
+    }
+  }
+`;
+export const createUserProfiles = /* GraphQL */ `
+  mutation CreateUserProfiles($input: CreateUserProfilesInput!) {
+    createUserProfiles(input: $input) {
+      userId
+      fullName
+      email
+      identityId
+      phoneNumber
+      createdAt
+      updatedAt
+      jobTitle
+      company
+      profilePicture
+      location
+      socialLinks
+      __typename
+    }
+  }
+`;
+export const updateUserProfiles = /* GraphQL */ `
+  mutation UpdateUserProfiles($input: UpdateUserProfilesInput!) {
+    updateUserProfiles(input: $input) {
+      userId
+      fullName
+      email
+      identityId
+      phoneNumber
+      createdAt
+      updatedAt
+      jobTitle
+      company
+      profilePicture
+      location
+      socialLinks
+      __typename
+    }
+  }
+`;
+export const deleteUserProfiles = /* GraphQL */ `
+  mutation DeleteUserProfiles($input: DeleteUserProfilesInput!) {
+    deleteUserProfiles(input: $input) {
+      userId
+      fullName
+      email
+      identityId
+      phoneNumber
+      createdAt
+      updatedAt
+      jobTitle
+      company
+      profilePicture
+      location
+      socialLinks
       __typename
     }
   }

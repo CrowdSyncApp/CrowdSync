@@ -1,20 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, TouchableOpacity, Pressable } from "react-native";
+import { View, Text, Image, TouchableOpacity, Pressable, Linking } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { getSessionData } from "./SessionManager";
 import styles, { palette, fonts } from "./style";
+import { useAuth } from "../QueryCaching";
 
 const OtherUserProfileScreen = () => {
   const navigation = useNavigation(); // Get navigation instance
   const route = useRoute(); // Get route object
+  const { fetchUserProfileImage } = useAuth();
+  const [profilePictureUri, setProfilePictureUri] = useState("");
 
   const { userData, sessionId } = route.params;
-  const myimage = Image.resolveAssetSource(userData.profilePicture);
 
   const [showLocationButton, setShowLocationButton] = useState(false);
 
-  console.log("userData", userData);
+    useEffect(() => {
+        async function getProfileImageUri() {
+            const profilePicture = await fetchUserProfileImage(userData.identityId, userData.profilePicture);
+            setProfilePictureUri(profilePicture);
+        }
+
+        getProfileImageUri();
+    }, []);
 
 useEffect(() => {
     async function checkSessionId() {
@@ -73,15 +82,17 @@ useEffect(() => {
       <View style={styles.index}>
         <View style={styles.div}>
           {/* Profile Picture */}
-          <Image
-            source={{ uri: userData.profilePicture }}
-            style={{
-              width: 350,
-              height: 350,
-              borderRadius: 100,
-              resizeMode: "contain",
-            }}
-          />
+          {profilePictureUri !== '' ? (
+            <Image
+              source={{ uri: profilePictureUri }}
+              style={{
+                width: 350,
+                height: 350,
+                borderRadius: 100,
+                resizeMode: "contain",
+              }}
+            />
+          ) : null}
 
           {/* User's Name */}
           <View style={{ alignItems: "center" }}>
@@ -103,8 +114,8 @@ useEffect(() => {
           {userData.jobTitle || userData.company ? (
             <View style={{ alignItems: "center" }}>
               <Text style={styles.secondaryHeaderTitle}>
-                {userData.address}
-                {userData.address && userData.phoneNumber ? ", " : ""}
+                {userData.location}
+                {userData.location && userData.phoneNumber ? ", " : ""}
                 {userData.phoneNumber}
               </Text>
             </View>
