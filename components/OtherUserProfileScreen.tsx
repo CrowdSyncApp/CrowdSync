@@ -92,7 +92,7 @@ useEffect(() => {
                 resizeMode: "contain",
               }}
             />
-          ) : null}
+          ) : <View style={{ width: 350, height: 350 }}/>}
 
           {/* User's Name */}
           <View style={{ alignItems: "center" }}>

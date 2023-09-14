@@ -23,7 +23,6 @@ const MyConnections = ({ route }) => {
   useEffect(() => {
         const getConnections = async () => {
           const profiles = await fetchConnectionsAndProfiles(userProfileData.userId);
-          console.log("profiles", profiles);
           const mergedData = [...participantsData, ...profiles];
           setConnectionsData(mergedData);
          }

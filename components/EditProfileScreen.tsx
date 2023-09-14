@@ -32,8 +32,18 @@ const EditProfileScreen = ({ route }) => {
     updateUserProfileTable,
     createUserTagsWithSession,
     removeUserTagsByTagId,
+    fetchUserProfileImage,
   } = useAuth();
   const navigation = useNavigation();
+
+useEffect(() => {
+    async function getProfileImageUri() {
+        const profilePicture = await fetchUserProfileImage(userProfileData.identityId, userProfileData.profilePicture);
+        setProfilePictureUri(profilePicture);
+    }
+
+    getProfileImageUri();
+}, []);
 
   useEffect(() => {
     if (updatedTags) {
@@ -167,17 +177,17 @@ const EditProfileScreen = ({ route }) => {
         <View style={styles.index}>
           <View style={styles.div}>
             <TouchableOpacity onPress={handleProfilePicturePress}>
-              <Image
-                source={{
-                  uri: profilePictureUri || userProfileData?.profilePictureUri,
-                }}
-                style={{
-                  width: 350,
-                  height: 350,
-                  borderRadius: 100,
-                  resizeMode: "contain",
-                }}
-              />
+              {profilePictureUri !== '' ? (
+                <Image
+                  source={{ uri: profilePictureUri }}
+                  style={{
+                    width: 350,
+                    height: 350,
+                    borderRadius: 100,
+                    resizeMode: "contain",
+                  }}
+                />
+              ) : <View style={{ width: 350, height: 350 }}/>}
             </TouchableOpacity>
 
             {/* Full Name */}
