@@ -501,6 +501,26 @@ export type CreateParticipantsMutation = {
   } | null,
 };
 
+export type CreateOrUpdateParticipantsMutationVariables = {
+  input: UpdateParticipantsInput,
+};
+
+export type CreateOrUpdateParticipantsMutation = {
+  createOrUpdateParticipants?:  {
+    __typename: "Participants",
+    sessionId: string,
+    userId: string,
+    joinedAt: string,
+    role?: string | null,
+    jobTitle?: string | null,
+    fullName: string,
+    company?: string | null,
+    visibility: string,
+    tags?: Array< string | null > | null,
+    sessionStatus: string,
+  } | null,
+};
+
 export type UpdateParticipantsMutationVariables = {
   input: UpdateParticipantsInput,
 };

@@ -3,7 +3,7 @@ import { API, graphqlOperation, Auth } from "aws-amplify";
 import {
   createSessions,
   updateSessions,
-  createParticipants,
+  createOrUpdateParticipants,
 } from "../src/graphql/mutations";
 import { listParticipants } from "../src/graphql/queries";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -150,7 +150,7 @@ const createSessionWithRetry = async (userId, title, retryAttempt = 1) => {
   }
 };
 
-export const createParticipant = async (userId, fullName, sessionId) => {
+export const createOrUpdateParticipant = async (userId, fullName, sessionId) => {
   const now = new Date().toISOString();
 
   const input = {
@@ -166,15 +166,15 @@ export const createParticipant = async (userId, fullName, sessionId) => {
 
   try {
     const response = await API.graphql({
-      query: createParticipants,
+      query: createOrUpdateParticipants,
       variables: input,
     });
 
-    const newParticipant = response.data.createParticipants;
+    const newParticipant = response.data.createOrUpdateParticipants;
 
-    console.log("Participant created:", newParticipant);
+    console.log("Participant joined:", newParticipant);
   } catch (error) {
-    console.error("Error creating participant:", error);
+    console.error("Error joining participant:", error);
     throw error;
   }
 };
@@ -185,7 +185,7 @@ export const startSession = async (userProfileData, title) => {
     const fullName = userProfileData.fullName;
 
     const newSession = await createSessionWithRetry(userId, title);
-    await createParticipant(userId, fullName, newSession.sessionId);
+    await createOrUpdateParticipant(userId, fullName, newSession.sessionId);
 
     storeSessionData(newSession);
 

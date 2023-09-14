@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { API, graphqlOperation } from "aws-amplify";
 import { useNavigation } from "@react-navigation/native";
-import { listParticipants, listTagSets } from "../src/graphql/queries";
+import { listParticipants, listTagSets, listUserTags } from "../src/graphql/queries";
 import styles, { palette, fonts } from "./style";
 import { useAuth } from "../QueryCaching";
 
@@ -77,8 +77,7 @@ const [tagQuery, setTagQuery] = useState("");
         if (validTagIds.length > 0) {
           // Create a filter to match user tags with the valid tagId values
           const userTagsFilter = {
-            sessionId: { eq: sessionData.sessionId }, // Replace with your actual session ID
-            tagId: { in: validTagIds }, // Filter by valid tagId values
+            sessionId: { eq: sessionData.sessionId },
           };
 
           // Make the GraphQL API call to search for user tags
@@ -88,21 +87,26 @@ const [tagQuery, setTagQuery] = useState("");
 
           // Extract the list of user tags
           userTags = userTagsResponse.data.listUserTags.items;
+          userTags = userTags.filter((userTag) =>
+              validTagIds.includes(userTag.tagId)
+            );
         }
       }
 
       // Combine the results of participants and user tags
       let results = [];
 
-      if (userTags.length === 0) {
-        // If userTags is empty, return participants
-        results = participants;
-      } else if (participants.length === 0) {
-        // If participants is empty, return userTags
-        results = userTags;
-      } else {
+      if (nameQuery.trim() !== '' && tagQuery.trim() !== '') {
         const userTagIds = userTags.map((userTag) => userTag.userId);
         results = participants.filter((participants) => userTagIds.includes(participants.userId));
+      } else if (tagQuery.trim() !== '') {
+        results = userTags;
+      } else {
+        results = participants;
+      }
+
+      if (results.length === 0) {
+        results = [{ userId: 0, fullName: "No results found..." }]
       }
 
       // Set the search results
@@ -114,6 +118,9 @@ const [tagQuery, setTagQuery] = useState("");
 
   const handleUserProfileLinkPress = async (user) => {
     try {
+      if (user.userId === 0) {
+        return;
+      }
       // Call the getUserProfileFromId function to fetch the user's profile data
       const userProfileData = await getUserProfileFromId(user.userId);
 
