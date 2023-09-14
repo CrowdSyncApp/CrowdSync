@@ -7,8 +7,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
-  PermissionsAndroid
+  ScrollView
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";

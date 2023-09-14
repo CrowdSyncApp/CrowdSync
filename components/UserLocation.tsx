@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { View, PermissionsAndroid, Text } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import styles, { palette, fonts } from "./style";
 import { API, graphqlOperation } from "aws-amplify";
