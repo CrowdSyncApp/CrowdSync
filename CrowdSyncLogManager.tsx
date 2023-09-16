@@ -16,11 +16,13 @@ export function useLog() {
 
 export function LogProvider({ children }) {
 
+    const logStreamName = `CrowdSync_Log_Stream_${Date.now()}`;
+
     const log = new Logger('CrowdSync', 'DEBUG');
     Amplify.register(log);
     log.addPluggable(new AWSCloudWatchProvider({
         logGroupName: 'CrowdSync_Debug_Logs',
-      logStreamName: 'CrowdSync_Log_Stream',
+      logStreamName: logStreamName,
       region: awsmobile.aws_project_region,
     }))
 

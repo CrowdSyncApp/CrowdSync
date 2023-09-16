@@ -16,7 +16,7 @@ const Header = () => {
   const [profilePictureUri, setProfilePictureUri] = useState("");
   const log = useLog();
 
-useEffect(() => {
+    useEffect(() => {
         async function getProfileImageUri() {
             log.debug("getProfileImageUri on userProfileData: ", userProfileData);
             const profilePicture = await fetchUserProfileImage(userProfileData.identityId, userProfileData.profilePicture, log);
@@ -29,7 +29,7 @@ useEffect(() => {
   useEffect(() => {
     const getUserProfileData = async () => {
       if (user) {
-        fetchedUserProfileData = await fetchUserProfileData(user?.username);
+        fetchedUserProfileData = await fetchUserProfileData();
       } else {
         // Pick a random user from participantsData
         const randomIndex = Math.floor(Math.random() * participantsData.length);

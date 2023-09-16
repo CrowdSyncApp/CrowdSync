@@ -63,7 +63,7 @@ const SessionHomeScreen = ({ route }) => {
 
     const fetchVisibility = async () => {
       log.debug("fetchVisibility");
-      const userProfileData = await fetchUserProfileData(user?.username);
+      const userProfileData = await fetchUserProfileData();
       try {
         const response = await API.graphql({
           query: getParticipants,
@@ -144,7 +144,7 @@ const SessionHomeScreen = ({ route }) => {
   const handleToggleVisibility = async () => {
     log.debug("handleToggleVisibility");
     try {
-      const userProfileData = await fetchUserProfileData(user?.username);
+      const userProfileData = await fetchUserProfileData();
       const newVisibility = isVisible ? "INVISIBLE" : "VISIBLE";
 
       log.debug(
