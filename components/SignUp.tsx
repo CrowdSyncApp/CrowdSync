@@ -13,7 +13,7 @@ import {
 import { Auth, API, graphqlOperation } from "aws-amplify";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
-import { createUserProfile } from "../src/graphql/mutations";
+import { createUserProfiles } from "../src/graphql/mutations";
 import CrowdSyncLogo from "../images/Crowdsync_Logo.png";
 import styles, { palette, fonts } from "./style";
 import { useLog } from "../CrowdSyncLogManager";
@@ -45,8 +45,8 @@ const SignUpScreen = () => {
       const userProfileInput = {
         userId: user.userSub,
         fullName: fullName,
-        email: isEmailFormat(username) ? username : "", // Store the email if it's in email format, otherwise set to null
-        phoneNumber: isEmailFormat(username) ? null : username, // Store the phone number if it's not in email format, otherwise set to null
+        email: isEmailFormat(username) ? username : "",
+        phoneNumber: isEmailFormat(username) ? null : username,
         createdAt: now,
         updatedAt: now,
       };
@@ -55,7 +55,7 @@ const SignUpScreen = () => {
 
       try {
         const response = await API.graphql(
-          graphqlOperation(createUserProfile, { input: userProfileInput })
+          graphqlOperation(createUserProfiles, { input: userProfileInput })
         );
         const data = response.data;
       } catch (error) {

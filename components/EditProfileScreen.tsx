@@ -16,12 +16,9 @@ import { useAuth } from "../QueryCaching";
 import MyConnections from "./MyConnections";
 import { getParticipants } from "../src/graphql/queries";
 import { Storage } from "aws-amplify";
-import {
-  updateParticipants,
-  updateUserProfile,
-} from "../src/graphql/mutations";
 import { launchImageLibrary } from "react-native-image-picker";
 import styles, { palette, fonts } from "./style";
+import { getSessionData } from "./SessionManager";
 import { useLog } from "../CrowdSyncLogManager";
 
 const EditProfileScreen = ({ route }) => {
@@ -40,9 +37,9 @@ const EditProfileScreen = ({ route }) => {
 
   log.debug(
     "Entering EditProfileScreen screen with userProfileData: " +
-      userProfileData +
+      JSON.stringify(userProfileData) +
       " and updatedTags: " +
-      updatedTags
+      JSON.stringify(updatedTags)
   );
 
   useEffect(() => {
@@ -90,7 +87,7 @@ const EditProfileScreen = ({ route }) => {
 
   const handleAddTags = () => {
     log.debug("handleAddTags...");
-    navigation.navigate("AddTags", { userProfileData });
+    navigation.navigate("AddTags", { userProfileData, currTags });
   };
 
   const handleSocialLinkChange = (index, value) => {
@@ -166,10 +163,12 @@ const EditProfileScreen = ({ route }) => {
           !currTags.some((currTag) => currTag.tagId === userTag.tagId)
       );
       log.debug("removedTags: ", removedTags);
+      const sessionData = await getSessionData(log);
+      const sessionId = sessionData.sessionId;
 
       const addedTags = await createUserTagsWithSession(
         userProfileData.userId,
-        userProfileData.sessionId,
+        sessionId,
         newTags,
         updatedUserData.fullName,
         log
@@ -180,7 +179,7 @@ const EditProfileScreen = ({ route }) => {
       const tagIds = removedTags;
       await removeUserTagsByTagId(
         userProfileData.userId,
-        userProfileData.sessionId,
+        sessionId,
         tagIds,
         log
       );
@@ -251,14 +250,14 @@ const EditProfileScreen = ({ route }) => {
               />
             </View>
 
-            {/* Address */}
+            {/* Location */}
             <View>
-              <Text style={styles.secondaryHeaderTitle}>Address:</Text>
+              <Text style={styles.secondaryHeaderTitle}>Location:</Text>
               <TextInput
                 style={styles.textInput}
                 value={editableFields.location}
                 onChangeText={(text) =>
-                  setEditableFields({ ...editableFields, address: text })
+                  setEditableFields({ ...editableFields, location: text })
                 }
               />
             </View>

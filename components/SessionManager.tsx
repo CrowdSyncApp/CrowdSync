@@ -70,7 +70,7 @@ export async function getSessionData(log) {
   if (sessionData) {
     return JSON.parse(sessionData);
   }
-  return null;
+  return {sessionId: "INACTIVE"};
 }
 
 async function removeSessionData(log) {
@@ -137,9 +137,11 @@ export const getSessionIdForUser = async (userId, log) => {
     log.debug("participants: ", participants);
 
     if (participants.length === 0) {
+      log.debug("getSessionIdForUser sessionId: INACTIVE");
       return "INACTIVE";
     }
 
+    log.debug('getSessionIdForUser sessionId: ', participants[0].sessionId);
     return participants[0].sessionId;
   } catch (error) {
     console.error("Error fetching session ID for user:", error);

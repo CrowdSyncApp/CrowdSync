@@ -102,13 +102,12 @@ async function fetchUserProfileImage(identityId, profilePictureFilename, log) {
       getLevel = "public";
       log.debug("Using default public image.");
     }
-    const id = "us-west-1:" + identityId; // TODO later might need to automate getting the region
 
     // Fetch the profile image URL from S3 using Amplify's Storage API
     const imageKey = await Storage.get(profilePictureFilename, {
       level: getLevel,
       validateObjectExistence: true,
-      identityId: id,
+      identityId: identityId,
     });
     log.debug("profilePictureFilename results: ", imageKey);
 
@@ -143,15 +142,19 @@ async function fetchUserProfile(userId, log) {
       let identityId;
       if (!data.getUserProfiles.identityId) {
         log.debug("Getting user " + userId + "'s identityId.");
-        identityId = await Auth.currentCredentials();
+        currCreds = await Auth.currentCredentials();
+        identityId = currCreds.identityId;
         log.debug("identityId: ", identityId);
         data.getUserProfiles.identityId = identityId;
-        await API.graphql(
-          graphqlOperation(updateUserProfiles, {
-            userId,
+
+        const input = {
+          input: {
+            userId: userId,
             identityId: identityId,
-          })
-        );
+          }
+        };
+
+        await API.graphql(graphqlOperation(updateUserProfiles, input));
         log.debug("updateUserProfiles complete.");
       }
 

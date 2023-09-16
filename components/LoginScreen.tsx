@@ -54,8 +54,8 @@ const LoginScreen = () => {
   const handleGuestSignIn = async () => {
     log.debug('handleGuestSignIn');
     try {
-      const anonymousUser = await Auth.currentCredentials(); // Guest account
-      log.debug('Guest account created: ', anonymousUser);
+      log.debug('Logging in with guest account hello@crowdync.net');
+      await login({ username: 'hello@crowdsync.net', password: 'CrowdsyncGuest1' }, log);
 
       // Navigate to the FindSession screen or any other desired screen
       navigation.navigate("FindSession");
