@@ -28,7 +28,7 @@ const ProfileScreen = ({ route }) => {
   const [profilePictureUri, setProfilePictureUri] = useState("");
   const log = useLog();
 
-  log.debug('ProfileScreen on userProfileData: ', userProfileData);
+  log.debug('ProfileScreen on userProfileData: ', JSON.stringify(userProfileData));
 
 useEffect(() => {
     async function getProfileImageUri() {
@@ -66,7 +66,7 @@ useEffect(() => {
 
   const handleEditProfilePress = () => {
   log.debug('handleEditProfilePress on userProfileData: ', userProfileData);
-    navigation.navigate("EditProfile", { userProfileData });
+    navigation.navigate("EditProfile", { userProfileData, updatedTags: userProfileData.tags });
   };
 
   const handleLinkPress = (url) => {

@@ -17,16 +17,16 @@ import styles, { palette, fonts } from "./style";
 import { useLog } from "../CrowdSyncLogManager";
 
 const AddTags = ({ route }) => {
-  const { userProfileData } = route.params;
+  const { userProfileData, currTags } = route.params;
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const { getTagSets } = useAuth();
   const log = useLog();
   const [allTags, setAllTags] = useState([]);
   const navigation = useNavigation();
-  const [currentTags, setCurrentTags] = useState(userProfileData.tags);
+  const [currentTags, setCurrentTags] = useState(currTags);
 
-  log.debug("Entering AddTags screen with userProfileData: ", userProfileData);
+  log.debug("Entering AddTags screen with currTags: ", currTags);
 
   useEffect(() => {
     const fetchTagSet = async () => {
@@ -64,7 +64,7 @@ const AddTags = ({ route }) => {
     if (matchingTag) {
       const tagId = matchingTag.tagId;
       const updatedTag = { tagId, tag };
-      log.debug("updatedTag: ", updatedTag);
+      log.debug("updatedTag: ", JSON.stringify(updatedTag));
 
       if (!currentTags.some((existingTag) => existingTag.tagId === tagId)) {
         setCurrentTags([...currentTags, updatedTag]);
@@ -79,12 +79,12 @@ const AddTags = ({ route }) => {
   // Implement the logic to remove a tag from the currentTags state
   const handleRemoveTag = (tag) => {
     const updatedTags = currentTags.filter((currentTag) => currentTag !== tag);
-    log.debug("currentTags: ", updatedTags);
+    log.debug("currentTags: ", JSON.stringify(updatedTags));
     setCurrentTags(updatedTags);
   };
 
   const handleSaveChanges = async () => {
-    log.debug("handleSaveChanges...");
+    log.debug("handleSaveChanges on currTags: " + JSON.stringify(currTags) + " and updatedTags: " + JSON.stringify(currentTags));
     navigation.navigate("EditProfile", {
       userProfileData,
       updatedTags: currentTags,

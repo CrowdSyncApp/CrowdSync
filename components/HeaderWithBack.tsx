@@ -18,9 +18,13 @@ const HeaderWithBack = () => {
 
     useEffect(() => {
             async function getProfileImageUri() {
+            try {
                 const profilePicture = await fetchUserProfileImage(userProfileData.identityId, userProfileData.profilePicture, log);
             log.debug('HeaderWithBack profilePicture: ', profilePicture);
                 setProfilePictureUri(profilePicture);
+                } catch (error) {
+                    log.debug('Error saving profile picture in HeaderWithBack: ', error);
+                }
             }
             getProfileImageUri();
         }, [userProfileData]);
