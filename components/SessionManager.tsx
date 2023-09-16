@@ -59,7 +59,7 @@ async function clearAllIntervals(log) {
   }
 }
 
-async function storeSessionData(sessionData, log) {
+export async function storeSessionData(sessionData, log) {
   log.debug("storeSessionData on sessionData: ", sessionData);
   await AsyncStorage.setItem("sessionData", JSON.stringify(sessionData));
 }

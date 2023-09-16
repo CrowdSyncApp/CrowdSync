@@ -26,7 +26,7 @@ const ChatScreen = ({ route }) => {
   const [participantIdsList, setParticipantIdsList] = useState("");
   const log = useLog();
   const [ttlExpiration, setTtlExpiration] = useState(0);
-  const { user, fetchUserProfileData } = useAuth();
+  const { user } = useAuth();
   const { participants, chatType } = route.params;
 
     log.debug("Entering ChatScreen with participants: " + participants + " and chatType: " + chatType);

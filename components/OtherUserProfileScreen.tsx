@@ -97,7 +97,7 @@ useEffect(() => {
 
   // Function to handle opening the chat (you can implement your chat logic here)
   const handleChatPress = () => {
-  log.debug('handleChatPress on participants: ' + [userData] + ' and chatType: ' + chatType);
+  log.debug('handleChatPress on participants: ' + [userData] + ' and chatType: INDIVIDUAL');
     // Implement your chat logic here
     navigation.navigate("ChatScreen", {
       participants: [userData],

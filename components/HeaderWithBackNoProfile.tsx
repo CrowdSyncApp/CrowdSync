@@ -18,7 +18,7 @@ const HeaderWithBackNoProfile = () => {
   useEffect(() => {
     const getUserProfileData = async () => {
       if (user) {
-        fetchedUserProfileData = await fetchUserProfileData(user?.username);
+        fetchedUserProfileData = await fetchUserProfileData();
       } else {
         // Pick a random user from participantsData
         const randomIndex = Math.floor(Math.random() * participantsData.length);

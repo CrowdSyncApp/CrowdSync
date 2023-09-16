@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { View, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
-import { createOrUpdateParticipant } from "./SessionManager";
+import { createOrUpdateParticipant, storeSessionData } from "./SessionManager";
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { useLog } from "../CrowdSyncLogManager";
 
@@ -19,13 +19,15 @@ const QRScannerScreen = () => {
     log.debug('handleBarCodeScanned on data: ', data);
 
     try {
-      const userProfileData = await fetchUserProfileData(user?.username);
+      const userProfileData = await fetchUserProfileData();
       const fullName = userProfileData.fullName;
 
       const sessionData = JSON.parse(data);
       const userId = userProfileData.userId;
       const sessionId = sessionData.sessionId;
       await createOrUpdateParticipant(userId, fullName, sessionId, log);
+
+      await storeSessionData(sessionData, log);
 
       navigation.navigate("SessionHome", { sessionData: sessionData });
     } catch (error) {

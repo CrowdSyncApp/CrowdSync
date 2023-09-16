@@ -88,6 +88,11 @@ async function fetchUserProfileImage(identityId, profilePictureFilename, log) {
       " and filename: " +
       profilePictureFilename
   );
+  if (!identityId) {
+    // Assume Guest Profile, use fake profile picture
+    log.debug('No identityId, using profilePictureFilename: ', profilePictureFilename);
+    return profilePictureFilename;
+  }
   let getLevel;
   try {
     getLevel = "protected";
@@ -178,21 +183,24 @@ async function refreshLocation(log) {
     // Fetch user data
     const user = await fetchUser(log);
 
+    let userId;
     if (!user || !user.username) {
       console.error("User data or userId is missing.");
       log.error("User data or userId is missing.");
-      return [];
+      userId = "0949d9ce-b0b1-7019-0aba-062ae33bdd92"; // TODO fix with no authenticated users
+    } else {
+        userId = user?.username;
     }
+    log.debug("refreshLocation userId: ", userId);
 
     const sessionData = await getSessionData(log);
-    let sessionId = sessionData.sessionId;
-    if (!sessionId) {
+    let sessionId;
+    if (!sessionData) {
       sessionId = "INACTIVE";
+    } else {
+        sessionId = sessionData.sessionId;
     }
     log.debug("refreshLocation sessionId: ", sessionId);
-
-    const userId = user?.username;
-    log.debug("refreshLocation userId: ", userId);
 
     let granted = false;
     try {
@@ -305,7 +313,7 @@ async function fetchUser(log) {
   } catch (error) {
     console.error("Error fetching user:", error);
     log.error("Error fetching user:", error);
-    throw error;
+    return null;
   }
 }
 
@@ -332,7 +340,7 @@ async function logout(log) {
   try {
     const response = await Auth.signOut();
     await AsyncStorage.removeItem("userProfileData");
-    await clearAllIntervals();
+    await clearAllIntervals(log);
     log.debug("Logged out");
   } catch (error) {
     console.error("Logout error:", error);

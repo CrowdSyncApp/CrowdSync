@@ -81,7 +81,7 @@ useEffect(() => {
   };
 
   const handleStartSession = async () => {
-    const userProfileData = await fetchUserProfileData(user?.userId);
+    const userProfileData = await fetchUserProfileData();
     const newSession = await startSession(userProfileData, sessionTitle, log);
     log.debug("handleStartSession with userProfileData: " + userProfileData + " and newSession: " + newSession);
 

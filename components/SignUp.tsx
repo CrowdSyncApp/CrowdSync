@@ -26,7 +26,7 @@ const SignUpScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const log = useLog();
   const [errorMessage, setErrorMessage] = useState("");
-  const { login, fetchUserProfileData } = useAuth();
+  const { login } = useAuth();
 
   log.debug('SignUpScreen...');
 
