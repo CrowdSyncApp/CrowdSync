@@ -38,6 +38,7 @@
     "react-native-screens": "^3.23.0",
     "react-native-svg": "^13.10.0",
     "react-query": "^3.39.3",
+    "text-encoding": "^0.7.0",
     "uuid": "^9.0.0",
     "whatwg-fetch": "^3.6.2"
   },

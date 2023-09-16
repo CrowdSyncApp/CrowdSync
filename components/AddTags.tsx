@@ -14,19 +14,24 @@ import {
 import { useAuth } from "../QueryCaching";
 import { useNavigation } from "@react-navigation/native";
 import styles, { palette, fonts } from "./style";
+import { useLog } from "../CrowdSyncLogManager";
 
 const AddTags = ({ route }) => {
   const { userProfileData } = route.params;
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const { getTagSets } = useAuth();
+  const log = useLog();
   const [allTags, setAllTags] = useState([]);
   const navigation = useNavigation();
   const [currentTags, setCurrentTags] = useState(userProfileData.tags);
 
+  log.debug("Entering AddTags screen with userProfileData: ", userProfileData);
+
   useEffect(() => {
     const fetchTagSet = async () => {
-      const fetchedTags = await getTagSets();
+      const fetchedTags = await getTagSets(log);
+      log.debug("allTags: ", fetchedTags);
       setAllTags(fetchedTags);
     };
     fetchTagSet();
@@ -51,6 +56,7 @@ const AddTags = ({ route }) => {
   };
 
   const handleAddTag = (tag) => {
+    log.debug("Adding tag: ", tag);
     const matchingTag = allTags.find(
       (tagData) => tagData.tag.toLowerCase() === tag.toLowerCase()
     );
@@ -58,6 +64,7 @@ const AddTags = ({ route }) => {
     if (matchingTag) {
       const tagId = matchingTag.tagId;
       const updatedTag = { tagId, tag };
+      log.debug("updatedTag: ", updatedTag);
 
       if (!currentTags.some((existingTag) => existingTag.tagId === tagId)) {
         setCurrentTags([...currentTags, updatedTag]);
@@ -72,10 +79,12 @@ const AddTags = ({ route }) => {
   // Implement the logic to remove a tag from the currentTags state
   const handleRemoveTag = (tag) => {
     const updatedTags = currentTags.filter((currentTag) => currentTag !== tag);
+    log.debug("currentTags: ", updatedTags);
     setCurrentTags(updatedTags);
   };
 
   const handleSaveChanges = async () => {
+    log.debug("handleSaveChanges...");
     navigation.navigate("EditProfile", {
       userProfileData,
       updatedTags: currentTags,

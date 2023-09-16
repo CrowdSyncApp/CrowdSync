@@ -13,30 +13,39 @@ import { useAuth } from "../QueryCaching";
 import participantsData from "../dummies/dummy_accounts.json";
 import { getSessionIdForUser } from "./SessionManager";
 import styles, { palette, fonts } from "./style";
+import { useLog } from "../CrowdSyncLogManager";
 
 const MyConnections = ({ route }) => {
   const navigation = useNavigation();
   const { fetchConnectionsAndProfiles, getUserProfileFromId } = useAuth();
   const { userProfileData } = route.params;
   const [connectionsData, setConnectionsData] = useState([]);
+  const log = useLog();
+
+  log.debug('MyConnections screen on userProfileData: ', userProfileData);
 
   useEffect(() => {
         const getConnections = async () => {
-          const profiles = await fetchConnectionsAndProfiles(userProfileData.userId);
+          const profiles = await fetchConnectionsAndProfiles(userProfileData.userId, log);
+          log.debug('getConnections profiles: ', profiles);
           const mergedData = [...participantsData, ...profiles];
+          log.debug('mergedData: ', mergedData);
           setConnectionsData(mergedData);
          }
          getConnections();
     }, []);
 
   const handleConnectionPress = async (connectionData) => {
+    log.debug('handleConnectionPress on connectionData: ', connectionData);
     try {
-    const userData = await getUserProfileFromId(connectionData.userId);
-      const sessionId = await getSessionIdForUser(connectionData.userId);
+    const userData = await getUserProfileFromId(connectionData.userId, log);
+      const sessionId = await getSessionIdForUser(connectionData.userId, log);
 
+        log.debug('Navigating to OtherUserProfile on userData: ' + userData + ' and sessionId: ' + sessionId);
       navigation.navigate("OtherUserProfile", { userData: userData, sessionId: sessionId });
     } catch (error) {
       console.error("Error in handleConnectionPress:", error);
+      log.error("Error in handleConnectionPress:", error);
     }
   };
 

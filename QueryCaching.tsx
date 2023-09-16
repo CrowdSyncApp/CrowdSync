@@ -1,4 +1,4 @@
-import { PermissionsAndroid, Platform } from 'react-native';
+import { PermissionsAndroid, Platform } from "react-native";
 import { createContext, useContext, useEffect, useState } from "react";
 import { Auth, API, Storage, Hub, graphqlOperation } from "aws-amplify";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -9,17 +9,21 @@ import {
   getTagSet,
   listConnections,
 } from "./src/graphql/queries";
-import { getSessionIdForUser, getSessionData } from "./components/SessionManager";
+import {
+  getSessionIdForUser,
+  getSessionData,
+} from "./components/SessionManager";
 import { v4 } from "uuid";
 import {
-updateUserProfiles,
+  updateUserProfiles,
   createTagSet,
   createUserTags,
   deleteUserTags,
   createOrUpdateLocations,
 } from "./src/graphql/mutations";
-import Geolocation from 'react-native-geolocation-service';
+import Geolocation from "react-native-geolocation-service";
 import skillsJson from "./data/new_skills.json";
+import { useLog } from "./CrowdSyncLogManager";
 
 const AuthContext = createContext();
 
@@ -27,28 +31,37 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
-async function storeInterval(intervalId) {
+async function storeInterval(intervalId, log) {
   try {
+    log.debug("Storing interval: ", intervalId);
     // Retrieve the existing list of intervalIds from AsyncStorage (if any)
-    const existingIntervalIdsJson = await AsyncStorage.getItem('intervalIds');
-    const existingIntervalIds = existingIntervalIdsJson ? JSON.parse(existingIntervalIdsJson) : [];
+    const existingIntervalIdsJson = await AsyncStorage.getItem("intervalIds");
+    const existingIntervalIds = existingIntervalIdsJson
+      ? JSON.parse(existingIntervalIdsJson)
+      : [];
 
     // Add the new intervalId to the list
     existingIntervalIds.push(intervalId);
+    log.debug("All interval IDs: ", existingIntervalIds);
 
     // Convert the updated list back to JSON and store it in AsyncStorage
-    await AsyncStorage.setItem('intervalIds', JSON.stringify(existingIntervalIds));
+    await AsyncStorage.setItem(
+      "intervalIds",
+      JSON.stringify(existingIntervalIds)
+    );
 
     console.log(`Interval with ID ${intervalId} stored successfully.`);
   } catch (error) {
-    console.error('Error storing interval ID:', error);
+    console.error("Error storing interval ID:", error);
+    log.error("Error storing interval ID:", error);
   }
 }
 
-async function clearAllIntervals() {
+async function clearAllIntervals(log) {
   try {
+    log.debug("Clearing all intervals");
     // Retrieve the list of intervalIds from AsyncStorage
-    const intervalIdsJson = await AsyncStorage.getItem('intervalIds');
+    const intervalIdsJson = await AsyncStorage.getItem("intervalIds");
     const intervalIds = intervalIdsJson ? JSON.parse(intervalIdsJson) : [];
 
     // Clear each interval using clearInterval
@@ -58,15 +71,23 @@ async function clearAllIntervals() {
     });
 
     // Clear the list of intervalIds from AsyncStorage
-    await AsyncStorage.removeItem('intervalIds');
+    await AsyncStorage.removeItem("intervalIds");
 
-    console.log('All intervals cleared.');
+    console.log("All intervals cleared.");
+    log.debug("All intervals cleared.");
   } catch (error) {
-    console.error('Error clearing intervals:', error);
+    console.error("Error clearing intervals:", error);
+    log.error("Error clearing intervals:", error);
   }
 }
 
-async function fetchUserProfileImage(identityId, profilePictureFilename) {
+async function fetchUserProfileImage(identityId, profilePictureFilename, log) {
+  log.debug(
+    "Fetching user profile image for ID: " +
+      identityId +
+      " and filename: " +
+      profilePictureFilename
+  );
   let getLevel;
   try {
     getLevel = "protected";
@@ -74,8 +95,9 @@ async function fetchUserProfileImage(identityId, profilePictureFilename) {
       // Default image
       profilePictureFilename = "CrowdSync_Temp_Profile.png";
       getLevel = "public";
+      log.debug("Using default public image.");
     }
-    const id = "us-west-1:" + identityId;  // TODO later might need to automate getting the region
+    const id = "us-west-1:" + identityId; // TODO later might need to automate getting the region
 
     // Fetch the profile image URL from S3 using Amplify's Storage API
     const imageKey = await Storage.get(profilePictureFilename, {
@@ -83,45 +105,55 @@ async function fetchUserProfileImage(identityId, profilePictureFilename) {
       validateObjectExistence: true,
       identityId: id,
     });
+    log.debug("profilePictureFilename results: ", imageKey);
 
     return imageKey;
   } catch (error) {
     console.error("Error fetching profile image:", error);
+    log.error("Error fetching profile image:", error);
     profilePictureFilename = "CrowdSync_Temp_Profile.png";
     const imageKey = await Storage.get(profilePictureFilename, {
-          level: "public",
-          validateObjectExistence: true,
-        });
+      level: "public",
+      validateObjectExistence: true,
+    });
     return imageKey;
   }
 }
 
-async function fetchUserProfile(userId) {
+async function fetchUserProfile(userId, log) {
+  log.debug("Fetching user profile: ", userId);
   try {
     const cachedUserProfile = await AsyncStorage.getItem("userProfileData");
     if (cachedUserProfile) {
+      log.debug("Returning cached user profile.");
       return JSON.parse(cachedUserProfile);
     }
 
     const { data } = await API.graphql(
       graphqlOperation(getUserProfiles, { userId })
     );
+    log.debug("getUserProfiles results: ", data);
 
     if (data && data.getUserProfiles) {
-
-        let identityId;
+      let identityId;
       if (!data.getUserProfiles.identityId) {
-          identityId = await Auth.currentCredentials();
-          data.getUserProfiles.identityId = identityId;
-            await API.graphql(
-                graphqlOperation(updateUserProfiles, { userId, identityId: identityId })
-            );
+        log.debug("Getting user " + userId + "'s identityId.");
+        identityId = await Auth.currentCredentials();
+        log.debug("identityId: ", identityId);
+        data.getUserProfiles.identityId = identityId;
+        await API.graphql(
+          graphqlOperation(updateUserProfiles, {
+            userId,
+            identityId: identityId,
+          })
+        );
+        log.debug("updateUserProfiles complete.");
       }
 
-      const currSessionId = await getSessionIdForUser(userId);
+      const currSessionId = await getSessionIdForUser(userId, log);
       data.getUserProfiles.sessionId = currSessionId;
 
-      const userTags = await getAllUserTags(userId, currSessionId);
+      const userTags = await getAllUserTags(userId, currSessionId, log);
       data.getUserProfiles.tags = userTags;
 
       await AsyncStorage.setItem(
@@ -129,61 +161,73 @@ async function fetchUserProfile(userId) {
         JSON.stringify(data.getUserProfiles)
       );
 
+      log.debug("User Profile Data: ", data.getUserProfiles);
       return data.getUserProfiles;
     }
     return null;
   } catch (error) {
     console.error("Error fetching user profile:", error);
+    log.error("Error fetching user profile:", error);
     throw error;
   }
 }
 
-async function refreshLocation() {
+async function refreshLocation(log) {
+  log.debug("Refreshing location.");
   try {
     // Fetch user data
-    const user = await fetchUser();
+    const user = await fetchUser(log);
 
     if (!user || !user.username) {
-          console.error("User data or userId is missing.");
-          return [];
-        }
-
-    const sessionData = await getSessionData();
-    let sessionId = sessionData.sessionId;
-    if (!sessionId) {
-        sessionId = "INACTIVE";
+      console.error("User data or userId is missing.");
+      log.error("User data or userId is missing.");
+      return [];
     }
 
+    const sessionData = await getSessionData(log);
+    let sessionId = sessionData.sessionId;
+    if (!sessionId) {
+      sessionId = "INACTIVE";
+    }
+    log.debug("refreshLocation sessionId: ", sessionId);
+
     const userId = user?.username;
+    log.debug("refreshLocation userId: ", userId);
 
     let granted = false;
     try {
-        if (Platform.OS === 'ios') {
-          const status = await Geolocation.requestAuthorization('whenInUse');
+      if (Platform.OS === "ios") {
+        log.debug("Getting iOS location permission.");
+        const status = await Geolocation.requestAuthorization("whenInUse");
 
-          if (status === "granted") {
-            granted = true;
-          } else {
-            console.error("Location permission denied");
-          }
-        } else if (Platform.OS === 'android') {
-          // Request location permission using PermissionsAndroid on Android.
-          const status = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-          );
-
-          if (status === PermissionsAndroid.RESULTS.GRANTED) {
-            granted = true;
-          } else {
-            // Handle permission denied.
-            console.error("Location permission denied");
-          }
+        if (status === "granted") {
+          granted = true;
+        } else {
+          console.error("Location permission denied");
+          log.error("Location permission denied");
         }
-      } catch (error) {
-        console.error("Error requesting location permission:", error);
+      } else if (Platform.OS === "android") {
+        log.debug("Getting Android location permission.");
+        // Request location permission using PermissionsAndroid on Android.
+        const status = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+        );
+
+        if (status === PermissionsAndroid.RESULTS.GRANTED) {
+          granted = true;
+        } else {
+          // Handle permission denied.
+          console.error("Location permission denied");
+          log.error("Location permission denied");
+        }
       }
+    } catch (error) {
+      console.error("Error requesting location permission:", error);
+      log.error("Error requesting location permission:", error);
+    }
 
     if (granted === true) {
+      log.debug("Location permission granted.");
       // Get current location
       const position = await new Promise((resolve, reject) => {
         Geolocation.getCurrentPosition(
@@ -200,39 +244,46 @@ async function refreshLocation() {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       };
+      log.debug("Location: ", location);
 
       const now = new Date().toISOString();
       const input = {
-          userId: userId,
-          latitude: location.latitude,
-          longitude: location.longitude,
-          sessionId: sessionId,
-          timestamp: now,
+        userId: userId,
+        latitude: location.latitude,
+        longitude: location.longitude,
+        sessionId: sessionId,
+        timestamp: now,
       };
 
+      log.debug("createOrUpdateLocations input: ", input);
       // Perform GraphQL update operation
       const response = await API.graphql(
         graphqlOperation(createOrUpdateLocations, { input: input })
       );
+      log.debug("createOrUpdateLocations results: ", response);
 
       return location;
     } else {
       // Handle permission denied
       console.error("Location permission denied");
+      log.error("Location permission denied");
       return [];
     }
   } catch (error) {
     console.error("Error refreshing location:", error);
+    log.error("Error refreshing location:", error);
     return [];
   }
 }
 
-async function getUserProfileFromId(userId) {
-try {
+async function getUserProfileFromId(userId, log) {
+  log.debug("getUserProfileFromId on userId: ", userId);
+  try {
     // Make the GraphQL API call to fetch the user profile
     const response = await API.graphql(
       graphqlOperation(getUserProfiles, { userId: userId })
     );
+    log.debug("getUserProfiles response: ", response);
 
     // Extract the user profile from the response
     const userProfile = response.data.getUserProfiles;
@@ -240,79 +291,97 @@ try {
     return userProfile;
   } catch (error) {
     console.error(`Error fetching user profile for userId ${userId}:`, error);
+    log.error(`Error fetching user profile for userId ${userId}:`, error);
     throw error; // You can handle the error as needed
   }
 }
 
-async function fetchUser() {
+async function fetchUser(log) {
+  log.debug("fetchUser...");
   try {
     const storedUser = await Auth.currentAuthenticatedUser();
+    log.debug("storedUser: ", storedUser);
     return storedUser;
   } catch (error) {
     console.error("Error fetching user:", error);
+    log.error("Error fetching user:", error);
     throw error;
   }
 }
 
-async function login(credentials) {
+async function login(credentials, log) {
+  log.debug("login with credentials: ", credentials);
   try {
     const user = await Auth.signIn(credentials.username, credentials.password);
+    log.debug("user: ", user);
     return user;
   } catch (error) {
     if (error.message === "User is not confirmed.") {
       alert("Please verify your account before logging in.");
+      log.error("Please verify your account before logging in.");
     } else {
       alert("Invalid email or password. Please try again.");
+      log.error("Invalid email or password. Please try again.");
     }
     throw error;
   }
 }
 
-async function logout() {
+async function logout(log) {
+  log.debug("logout");
   try {
     const response = await Auth.signOut();
     await AsyncStorage.removeItem("userProfileData");
     await clearAllIntervals();
+    log.debug("Logged out");
   } catch (error) {
     console.error("Logout error:", error);
+    log.error("Logout error:", error);
     throw error;
   }
 }
 
-const fetchConnectionsAndProfiles = async (userId) => {
-    try {
+const fetchConnectionsAndProfiles = async (userId, log) => {
+  log.debug("fetchConnectionsAndProfiles on userId: ", userId);
+  try {
+    // Fetch all connections for the current user
+    const connectionsResponse = await API.graphql(
+      graphqlOperation(listConnections, {
+        filter: {
+          userId: { eq: userId },
+        },
+      })
+    );
+    log.debug("listConnections result: ", connectionsResponse);
 
-      // Fetch all connections for the current user
-      const connectionsResponse = await API.graphql(
-        graphqlOperation(listConnections, {
-            filter: {
-                userId: { eq: userId },
-            },
-        })
+    // Extract the connections data
+    const connections = connectionsResponse.data.listConnections.items;
+
+    // Fetch user profiles for each connection
+    const profilesPromises = connections.map(async (connection) => {
+      const userProfileResponse = await API.graphql(
+        graphqlOperation(getUserProfiles, { userId: connection.otherUserId })
       );
+      log.debug("getUserProfiles results: ", userProfileResponse);
 
-      // Extract the connections data
-      const connections = connectionsResponse.data.listConnections.items;
+      return userProfileResponse.data.getUserProfiles;
+    });
 
-      // Fetch user profiles for each connection
-      const profilesPromises = connections.map(async (connection) => {
-        const userProfileResponse = await API.graphql(
-          graphqlOperation(getUserProfiles, { userId: connection.otherUserId })
-        );
+    // Wait for all profile fetches to complete
+    const profiles = await Promise.all(profilesPromises);
+    log.debug("All connection profiles: ", profiles);
 
-        return userProfileResponse.data.getUserProfiles;
-      });
+    return profiles;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    log.error("Error fetching data:", error);
+  }
+};
 
-      // Wait for all profile fetches to complete
-      const profiles = await Promise.all(profilesPromises);
-
-      return profiles;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-}
-
-const getUserTagsIds = async (userId, sessionId) => {
+const getUserTagsIds = async (userId, sessionId, log) => {
+  log.debug(
+    "getUserTagsIds on userId: " + userId + " and sessionId: " + sessionId
+  );
   try {
     const response = await API.graphql(
       graphqlOperation(listUserTags, {
@@ -322,41 +391,54 @@ const getUserTagsIds = async (userId, sessionId) => {
         },
       })
     );
+    log.debug("listUserTags results: ", response);
 
     const userTags = response.data.listUserTags.items || [];
     const tagIds = userTags.map((tag) => tag.tagId);
+
+    log.debug("tagIds: ", tagIds);
     return tagIds;
   } catch (error) {
     console.error("Error fetching user tags:", error);
+    log.error("Error fetching user tags:", error);
     return [];
   }
 };
 
-const getAllUserTags = async (userId, sessionId) => {
+const getAllUserTags = async (userId, sessionId, log) => {
+  log.debug(
+    "getAllUserTags on userId: " + userId + " and sessionId: " + sessionId
+  );
   try {
-    const tagIds = await getUserTagsIds(userId, sessionId);
-    const tagSets = await getTagSets();
+    const tagIds = await getUserTagsIds(userId, sessionId, log);
+    const tagSets = await getTagSets(log);
 
     const userTagsWithTags = tagIds
       .map((tagId) => tagSets.find((tag) => tag.tagId === tagId))
       .filter((tag) => tag);
+
+    log.debug("userTagsWithTags: ", userTagsWithTags);
     return userTagsWithTags;
   } catch (error) {
     console.error("Error fetching user tags with tags:", error);
+    log.error("Error fetching user tags with tags:", error);
     return [];
   }
 };
 
-const getTagSets = async () => {
+const getTagSets = async (log) => {
+  log.debug("getTagSets...");
   try {
     // Check if the tag set is already stored in AsyncStorage
     const storedTagSet = await AsyncStorage.getItem("tagSet");
     if (storedTagSet) {
+      log.debug("Returning cached tag set.");
       return JSON.parse(storedTagSet);
     }
 
     // If not stored, fetch from API and store in AsyncStorage
     const response = await API.graphql(graphqlOperation(listTagSets));
+    log.debug("listTagSets response: ", response);
     const tagSets = response.data.listTagSets.items.map((item) => ({
       tag: item.tag,
       tagId: item.tagId,
@@ -365,16 +447,19 @@ const getTagSets = async () => {
     // Store the tag set in AsyncStorage
     await AsyncStorage.setItem("tagSet", JSON.stringify(tagSets));
 
+    log.debug("tagSets: ", tagSets);
     return tagSets;
   } catch (error) {
     console.error("Error listing TagSets:", error);
+    log.error("Error listing TagSets:", error);
     return [];
   }
 };
 
-const populateTagSet = async () => {
+const populateTagSet = async (log) => {
+  log.debug("populateTagSet...");
   try {
-    const batchSize = 25; // Set the batch size according to your needs
+    const batchSize = 25;
 
     const tagRows = skillsJson.map((row) => ({
       tag: row.tag.trim(),
@@ -387,12 +472,15 @@ const populateTagSet = async () => {
     const existingTags = existingTagsResponse.data.listTagSets.items.map(
       (item) => item.tag
     );
+    log.debug("existing tags: ", existingTags);
 
     const newTags = tagRows.filter(
       (tagData) => !existingTags.includes(tagData.tag)
     );
+    log.debug("New tags: ", newTags);
 
     console.log(`Total new tags to add: ${newTags.length}`);
+    log.debug(`Total new tags to add: ${newTags.length}`);
 
     const tagBatches = [];
     for (let i = 0; i < newTags.length; i += batchSize) {
@@ -463,12 +551,30 @@ const populateTagSet = async () => {
     }
 
     console.log(`Successfully added ${newTags.length} new tags.`);
+    log.debug(`Successfully added ${newTags.length} new tags.`);
   } catch (error) {
     console.error("Error populating TagSet table:", error);
+    log.error("Error populating TagSet table:", error);
   }
 };
 
-const createUserTagsWithSession = async (userId, sessionId, tagIds, fullName) => {
+const createUserTagsWithSession = async (
+  userId,
+  sessionId,
+  tagIds,
+  fullName,
+  log
+) => {
+  log.debug(
+    "createUserTagsWithSession on userId: " +
+      userId +
+      " and sessionId: " +
+      sessionId +
+      " and tagIds: " +
+      tagIds +
+      " and fullName: " +
+      fullName
+  );
   try {
     const batchCreatePromises = tagIds.map(async (tagId) => {
       const currTagId = tagId.tagId;
@@ -477,7 +583,7 @@ const createUserTagsWithSession = async (userId, sessionId, tagIds, fullName) =>
         sessionId: sessionId,
         userId: userId,
         tagId: currTagId,
-        fullName: fullName
+        fullName: fullName,
       };
       await API.graphql(graphqlOperation(createUserTags, { input }));
       const tagSetResponse = await API.graphql(
@@ -488,15 +594,25 @@ const createUserTagsWithSession = async (userId, sessionId, tagIds, fullName) =>
     });
 
     const addedTags = await Promise.all(batchCreatePromises);
+    log.debug("addedTags: ", addedTags);
     console.log("User tags batch added successfully.");
     return addedTags;
   } catch (error) {
     console.error("Error adding user tags:", error);
+    log.error("Error adding user tags:", error);
     return [];
   }
 };
 
-const removeUserTagsByTagId = async (userId, sessionId, tagIds) => {
+const removeUserTagsByTagId = async (userId, sessionId, tagIds, log) => {
+  log.debug(
+    "removeUserTagsByTagId on userId: " +
+      userId +
+      " and sessionId: " +
+      sessionId +
+      " and tagIds: " +
+      tagIds
+  );
   try {
     const deletePromises = [];
 
@@ -514,6 +630,7 @@ const removeUserTagsByTagId = async (userId, sessionId, tagIds) => {
       );
 
       const userTags = response.data.listUserTags.items;
+      log.debug("userTags: ", userTags);
 
       // Create an array of promises to delete user tags in a batch for the current tagId
       const deleteTagPromises = userTags.map(async (userTag) => {
@@ -532,17 +649,21 @@ const removeUserTagsByTagId = async (userId, sessionId, tagIds) => {
 
     // Execute the batch delete operation for all tagIds
     const deleteResults = await Promise.all(deletePromises);
+    log.debug("deleteResults: ", deleteResults);
 
     console.log("User tags removed successfully:", deleteResults);
     return deleteResults;
   } catch (error) {
     console.error("Error removing user tags:", error);
+    log.error("Error removing user tags:", error);
     return [];
   }
 };
 
-async function uploadImageToS3(profilePictureUri) {
+async function uploadImageToS3(profilePictureUri, log) {
+  log.debug("uploadImageToS3 on profilePictureUri: ", profilePictureUri);
   const filename = v4() + "_profilePhoto.jpeg";
+  log.debug("filename: ", filename);
   const response = await fetch(profilePictureUri);
   const blob = await response.blob();
 
@@ -554,17 +675,23 @@ async function uploadImageToS3(profilePictureUri) {
   return filename;
 }
 
-async function updateUserProfileTable(updatedFields) {
+async function updateUserProfileTable(updatedFields, log) {
+  log.debug("updateUserProfileTable on updatedFields: ", updatedFields);
   const updatedUserProfile = await API.graphql(
     graphqlOperation(updateUserProfiles, { input: updatedFields })
   );
   await AsyncStorage.removeItem("userProfileData");
+  log.debug(
+    "updatedUserProfile.data.updateUserProfiles: ",
+    updatedUserProfile.data.updateUserProfiles
+  );
   return updatedUserProfile.data.updateUserProfiles;
 }
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const log = useLog();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -601,7 +728,7 @@ export function AuthProvider({ children }) {
 
   const fetchUserProfileData = async () => {
     if (user && user.username) {
-      const userProfileData = await fetchUserProfile(user.username);
+      const userProfileData = await fetchUserProfile(user.username, log);
       return userProfileData;
     }
     return null;
@@ -613,6 +740,7 @@ export function AuthProvider({ children }) {
       await Auth.refreshSession();
     } catch (error) {
       console.error("Token refresh error:", error);
+      log.error("Token refresh error:", error);
       throw error;
     }
   };

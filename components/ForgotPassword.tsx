@@ -4,6 +4,7 @@ import { Auth } from "aws-amplify";
 import { useNavigation } from "@react-navigation/native";
 import CrowdSyncLogo from "../images/Crowdsync_Logo.png";
 import styles, { palette, fonts } from "./style";
+import { useLog } from "../CrowdSyncLogManager";
 
 const ForgotPasswordScreen = () => {
   const [username, setUsername] = useState("");
@@ -11,18 +12,24 @@ const ForgotPasswordScreen = () => {
   const [newPassword, setNewPassword] = useState("");
   const [isCodeSent, setIsCodeSent] = useState(false);
   const navigation = useNavigation();
+  const log = useLog();
+
+  log.debug("Entering ForgotPasswordScreen...");
 
   const handleSendCode = async () => {
+    log.debug('handleSendCode on username: ', username);
     try {
       await Auth.forgotPassword(username);
       setIsCodeSent(true);
     } catch (error) {
       console.error("Forgot password error:", error);
+      log.error("Forgot password error:", error);
       alert("An error occurred. Please try again.");
     }
   };
 
   const handleResetPassword = async () => {
+    log.debug('handleResetPassword...');
     try {
       await Auth.forgotPasswordSubmit(username, verificationCode, newPassword);
       alert("Password reset successful.");
@@ -30,6 +37,7 @@ const ForgotPasswordScreen = () => {
       navigation.navigate("Login");
     } catch (error) {
       console.error("Reset password error:", error);
+      log.error("Reset password error:", error);
       alert("An error occurred. Please try again.");
     }
   };

@@ -19,6 +19,7 @@ import { StatusBar } from "react-native";
 import { createTagSet, listTagSets } from "../src/graphql/mutations";
 import MapView, { Marker } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
+import { useLog } from "../CrowdSyncLogManager";
 
 import SampleFindSessionMap from "../images/sample_find_session.png";
 
@@ -30,15 +31,20 @@ const FindSessionScreen = () => {
   const { user, fetchUserProfileData, populateTagSet, refreshLocation, storeInterval } = useAuth();
   const [sessionTitle, setSessionTitle] = useState("General");
   const [location, setLocation] = useState();
+  const log = useLog();
+
+  log.debug("Entering FindSessionScreen screen...");
 
 useEffect(() => {
   // Request location permission specifically for Android
   const requestLocationPermission = async () => {
     try {
-        const currLocation = await refreshLocation();
+        const currLocation = await refreshLocation(log);
+        log.debug("location: ", currLocation);
         setLocation(currLocation);
     } catch (error) {
       console.error("Error requesting location permission:", error);
+      log.error("Error requesting location permission:", error);
     }
   };
 
@@ -50,11 +56,12 @@ useEffect(() => {
         requestLocationPermission();
       } catch (error) {
         console.error("Error refreshing location:", error);
+        log.error("Error refreshing location:", error);
       }
     }, 1 * 60 * 1000);
 
     const storeLocationIntervalId = async () => {
-        await storeInterval(locationUpdateInterval);
+        await storeInterval(locationUpdateInterval, log);
     }
     storeLocationIntervalId();
 }, []);
@@ -69,12 +76,14 @@ useEffect(() => {
    }, [navigation]);
 
   const handleJoinSessionWithQRCode = () => {
+    log.debug("handleJoinSessionWithQRCode...");
     navigation.navigate("QRScanner");
   };
 
   const handleStartSession = async () => {
     const userProfileData = await fetchUserProfileData(user?.userId);
-    const newSession = await startSession(userProfileData, sessionTitle);
+    const newSession = await startSession(userProfileData, sessionTitle, log);
+    log.debug("handleStartSession with userProfileData: " + userProfileData + " and newSession: " + newSession);
 
     // Check if startSession was successful and navigate to SessionHomeScreen
     if (newSession) {
@@ -83,17 +92,21 @@ useEffect(() => {
   };
 
   const handlePopulateTagSet = async () => {
+  log.debug('handlePopulateTagSet...');
     try {
       // Load CSV, fetch existing tags, filter duplicates, and create new tags
-      await populateTagSet();
+      await populateTagSet(log);
     } catch (error) {
       console.error("Error populating TagSet table:", error);
+      log.error("Error populating TagSet table:", error);
     }
   };
 
   const renderSessionButtons = () => {
+    log.debug('renderSessionButtons...');
     const userGroups =
       user?.signInUserSession?.idToken?.payload["cognito:groups"] || [];
+    log.debug('userGroups: ', userGroups);
 
     if (userGroups.includes("CrowdSync_UserPool_Admin")) {
       return (

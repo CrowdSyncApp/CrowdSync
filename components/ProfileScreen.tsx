@@ -18,6 +18,7 @@ import { getParticipants } from "../src/graphql/queries";
 import { Storage } from "aws-amplify";
 import { updateParticipants } from "../src/graphql/mutations";
 import styles, { palette, fonts } from "./style";
+import { useLog } from "../CrowdSyncLogManager";
 
 const ProfileScreen = ({ route }) => {
   // Extract the user information passed as props from the route object
@@ -25,10 +26,14 @@ const ProfileScreen = ({ route }) => {
   const { logout, fetchUserProfileImage } = useAuth();
   const navigation = useNavigation();
   const [profilePictureUri, setProfilePictureUri] = useState("");
+  const log = useLog();
+
+  log.debug('ProfileScreen on userProfileData: ', userProfileData);
 
 useEffect(() => {
     async function getProfileImageUri() {
-        const profilePicture = await fetchUserProfileImage(userProfileData.identityId, userProfileData.profilePicture);
+        const profilePicture = await fetchUserProfileImage(userProfileData.identityId, userProfileData.profilePicture, log);
+        log.debug('getProfileImageUri results: ', profilePicture);
         setProfilePictureUri(profilePicture);
     }
 
@@ -36,7 +41,8 @@ useEffect(() => {
 }, []);
 
   const handleLogout = () => {
-    logout();
+  log.debug('Logging out and navigating to Login screen...');
+    logout(log);
     navigation.navigate("Login");
   };
 
@@ -53,18 +59,21 @@ useEffect(() => {
   };
 
   const handleMyConnectionsPress = () => {
+    log.debug('handleMyConnectionsPress on userProfileData: ', userProfileData);
     // Navigate to the ProfileScreen and pass the user data as params
     navigation.navigate("MyConnections", { userProfileData });
   };
 
   const handleEditProfilePress = () => {
+  log.debug('handleEditProfilePress on userProfileData: ', userProfileData);
     navigation.navigate("EditProfile", { userProfileData });
   };
 
   const handleLinkPress = (url) => {
+    log.debug('handleLinkPress on url: ', url);
     if (url) {
       Linking.openURL(url).catch((err) =>
-        console.error("Error opening URL:", err)
+        log.error("Error opening URL:", err)
       );
     }
   };

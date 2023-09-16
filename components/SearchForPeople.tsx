@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import { listParticipants, listTagSets, listUserTags } from "../src/graphql/queries";
 import styles, { palette, fonts } from "./style";
 import { useAuth } from "../QueryCaching";
+import { useLog } from "../CrowdSyncLogManager";
 
 const SearchForPeople = ({ route }) => {
 const navigation = useNavigation();
@@ -22,13 +23,19 @@ const { sessionData } = route.params;
 const { getUserProfileFromId } = useAuth();
   const [nameQuery, setNameQuery] = useState("");
 const [tagQuery, setTagQuery] = useState("");
+  const log = useLog();
   const [searchResults, setSearchResults] = useState<string[]>([]);
+
+    log.debug('SearchForPeople with sessionData: ', sessionData);
 
   // Function to handle the search button press
   const handleSearch = async () => {
+    log.debug('handleSearch...');
     try {
       // Split the tagQuery string into an array of tag strings
       const tagQueryArray = tagQuery.trim().split(',');
+      log.debug('tagQueryArray: ', tagQueryArray);
+      log.debug('nameQuery: ', nameQuery);
 
       let participants = [];
       let userTags = [];
@@ -40,6 +47,7 @@ const [tagQuery, setTagQuery] = useState("");
           visibility: { eq: 'VISIBLE' },
           fullName: { beginsWith: nameQuery.trim() }, // Match participants whose name starts with nameQuery
         };
+        log.debug('listParticipants with filter: ', participantsFilter);
 
         // Make the GraphQL API call to search for participants
         const participantsResponse = await API.graphql(
@@ -48,6 +56,7 @@ const [tagQuery, setTagQuery] = useState("");
 
         // Extract the list of participants from the response
         participants = participantsResponse.data.listParticipants.items;
+        log.debug('participants: ', participants);
       }
 
       if (tagQuery.trim() !== '') {
@@ -70,15 +79,18 @@ const [tagQuery, setTagQuery] = useState("");
 
         // Fetch all tagId values asynchronously
         const tagIdValues = await Promise.all(tagIdPromises);
+        log.debug('listTagSets returns: ', tagIdValues);
 
         // Remove null values (tags not found)
         const validTagIds = tagIdValues.filter((tagId) => tagId !== null);
+        log.debug('validTagIds: ', validTagIds);
 
         if (validTagIds.length > 0) {
           // Create a filter to match user tags with the valid tagId values
           const userTagsFilter = {
             sessionId: { eq: sessionData.sessionId },
           };
+          log.debug('listUserTags with filter: ', userTagsFilter);
 
           // Make the GraphQL API call to search for user tags
           const userTagsResponse = await API.graphql(
@@ -90,6 +102,7 @@ const [tagQuery, setTagQuery] = useState("");
           userTags = userTags.filter((userTag) =>
               validTagIds.includes(userTag.tagId)
             );
+            log.debug('userTags: ', userTags);
         }
       }
 
@@ -104,6 +117,7 @@ const [tagQuery, setTagQuery] = useState("");
       } else {
         results = participants;
       }
+      log.debug('handleSearch results: ', results);
 
       if (results.length === 0) {
         results = [{ userId: 0, fullName: "No results found..." }]
@@ -113,20 +127,24 @@ const [tagQuery, setTagQuery] = useState("");
       setSearchResults(results);
     } catch (error) {
       console.error("Error searching for participants and user tags:", error);
+      log.error("Error searching for participants and user tags:", error);
     }
   };
 
   const handleUserProfileLinkPress = async (user) => {
+  log.debug('handleUserProfileLinkPress on user: ', user);
     try {
       if (user.userId === 0) {
         return;
       }
       // Call the getUserProfileFromId function to fetch the user's profile data
-      const userProfileData = await getUserProfileFromId(user.userId);
+      const userProfileData = await getUserProfileFromId(user.userId, log);
+      log.debug('Navigating to OtherUserProfile on userData: ' + userProfileData + ' and sessionId: ' + sessionData.sessionId);
 
       navigation.navigate('OtherUserProfile', { userData: userProfileData, sessionId: sessionData.sessionId });
     } catch (error) {
       console.error('Error fetching user profile:', error);
+      log.error('Error fetching user profile:', error);
       // Handle the error as needed, e.g., show an error message to the user
     }
   };

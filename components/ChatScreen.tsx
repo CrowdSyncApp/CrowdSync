@@ -16,6 +16,7 @@ import "react-native-get-random-values";
 import { v4 } from "uuid";
 import { useAuth } from "../QueryCaching";
 import styles, { palette, fonts } from "./style";
+import { useLog } from "../CrowdSyncLogManager";
 
 const ChatScreen = ({ route }) => {
   const [messages, setMessages] = useState<string[]>([]);
@@ -23,14 +24,20 @@ const ChatScreen = ({ route }) => {
   const [senderId, setSenderId] = useState("");
   const [participantsList, setParticipantsList] = useState("");
   const [participantIdsList, setParticipantIdsList] = useState("");
+  const log = useLog();
   const [ttlExpiration, setTtlExpiration] = useState(0);
   const { user, fetchUserProfileData } = useAuth();
   const { participants, chatType } = route.params;
 
+    log.debug("Entering ChatScreen with participants: " + participants + " and chatType: " + chatType);
+
   useEffect(() => {
+    log.debug("senderId: ", user?.attributes.sub);
     setSenderId(user?.attributes.sub);
+    log.debug("participantsList: ", participants);
     setParticipantsList(participants);
     const participantIds = participants.map(participant => participant.userId);
+    log.debug("participantIdsList: ", participantIds);
     setParticipantIdsList(participantIds);
   }, []);
 
@@ -40,6 +47,7 @@ const ChatScreen = ({ route }) => {
       fetchChatMessages();
     }
 
+    log.debug("Subscribing to onCreateChats");
     const subscription = API.graphql(
           graphqlOperation(onCreateChats, {
             chatTypeStatus: `${chatType}#ACTIVE`,
@@ -48,6 +56,7 @@ const ChatScreen = ({ route }) => {
           next: (data) => {
             // Handle incoming subscription data (new chat messages)
             const newChatMessage = data.value.data.onCreateChats;
+            log.debug("newChatMessage: ", newChatMessage);
 
             const isMessageValid =
                   (newChatMessage.senderId === user?.attributes.sub &&
@@ -55,13 +64,17 @@ const ChatScreen = ({ route }) => {
                   (participantIdsList.includes(newChatMessage.senderId) &&
                     newChatMessage.receiverId === user?.attributes.sub);
 
+            log.debug("isMessageValid: ", isMessageValid);
+
             // If the message meets your filtering criteria, update the state
             if (isMessageValid) {
               setMessages((prevMessages) => [...prevMessages, newChatMessage]);
+            log.debug("messages: ", messages);
             }
           },
           error: (error) => {
             console.error('Subscription error:', error);
+            log.error('Subscription error:', error);
           },
         });
 
@@ -95,6 +108,7 @@ const ChatScreen = ({ route }) => {
 
   // Function to handle sending a new message
   const handleSend = async () => {
+    log.debug("handleSend...");
     if (newMessage.trim() !== "") {
       const now = new Date().toISOString();
       const chatId = v4();
@@ -109,15 +123,17 @@ const ChatScreen = ({ route }) => {
               (participant.visibility === "VISIBLE" && chatType === "GROUP") ||
               chatType === "INDIVIDUAL"
             ) {
+                const input = {
+                  senderId: senderId,
+                  timestamp: now,
+                  receiverId: participant.userId,
+                  messageContent: newMessage.trim(),
+                  chatTypeStatus,
+                }
+                log.debug("createChats input: ", input);
               await API.graphql(
                 graphqlOperation(createChats, {
-                  input: {
-                    senderId: senderId,
-                    timestamp: now,
-                    receiverId: participant.userId,
-                    messageContent: newMessage.trim(),
-                    chatTypeStatus,
-                  },
+                  input: input,
                 })
               );
             }
@@ -131,6 +147,7 @@ const ChatScreen = ({ route }) => {
         setNewMessage("");
       } catch (error) {
         console.error("Error sending message:", error);
+        log.error("Error sending message:", error);
       }
     }
   };
@@ -145,10 +162,14 @@ const ChatScreen = ({ route }) => {
   };
 
   const fetchChatMessages = async () => {
+    log.debug("fetchChatMessages...");
     try {
 
     const userId = user?.attributes.sub;
     const chatTypeStatus = `${chatType}#ACTIVE`;
+    log.debug("userId: ", userId);
+    log.debug("chatTypeStatus: ", chatTypeStatus);
+    log.debug("otherUserIds: ", participantIdsList);
 
       const response = await API.graphql(
         graphqlOperation(listChatsBetweenUsers, {
@@ -172,6 +193,7 @@ const ChatScreen = ({ route }) => {
       setMessages(chatMessages);
     } catch (error) {
       console.error("Error fetching chat messages:", error);
+      log.error("Error fetching chat messages:", error);
     }
   };
 

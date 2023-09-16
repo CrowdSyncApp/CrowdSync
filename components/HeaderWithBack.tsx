@@ -7,19 +7,21 @@ import styles, { palette, fonts } from "./style";
 import participantsData from "../dummies/dummy_accounts.json";
 import CrowdSyncBackArrow from "../images/CrowdSync_Back_Arrow.png";
 import { getSessionData } from "./SessionManager";
+import { useLog } from "../CrowdSyncLogManager";
 
-const Header = () => {
+const HeaderWithBack = () => {
   const navigation = useNavigation();
   const { user, fetchUserProfileData, fetchUserProfileImage } = useAuth();
   const [userProfileData, setUserProfileData] = useState(null);
   const [profilePictureUri, setProfilePictureUri] = useState("");
+  const log = useLog();
 
     useEffect(() => {
             async function getProfileImageUri() {
-                const profilePicture = await fetchUserProfileImage(userProfileData.identityId, userProfileData.profilePicture);
+                const profilePicture = await fetchUserProfileImage(userProfileData.identityId, userProfileData.profilePicture, log);
+            log.debug('HeaderWithBack profilePicture: ', profilePicture);
                 setProfilePictureUri(profilePicture);
             }
-
             getProfileImageUri();
         }, [userProfileData]);
 
@@ -32,13 +34,15 @@ const Header = () => {
         const randomIndex = Math.floor(Math.random() * participantsData.length);
         fetchedUserProfileData = participantsData[randomIndex];
       }
+      log.debug('HeaderWithBack userProfileData: ', fetchedUserProfileData);
       setUserProfileData(fetchedUserProfileData);
     };
     getUserProfileData();
   }, [user]);
 
   const handleTitlePress = async () => {
-       const sessionData = await getSessionData();
+       const sessionData = await getSessionData(log);
+       log.debug('handleTitlePress on sessionData: ', sessionData);
 
        if (sessionData) {
           navigation.navigate("SessionHome", { sessionData: sessionData });
@@ -48,11 +52,13 @@ const Header = () => {
     };
 
   const handleProfilePress = async () => {
+  log.debug('handleProfilePress on userProfileData: ', userProfileData);
     // Navigate to the ProfileScreen and pass the user profile data as params
     navigation.navigate("Profile", { userProfileData });
   };
 
   const handleGoBack = () => {
+    log.debug('handleGoBack');
     navigation.goBack();
   };
 
@@ -91,4 +97,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default HeaderWithBack;

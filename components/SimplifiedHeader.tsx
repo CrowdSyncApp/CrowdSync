@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import BackArrow from "../images/CrowdSync_Back_Arrow.png";
 import styles, { palette, fonts } from "./style";
 
-const Header = () => {
+const SimplifiedHeader = () => {
   const navigation = useNavigation();
 
   const handleGoBack = () => {
@@ -30,4 +30,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default SimplifiedHeader;

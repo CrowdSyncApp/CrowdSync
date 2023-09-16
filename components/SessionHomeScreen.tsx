@@ -14,18 +14,20 @@ import { useAuth } from "../QueryCaching";
 import { endSession, fetchParticipants } from "./SessionManager";
 import { getParticipants, listParticipants } from "../src/graphql/queries";
 import { updateParticipants } from "../src/graphql/mutations";
-import { onCreateParticipants } from '../src/graphql/subscriptions';
+import { onCreateParticipants } from "../src/graphql/subscriptions";
 import styles, { palette, fonts } from "./style";
+import { useLog } from "../CrowdSyncLogManager";
 
 const SessionHomeScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { user, fetchUserProfileData, getUserProfileFromId, storeInterval } = useAuth();
+  const { user, fetchUserProfileData, getUserProfileFromId, storeInterval } =
+    useAuth();
   const { sessionData } = route.params;
+  const log = useLog();
   const [participants, setParticipants] = useState([]);
   const [isVisible, setIsVisible] = useState(true);
-  const [participantsUpdateInterval, setParticipantsUpdateInterval] = useState(null);
-    const [subscriptionStatus, setSubscriptionStatus] = useState('Inactive'); // Initialize as 'Inactive'
 
+  log.debug("SessionHomeScreen on sessionData: ", sessionData);
 
   const qrCodeData = JSON.stringify({
     sessionId: sessionData.sessionId,
@@ -33,34 +35,34 @@ const SessionHomeScreen = ({ route }) => {
     title: sessionData.title,
   });
 
-  const userId = user?.username;
-  const sessionId = sessionData.sessionId;
-
   useEffect(() => {
-
     async function storeParticipantData() {
-        // Fetch participant data for the current session
-    const userId = user?.username;
-        const participantsList = await fetchParticipants(userId);
-          setParticipants(participantsList);
-    };
+      log.debug("storeParticipantData on user: ", user);
+      // Fetch participant data for the current session
+      const userId = user?.username;
+      const participantsList = await fetchParticipants(log);
+      log.debug("participantsList: ", participantsList);
+      setParticipants(participantsList);
+    }
     storeParticipantData();
 
-      const participantsUpdateInterval = setInterval(async () => {
-            try {
-              const participantsList = await fetchParticipants();
-              setParticipants(participantsList);
-            } catch (error) {
-              console.error("Error refreshing participants:", error);
-            }
-          }, 1 * 60 * 1000);
+    const participantsUpdateInterval = setInterval(async () => {
+      try {
+        const participantsList = await fetchParticipants(log);
+        setParticipants(participantsList);
+      } catch (error) {
+        console.error("Error refreshing participants:", error);
+        log.error("Error refreshing participants:", error);
+      }
+    }, 1 * 60 * 1000);
 
-          const storeParticipantIntervalId = async () => {
-                  await storeInterval(participantsUpdateInterval);
-              }
-              storeParticipantIntervalId();
+    const storeParticipantIntervalId = async () => {
+      await storeInterval(participantsUpdateInterval, log);
+    };
+    storeParticipantIntervalId();
 
     const fetchVisibility = async () => {
+      log.debug("fetchVisibility");
       const userProfileData = await fetchUserProfileData(user?.username);
       try {
         const response = await API.graphql({
@@ -71,39 +73,48 @@ const SessionHomeScreen = ({ route }) => {
           },
         });
 
+        log.debug("visibility: ", response.data.getParticipants.visibility);
         // Update the visibility state
         setIsVisible(response.data.getParticipants.visibility === "VISIBLE");
       } catch (error) {
         console.error("Error fetching visibility:", error);
+        log.error("Error fetching visibility:", error);
       }
     };
 
     fetchVisibility();
 
-      const subscription = API.graphql(
-        graphqlOperation(onCreateParticipants, { sessionId: sessionData.sessionId })
-      ).subscribe({
-        next: (response) => {
-          const newParticipant = response.value.data.onCreateParticipants;
-          setParticipants((prevParticipants) => [...prevParticipants, newParticipant]);
-        },
-        error: (error) => {
-          console.error('Error subscribing to participant joined:', error);
-        },
-      });
-setParticipantsUpdateInterval(participantsUpdateInterval);
-    setSubscriptionStatus(subscription ? 'Active' : 'Inactive');
-      return () => {
-        subscription.unsubscribe();
-      };
+    const subscription = API.graphql(
+      graphqlOperation(onCreateParticipants, {
+        sessionId: sessionData.sessionId,
+      })
+    ).subscribe({
+      next: (response) => {
+        const newParticipant = response.value.data.onCreateParticipants;
+        setParticipants((prevParticipants) => [
+          ...prevParticipants,
+          newParticipant,
+        ]);
+      },
+      error: (error) => {
+        console.error("Error subscribing to participant joined:", error);
+        log.error("Error subscribing to participant joined:", error);
+      },
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [sessionData.sessionId]);
 
   const handleJoinSessionWithQRCode = () => {
+    log.debug("handleJoinSessionWithQRCode");
     navigation.navigate("QRScanner");
   };
 
   // Function to handle pressing the Search For People button
   const handleSearchForPeople = () => {
+    log.debug("handleSearchForPeople on sessionData: ", sessionData);
     // Handle the action when Search For People button is pressed
     // For now, let's log a message to the console
     navigation.navigate("SearchForPeople", { sessionData: sessionData });
@@ -111,48 +122,70 @@ setParticipantsUpdateInterval(participantsUpdateInterval);
 
   // Function to handle pressing the Chat button
   const handleChat = () => {
+    log.debug("handleChat");
     // Handle the action when Chat button is pressed
     // For now, let's log a message to the console
     navigation.navigate("ChatScreen");
   };
 
   const handleEndSession = async () => {
+    log.debug("handleEndSession on sessionData: ", sessionData);
     try {
-      await endSession(sessionData.sessionId, sessionData.startTime);
+      await endSession(sessionData.sessionId, sessionData.startTime, log);
 
       navigation.navigate("FindSession");
     } catch (error) {
       // Handle the error as needed
       console.error("Error ending session:", error);
+      log.error("Error ending session:", error);
     }
   };
 
   const handleToggleVisibility = async () => {
+    log.debug("handleToggleVisibility");
     try {
       const userProfileData = await fetchUserProfileData(user?.username);
       const newVisibility = isVisible ? "INVISIBLE" : "VISIBLE";
 
+      log.debug(
+        "updateParticipants on sessionId: " +
+          sessionData.sessionId +
+          " and userId: " +
+          userProfileData.userId +
+          " and visibility: " +
+          newVisibility
+      );
       await API.graphql(
-          graphqlOperation(updateParticipants, {
-              input: {
-                    sessionId: sessionData.sessionId,
-                  userId: userProfileData.userId,
-                  visibility: newVisibility,
-              },
-          })
+        graphqlOperation(updateParticipants, {
+          input: {
+            sessionId: sessionData.sessionId,
+            userId: userProfileData.userId,
+            visibility: newVisibility,
+          },
+        })
       );
 
       // Update the visibility state
       setIsVisible(!isVisible);
     } catch (error) {
       console.error("Error toggling visibility:", error);
+      log.error("Error toggling visibility:", error);
     }
   };
 
   const handleUserProfilePress = async (userProfileData) => {
-    let userData = await getUserProfileFromId(userProfileData.userId);
+    log.debug(
+      "handleUserProfilePress on userProfileData: " +
+        userProfileData +
+        " and sessionId: " +
+        sessionData.sessionId
+    );
+    let userData = await getUserProfileFromId(userProfileData.userId, log);
 
-    navigation.navigate("OtherUserProfile", { userData, sessionId: sessionData.sessionId });
+    navigation.navigate("OtherUserProfile", {
+      userData,
+      sessionId: sessionData.sessionId,
+    });
   };
 
   const isAdmin = user?.signInUserSession?.idToken?.payload[
@@ -222,31 +255,18 @@ setParticipantsUpdateInterval(participantsUpdateInterval);
           </TouchableOpacity>
 
           {isVisible && (
-          <TouchableOpacity
-            style={styles.loginButton}
-            onPress={() =>
-              navigation.navigate("ChatScreen", {
-                participants: participants,
-                chatType: "GROUP",
-              })
-            }
-          >
-            <Text style={styles.buttonText}>Chat</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={() =>
+                navigation.navigate("ChatScreen", {
+                  participants: participants,
+                  chatType: "GROUP",
+                })
+              }
+            >
+              <Text style={styles.buttonText}>Chat</Text>
+            </TouchableOpacity>
           )}
-          {/* Display userId */}
-          <View style={styles.div}>
-          <Text style={styles.debugText}>User ID: {userId}</Text>
-
-          {/* Display participantsUpdateInterval */}
-          <Text style={styles.debugText}>Interval ID: {participantsUpdateInterval}</Text>
-
-          {/* Display subscription status */}
-          <Text style={styles.debugText}>Subscription: {subscriptionStatus ? 'Active' : 'Inactive'}</Text>
-
-          {/* Display sessionId */}
-          <Text style={styles.debugText}>Session ID: {sessionId}</Text>
-          </View>
         </View>
       </View>
     </View>

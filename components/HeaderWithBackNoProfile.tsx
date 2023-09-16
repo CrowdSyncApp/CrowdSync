@@ -7,11 +7,13 @@ import styles, { palette, fonts } from "./style";
 import participantsData from "../dummies/dummy_accounts.json";
 import CrowdSyncBackArrow from "../images/CrowdSync_Back_Arrow.png";
 import { getSessionData } from "./SessionManager";
+import { useLog } from "../CrowdSyncLogManager";
 
-const Header = () => {
+const HeaderWithBackNoProfile = () => {
   const navigation = useNavigation();
   const { user, fetchUserProfileData } = useAuth();
   const [userProfileData, setUserProfileData] = useState(null);
+  const log = useLog();
 
   useEffect(() => {
     const getUserProfileData = async () => {
@@ -22,13 +24,15 @@ const Header = () => {
         const randomIndex = Math.floor(Math.random() * participantsData.length);
         fetchedUserProfileData = participantsData[randomIndex];
       }
+      log.debug('HeaderWithBackNoProfile userProfileData: ', fetchedUserProfileData);
       setUserProfileData(fetchedUserProfileData);
     };
     getUserProfileData();
   }, [user]);
 
   const handleTitlePress = async () => {
-       const sessionData = await getSessionData();
+       const sessionData = await getSessionData(log);
+       log.debug('handleTitlePress on sessionData: ', sessionData);
 
        if (sessionData) {
           navigation.navigate("SessionHome", { sessionData: sessionData });
@@ -38,11 +42,13 @@ const Header = () => {
     };
 
   const handleProfilePress = async () => {
+  log.debug('handleProfilePress on userProfileData: ', userProfileData);
     // Navigate to the ProfileScreen and pass the user profile data as params
     navigation.navigate("Profile", { userProfileData });
   };
 
   const handleGoBack = () => {
+    log.debug('handleGoBack');
     navigation.goBack();
   };
 
@@ -69,4 +75,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default HeaderWithBackNoProfile;
