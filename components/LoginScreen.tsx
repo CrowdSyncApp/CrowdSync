@@ -14,12 +14,16 @@ import { Auth } from "aws-amplify";
 import { useAuth } from "../QueryCaching";
 import CrowdSyncLogo from "../images/Crowdsync_Logo.png";
 import styles, { palette, fonts } from "./style";
+import { useLog } from "../CrowdSyncLogManager";
 
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
   const { login } = useAuth();
+  const log = useLog();
+
+  log.debug('Login screen...');
 
   useEffect(() => {
         navigation.addListener('beforeRemove', nav => {
@@ -32,38 +36,46 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      await login({ username, password });
+        log.debug('Attempted login on username: ', username);
+      await login({ username, password }, log);
       navigation.navigate("FindSession");
     } catch (error) {
+    log.debug('Failed login: ', error);
       throw error;
     }
   };
 
   const handleSignUp = () => {
     // Navigate to the SignUp screen
-    navigation.navigate("SignUp"); // Replace 'SignUp' with the name of your SignUp screen in the navigation stack
+    log.debug('Navigating to signup screen');
+    navigation.navigate("SignUp");
   };
 
   const handleGuestSignIn = async () => {
+    log.debug('handleGuestSignIn');
     try {
       const anonymousUser = await Auth.currentCredentials(); // Guest account
+      log.debug('Guest account created: ', anonymousUser);
 
       // Navigate to the FindSession screen or any other desired screen
       navigation.navigate("FindSession");
     } catch (error) {
       console.error("Guest Sign In error:", error);
+      log.error("Guest Sign In error:", error);
       alert("Guest Sign In failed. Please try again.");
     }
   };
 
   const handleForgotUsername = () => {
+    log.debug('handleForgotUsername');
     // Navigate to the ForgotUsername screen
-    navigation.navigate("ForgotUsername"); // Replace 'ForgotUsername' with the name of your ForgotUsername screen in the navigation stack
+    navigation.navigate("ForgotUsername");
   };
 
   const handleForgotPassword = () => {
+    log.debug('handleForgotPassword');
     // Navigate to the ForgotPassword screen
-    navigation.navigate("ForgotPassword"); // Replace 'ForgotPassword' with the name of your ForgotPassword screen in the navigation stack
+    navigation.navigate("ForgotPassword");
   };
 
   return (

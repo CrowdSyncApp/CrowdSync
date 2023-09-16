@@ -7,16 +7,19 @@ import styles, { palette, fonts } from "./style";
 import participantsData from "../dummies/dummy_accounts.json";
 import CrowdSyncLogo from "../images/Crowdsync_Logo.png";
 import { getSessionData } from "./SessionManager";
+import { useLog } from "../CrowdSyncLogManager";
 
 const Header = () => {
   const navigation = useNavigation();
   const { user, fetchUserProfileData, fetchUserProfileImage } = useAuth();
   const [userProfileData, setUserProfileData] = useState(null);
   const [profilePictureUri, setProfilePictureUri] = useState("");
+  const log = useLog();
 
 useEffect(() => {
         async function getProfileImageUri() {
-            const profilePicture = await fetchUserProfileImage(userProfileData.identityId, userProfileData.profilePicture);
+            log.debug("getProfileImageUri on userProfileData: ", userProfileData);
+            const profilePicture = await fetchUserProfileImage(userProfileData.identityId, userProfileData.profilePicture, log);
             setProfilePictureUri(profilePicture);
         }
 
@@ -38,7 +41,8 @@ useEffect(() => {
   }, [user]);
 
   const handleTitlePress = async () => {
-     const sessionData = await getSessionData();
+     const sessionData = await getSessionData(log);
+     log.debug('handleTitlePress on sessionData: ', sessionData);
 
      if (sessionData) {
         navigation.navigate("SessionHome", { sessionData: sessionData });
@@ -48,6 +52,7 @@ useEffect(() => {
   };
 
   const handleProfilePress = async () => {
+    log.debug('handleProfilePress...');
     // Navigate to the ProfileScreen and pass the user profile data as params
     navigation.navigate("Profile", { userProfileData });
   };

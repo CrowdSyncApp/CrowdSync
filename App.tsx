@@ -12,6 +12,7 @@ import type { PropsWithChildren } from "react";
 import { Amplify, Auth, PushNotification } from "aws-amplify";
 import awsmobile from "./src/aws-exports";
 import { AuthProvider, useAuth } from "./QueryCaching";
+import { LogProvider, useLog } from "./CrowdSyncLogManager";
 import styles, { palette, fonts } from "./components/style";
 
 Amplify.configure(awsmobile);
@@ -67,21 +68,26 @@ function App(): JSX.Element {
   };
 
   return (
-    <AuthProvider>
-      <NavigationContainer>
-        <AppNavigator />
-      </NavigationContainer>
-    </AuthProvider>
+    <LogProvider>
+      <AuthProvider>
+        <NavigationContainer>
+          <AppNavigator />
+        </NavigationContainer>
+      </AuthProvider>
+    </LogProvider>
   );
 }
 
 const AppNavigator = () => {
   const auth = useAuth();
+  const log = useLog();
   const { isUserLoggedIn, refreshToken } = auth;
 
+  log.debug("Starting AppNavigator");
+
   useEffect(() => {
-      //configurePushNotifications();
-    }, []);
+    //configurePushNotifications();
+  }, []);
 
   useEffect(() => {
     const checkTokenFreshness = async () => {
@@ -99,6 +105,7 @@ const AppNavigator = () => {
         }
       } catch (error) {
         console.error("Token check error:", error);
+        log.error("Token check error:", error);
       }
     };
 
@@ -188,13 +195,13 @@ const AppNavigator = () => {
         }}
       />
       <Stack.Screen
-          name="UserLocation"
-          component={UserLocation}
-          options={{
-            title: "Location",
-            header: () => <HeaderWithBack />,
-          }}
-        />
+        name="UserLocation"
+        component={UserLocation}
+        options={{
+          title: "Location",
+          header: () => <HeaderWithBack />,
+        }}
+      />
       <Stack.Screen name="QRScanner" component={QRScannerScreen} />
       <Stack.Screen
         name="Login"

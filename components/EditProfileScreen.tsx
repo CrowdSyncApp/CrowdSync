@@ -22,6 +22,7 @@ import {
 } from "../src/graphql/mutations";
 import { launchImageLibrary } from "react-native-image-picker";
 import styles, { palette, fonts } from "./style";
+import { useLog } from "../CrowdSyncLogManager";
 
 const EditProfileScreen = ({ route }) => {
   // Extract the user information passed as props from the route object
@@ -34,19 +35,33 @@ const EditProfileScreen = ({ route }) => {
     removeUserTagsByTagId,
     fetchUserProfileImage,
   } = useAuth();
+  const log = useLog();
   const navigation = useNavigation();
 
-useEffect(() => {
+  log.debug(
+    "Entering EditProfileScreen screen with userProfileData: " +
+      userProfileData +
+      " and updatedTags: " +
+      updatedTags
+  );
+
+  useEffect(() => {
     async function getProfileImageUri() {
-        const profilePicture = await fetchUserProfileImage(userProfileData.identityId, userProfileData.profilePicture);
-        setProfilePictureUri(profilePicture);
+      const profilePicture = await fetchUserProfileImage(
+        userProfileData.identityId,
+        userProfileData.profilePicture,
+        log
+      );
+      log.debug("profilePictureUri: ", profilePicture);
+      setProfilePictureUri(profilePicture);
     }
 
     getProfileImageUri();
-}, []);
+  }, []);
 
   useEffect(() => {
     if (updatedTags) {
+      log.debug("currTags: ", updatedTags);
       setCurrTags(updatedTags);
     }
   }, [updatedTags]);
@@ -60,9 +75,11 @@ useEffect(() => {
     profilePicture: userProfileData.profilePicture,
     socialLinks: userProfileData.socialLinks || [],
   });
+  log.debug("default editableFields: ", editableFields);
   const [profilePictureUri, setProfilePictureUri] = useState(null);
 
   const handleAddSocialLink = () => {
+    log.debug("Updating social links...");
     if (editableFields.socialLinks.length < 5) {
       setEditableFields({
         ...editableFields,
@@ -72,28 +89,35 @@ useEffect(() => {
   };
 
   const handleAddTags = () => {
+    log.debug("handleAddTags...");
     navigation.navigate("AddTags", { userProfileData });
   };
 
   const handleSocialLinkChange = (index, value) => {
+    log.debug(
+      "handleSocialLinkChange on index: " + index + " and value: " + value
+    );
     const updatedLinks = [...editableFields.socialLinks];
     updatedLinks[index] = value;
     setEditableFields({ ...editableFields, socialLinks: updatedLinks });
   };
 
   const handleDeleteSocialLink = (index) => {
+    log.debug("handleDeleteSocialLink on index: ", index);
     const updatedLinks = [...editableFields.socialLinks];
     updatedLinks.splice(index, 1); // Remove the link at the given index
     setEditableFields({ ...editableFields, socialLinks: updatedLinks });
   };
 
   const handleProfilePicturePress = () => {
+    log.debug("handleProfilePicturePress...");
     launchImageLibrary(
       {
         mediaType: "photo",
       },
       (response) => {
         if (!response.didCancel && !response.error) {
+          log.debug("Setting new profilePictureUri...");
           setProfilePictureUri(response["assets"][0].uri);
         }
       }
@@ -101,17 +125,20 @@ useEffect(() => {
   };
 
   const handleSaveChanges = async () => {
+    log.debug("handleSaveChanges...");
     let profilePictureName;
     try {
       // Update S3 profile picture if a new one was selected
       if (profilePictureUri) {
-        profilePictureName = await uploadImageToS3(profilePictureUri);
+        log.debug("New profile picture to save...");
+        profilePictureName = await uploadImageToS3(profilePictureUri, log);
       }
 
       const newProfilePictureUri =
         profilePictureUri !== null
           ? profilePictureUri
           : userProfileData?.profilePictureUri;
+      log.debug("newProfilePictureUri: ", newProfilePictureUri);
 
       const updatedFields = {
         userId: editableFields.userId,
@@ -122,8 +149,9 @@ useEffect(() => {
         profilePicture: profilePictureName || editableFields.profilePicture,
         socialLinks: editableFields.socialLinks,
       };
+      log.debug("updatedFields: ", updatedFields);
 
-      const updatedUserData = await updateUserProfileTable(updatedFields);
+      const updatedUserData = await updateUserProfileTable(updatedFields, log);
 
       const newTags = currTags.filter(
         (currTag) =>
@@ -131,25 +159,30 @@ useEffect(() => {
             (userTag) => userTag.tagId === currTag.tagId
           )
       );
+      log.debug("newTags: ", newTags);
 
       const removedTags = userProfileData.tags.filter(
         (userTag) =>
           !currTags.some((currTag) => currTag.tagId === userTag.tagId)
       );
+      log.debug("removedTags: ", removedTags);
 
       const addedTags = await createUserTagsWithSession(
         userProfileData.userId,
         userProfileData.sessionId,
         newTags,
-        updatedUserData.fullName
+        updatedUserData.fullName,
+        log
       );
       let combinedTags = [...userProfileData.tags, ...addedTags];
+      log.debug("combinedTags: ", combinedTags);
 
       const tagIds = removedTags;
       await removeUserTagsByTagId(
         userProfileData.userId,
         userProfileData.sessionId,
-        tagIds
+        tagIds,
+        log
       );
 
       removedTags.forEach((removedTag) => {
@@ -160,11 +193,13 @@ useEffect(() => {
 
       updatedUserData.profilePictureUri = newProfilePictureUri;
       updatedUserData.tags = combinedTags;
+      log.debug("Final updatedUserData: ", updatedUserData);
 
       alert("Changes saved successfully!");
       navigation.navigate("Profile", { userProfileData: updatedUserData });
     } catch (error) {
       console.error("Error saving changes:", error);
+      log.error("Error saving changes:", error);
     }
   };
 
@@ -177,7 +212,7 @@ useEffect(() => {
         <View style={styles.index}>
           <View style={styles.div}>
             <TouchableOpacity onPress={handleProfilePicturePress}>
-              {profilePictureUri !== '' ? (
+              {profilePictureUri !== "" ? (
                 <Image
                   source={{ uri: profilePictureUri }}
                   style={{
@@ -187,7 +222,9 @@ useEffect(() => {
                     resizeMode: "contain",
                   }}
                 />
-              ) : <View style={{ width: 350, height: 350 }}/>}
+              ) : (
+                <View style={{ width: 350, height: 350 }} />
+              )}
             </TouchableOpacity>
 
             {/* Full Name */}

@@ -5,14 +5,20 @@ import { useAuth } from "../QueryCaching";
 import styles, { palette, fonts } from "./style";
 import CrowdSyncLogo from "../images/Crowdsync_Logo.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useLog } from "../CrowdSyncLogManager";
 
 const SplashScreen = () => {
   const navigation = useNavigation();
   const { isLoading, isUserLoggedIn } = useAuth();
+  const log = useLog();
+
+  log.debug("Entering splash screen...");
 
   useEffect(() => {
     async function checkLogin() {
     // Check if isLoading is false and isUserLoggedIn has a value
+    log.debug("isLoading: ", isLoading);
+    log.debug("isUserLoggedIn: ", isUserLoggedIn);
     if (!isLoading && isUserLoggedIn !== undefined) {
       if (isUserLoggedIn) {
       await AsyncStorage.removeItem("userProfileData");

@@ -16,6 +16,7 @@ import { useAuth } from "../QueryCaching";
 import { createUserProfile } from "../src/graphql/mutations";
 import CrowdSyncLogo from "../images/Crowdsync_Logo.png";
 import styles, { palette, fonts } from "./style";
+import { useLog } from "../CrowdSyncLogManager";
 
 const SignUpScreen = () => {
   const navigation = useNavigation();
@@ -23,10 +24,14 @@ const SignUpScreen = () => {
   const [username, setUsername] = useState(""); // Use this field for email or phone number
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const log = useLog();
   const [errorMessage, setErrorMessage] = useState("");
   const { login, fetchUserProfileData } = useAuth();
 
+  log.debug('SignUpScreen...');
+
   const handleSignUp = async () => {
+    log.debug('handleSignUp...');
     try {
       // Perform sign-up logic
       const user = await Auth.signUp({
@@ -46,6 +51,8 @@ const SignUpScreen = () => {
         updatedAt: now,
       };
 
+        log.debug('userProfileInput: ', userProfileInput);
+
       try {
         const response = await API.graphql(
           graphqlOperation(createUserProfile, { input: userProfileInput })
@@ -53,11 +60,13 @@ const SignUpScreen = () => {
         const data = response.data;
       } catch (error) {
         console.error("Error storing data:", error);
+        log.error("Error storing data:", error);
       }
 
       navigation.navigate("Login");
     } catch (error) {
       console.error("Sign up error:", error);
+      log.error("Sign up error:", error);
       if (error.code === "UsernameExistsException") {
         setErrorMessage(
           "Username already exists. Please choose a different email or phone number."

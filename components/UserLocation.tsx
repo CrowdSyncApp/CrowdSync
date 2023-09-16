@@ -7,14 +7,18 @@ import { useAuth } from "../QueryCaching";
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import { getLocations } from "../src/graphql/queries";
+import { useLog } from "../CrowdSyncLogManager";
 
 const UserLocation = () => {
   const navigation = useNavigation();
   const { user } = useAuth();
   const route = useRoute();
+  const log = useLog();
   const { userData, sessionId } = route.params;
   const [location, setLocation] = useState(null);
   const [otherUserLocation, setOtherUserLocation] = useState(null);
+
+    log.debug("Entering UserLocation screen on userData: " + userData + " and sessionId: " + sessionId);
 
   useEffect(() => {
     const fetchUserLocations = async () => {
@@ -28,6 +32,7 @@ const UserLocation = () => {
         const response = await API.graphql(
           graphqlOperation(getLocations, { userId: userId, sessionId: sessionId })
         );
+        log.debug('getLocations response: ', response);
 
         const userLocation = response.data.getLocations;
         setLocation({
@@ -41,6 +46,8 @@ const UserLocation = () => {
               graphqlOperation(getLocations, { userId: user?.username, sessionId: sessionId })
             );
 
+            log.debug('getLocations otherresponse', otherresponse);
+
           const otherUserLocation = otherresponse.data.getLocations;
           setOtherUserLocation({
             latitude: otherUserLocation.latitude,
@@ -50,6 +57,7 @@ const UserLocation = () => {
           });
       } catch (error) {
         console.error("Error fetching user locations:", error);
+        log.error("Error fetching user locations:", error);
       }
     };
 
