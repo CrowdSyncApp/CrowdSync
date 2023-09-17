@@ -313,9 +313,9 @@ const EditProfileScreen = ({ route }) => {
               <View>
                 <Text style={styles.secondaryHeaderTitle}>My Tags:</Text>
                 <Text style={styles.detailText}>
-                  {userProfileData.tags && userProfileData.tags.length > 0
-                    ? userProfileData.tags.map((tag, index) =>
-                        index === userProfileData.tags.length - 1
+                  {currTags && currTags.length > 0
+                    ? currTags.map((tag, index) =>
+                        index === currTags.length - 1
                           ? tag.tag
                           : tag.tag + ", "
                       )

@@ -31,7 +31,7 @@ const AddTags = ({ route }) => {
   useEffect(() => {
     const fetchTagSet = async () => {
       const fetchedTags = await getTagSets(log);
-      log.debug("allTags: ", fetchedTags);
+      log.debug("allTags: ", JSON.stringify(fetchedTags));
       setAllTags(fetchedTags);
     };
     fetchTagSet();
@@ -43,7 +43,7 @@ const AddTags = ({ route }) => {
       setSearchResults([]);
     } else {
       const filteredTags = allTags.filter((tag) =>
-        tag.tag.toLowerCase().includes(text.toLowerCase())
+        tag.tag.toLowerCase().startsWith(text.toLowerCase())
       );
 
       // Extract tag names from filteredTags array
@@ -84,7 +84,7 @@ const AddTags = ({ route }) => {
   };
 
   const handleSaveChanges = async () => {
-    log.debug("handleSaveChanges on currTags: " + JSON.stringify(currTags) + " and updatedTags: " + JSON.stringify(currentTags));
+    log.debug("handleSaveChanges on updatedTags: " + JSON.stringify(currentTags));
     navigation.navigate("EditProfile", {
       userProfileData,
       updatedTags: currentTags,

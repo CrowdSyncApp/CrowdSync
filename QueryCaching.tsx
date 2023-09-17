@@ -438,26 +438,35 @@ const getAllUserTags = async (userId, log) => {
 const getTagSets = async (log) => {
   log.debug("getTagSets...");
   try {
-    // Check if the tag set is already stored in AsyncStorage
-    const storedTagSet = await AsyncStorage.getItem("tagSet");
-    if (storedTagSet) {
-      log.debug("Returning cached tag set.");
-      return JSON.parse(storedTagSet);
-    }
+    // Initialize an array to store all tag sets
+    const allTagSets = [];
 
-    // If not stored, fetch from API and store in AsyncStorage
-    const response = await API.graphql(graphqlOperation(listTagSets));
-    log.debug("listTagSets response: ", response);
-    const tagSets = response.data.listTagSets.items.map((item) => ({
-      tag: item.tag,
-      tagId: item.tagId,
-    }));
+    // Start with a null nextToken
+    let nextToken = null;
 
-    // Store the tag set in AsyncStorage
-    await AsyncStorage.setItem("tagSet", JSON.stringify(tagSets));
+    do {
+      // Fetch a batch of tag sets using pagination
+      const response = await API.graphql(
+        graphqlOperation(listTagSets, {
+          limit: 100, // Adjust the limit as needed to retrieve all entries in batches
+          nextToken,   // Use the nextToken from the previous response
+        })
+      );
 
-    log.debug("tagSets: ", tagSets);
-    return tagSets;
+      const { items, nextToken: newNextToken } = response.data.listTagSets;
+
+      // Add the retrieved items to the result array
+      allTagSets.push(...items);
+
+      // Update the nextToken for the next iteration
+      nextToken = newNextToken;
+    } while (nextToken); // Continue until there are no more items
+
+    // Store the tag sets in AsyncStorage
+    await AsyncStorage.setItem("tagSet", JSON.stringify(allTagSets));
+
+    log.debug("All tag sets: ", allTagSets);
+    return allTagSets;
   } catch (error) {
     console.error("Error listing TagSets:", error);
     log.error("Error listing TagSets:", error);
@@ -585,7 +594,6 @@ const addUserTags = async (
     const batchCreatePromises = tagIds.map(async (tagId) => {
       const currTagId = tagId.tagId;
       const input = {
-        userTagId: v4(),
         userId: userId,
         tagId: currTagId,
         fullName: fullName,
@@ -609,57 +617,30 @@ const addUserTags = async (
   }
 };
 
-const removeUserTagsByTagId = async (userId, tagIds, log) => {
-  log.debug(
-    "removeUserTagsByTagId on userId: " +
-      userId +
-      " and tagIds: " +
-      tagIds
-  );
+const removeUserTagsByTagId = async (userId, tags, log) => {
+    log.debug('removeUserTagsByTagId on userId: ' + userId + ' and tags: ' + JSON.stringify(tags))
   try {
-    const deletePromises = [];
-
-    for (const tagIdPair of tagIds) {
-      const tagId = tagIdPair.tagId;
-
-      // Fetch the userTagIds and sessionIds using the listUserTags query for the current tagId
-      const response = await API.graphql(
-        graphqlOperation(listUserTags, {
-          filter: {
-            userId: { eq: userId },
-            tagId: { eq: tagId },
-          },
-        })
-      );
-
-      const userTags = response.data.listUserTags.items;
-      log.debug("userTags: ", userTags);
-
-      // Create an array of promises to delete user tags in a batch for the current tagId
-      const deleteTagPromises = userTags.map(async (userTag) => {
-        try {
-          const input = { userTagId: userTag.userTagId };
-          return await API.graphql(graphqlOperation(deleteUserTags, { input }));
-        } catch (error) {
-          console.error("Error deleting user tag:", error);
-          throw error;
+    const deletePromises = tags.map(async (tag) => {
+      const input = {
+        input: {
+          userId,
+          tagId: tag.tagId,
         }
-      });
+      };
+      log.debug('Deleting UserTag:', input);
 
-      // Accumulate the delete tag promises for the current tagId
-      deletePromises.push(deleteTagPromises);
-    }
+      // Call the deleteUserTags mutation to delete the UserTag
+      await API.graphql(graphqlOperation(deleteUserTags, input));
+    });
 
-    // Execute the batch delete operation for all tagIds
-    const deleteResults = await Promise.all(deletePromises);
-    log.debug("deleteResults: ", deleteResults);
+    // Execute all delete operations concurrently
+    await Promise.all(deletePromises);
 
-    console.log("User tags removed successfully:", deleteResults);
-    return deleteResults;
+    log.debug('UserTags deleted successfully');
   } catch (error) {
-    console.error("Error removing user tags:", error);
-    log.error("Error removing user tags:", error);
-    return [];
+    console.error('Error deleting UserTags:', error);
+    log.error('Error deleting UserTags:', error);
+    throw error; // Rethrow the error for handling at the caller level
   }
 };
 
