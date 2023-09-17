@@ -11,7 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import { API, graphqlOperation } from "aws-amplify";
 import QRCode from "react-native-qrcode-svg";
 import { useAuth } from "../QueryCaching";
-import { endSession, fetchParticipants } from "./SessionManager";
+import { endSession, fetchParticipants, exitSession } from "./SessionManager";
 import { getParticipants, listParticipants } from "../src/graphql/queries";
 import { updateParticipants } from "../src/graphql/mutations";
 import { onCreateParticipants } from "../src/graphql/subscriptions";
@@ -128,10 +128,32 @@ const SessionHomeScreen = ({ route }) => {
     navigation.navigate("ChatScreen");
   };
 
+const handleExitSession = async () => {
+    log.debug("handleExitSession on sessionData: ", sessionData);
+    try {
+      await exitSession(
+        user?.username,
+        sessionData.sessionId,
+        log
+      );
+
+      navigation.navigate("FindSession");
+    } catch (error) {
+      // Handle the error as needed
+      console.error("Error exiting session:", error);
+      log.error("Error exiting session:", error);
+    }
+  };
+
   const handleEndSession = async () => {
     log.debug("handleEndSession on sessionData: ", sessionData);
     try {
-      await endSession(sessionData.sessionId, sessionData.startTime, log);
+      await endSession(
+        user?.username,
+        sessionData.sessionId,
+        sessionData.startTime,
+        log
+      );
 
       navigation.navigate("FindSession");
     } catch (error) {
@@ -224,7 +246,7 @@ const SessionHomeScreen = ({ route }) => {
             )}
           />
         </View>
-        <View style={{ height: 40, marginBottom: 10 }}>
+        <View style={styles.flexButtonContainer}>
           <TouchableOpacity
             style={styles.loginButton}
             onPress={handleToggleVisibility}
@@ -233,10 +255,18 @@ const SessionHomeScreen = ({ route }) => {
               {isVisible ? "Go Invisible" : "Go Visible"}
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={handleExitSession}
+          >
+            <Text style={styles.buttonText}>Exit Session</Text>
+          </TouchableOpacity>
         </View>
 
         {isAdmin && (
-          <View style={{ flexDirection: "row", marginBottom: 20 }}>
+          <View
+            style={{ flexDirection: "row", marginBottom: 10, marginTop: 10 }}
+          >
             <TouchableOpacity
               style={styles.tertiaryButton}
               onPress={handleEndSession}
@@ -264,7 +294,7 @@ const SessionHomeScreen = ({ route }) => {
                 })
               }
             >
-              <Text style={styles.buttonText}>Chat</Text>
+              <Text style={styles.buttonText}>Session Chat</Text>
             </TouchableOpacity>
           )}
         </View>

@@ -1,23 +1,5 @@
 [
   {
-    "userId": "1",
-    "profilePicture": "https://images.pexels.com/photos/6274712/pexels-photo-6274712.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "fullName": "John Doe",
-    "jobTitle": "Software Engineer",
-    "address": "123 Main St, City, State",
-    "phoneNumber": "123-456-7890",
-    "socialLinks": [
-      "https://www.linkedin.com/in/johndoe",
-      "https://twitter.com/johndoe"
-    ],
-    "tags": [
-      { "tagId": 1, "tag": "Tech" },
-      { "tagId": 2, "tag": "Programming" },
-      { "tagId": 3, "tag": "Web Development" }
-    ],
-    "visibility": "VISIBLE"
-  },
-  {
     "userId": "2",
     "profilePicture": "https://images.pexels.com/photos/8993561/pexels-photo-8993561.jpeg",
     "fullName": "Jane Smith",

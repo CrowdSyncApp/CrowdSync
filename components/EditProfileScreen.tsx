@@ -28,7 +28,7 @@ const EditProfileScreen = ({ route }) => {
   const {
     uploadImageToS3,
     updateUserProfileTable,
-    createUserTagsWithSession,
+    addUserTags,
     removeUserTagsByTagId,
     fetchUserProfileImage,
   } = useAuth();
@@ -166,9 +166,8 @@ const EditProfileScreen = ({ route }) => {
       const sessionData = await getSessionData(log);
       const sessionId = sessionData.sessionId;
 
-      const addedTags = await createUserTagsWithSession(
+      const addedTags = await addUserTags(
         userProfileData.userId,
-        sessionId,
         newTags,
         updatedUserData.fullName,
         log
@@ -179,7 +178,6 @@ const EditProfileScreen = ({ route }) => {
       const tagIds = removedTags;
       await removeUserTagsByTagId(
         userProfileData.userId,
-        sessionId,
         tagIds,
         log
       );

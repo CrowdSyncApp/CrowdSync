@@ -9,9 +9,9 @@ import {
   Platform,
   ScrollView
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
-import { startSession } from "./SessionManager";
+import { startSession, removeSessionData } from "./SessionManager";
 import { Auth } from "aws-amplify";
 import styles, { palette, fonts } from "./style";
 import { useHeaderHeight } from "@react-navigation/elements";
@@ -33,9 +33,16 @@ const FindSessionScreen = () => {
   const [location, setLocation] = useState();
   const log = useLog();
 
-  log.debug("Entering FindSessionScreen screen...");
+useFocusEffect(
+    React.useCallback(() => {
+        log.debug("Entering FindSessionScreen screen...");
+      removeSessionData(log); // Should never have session data on this screen
+    }, [])
+  );
 
 useEffect(() => {
+    removeSessionData(log); // Should never have session data on this screen
+
   // Request location permission specifically for Android
   const requestLocationPermission = async () => {
     try {

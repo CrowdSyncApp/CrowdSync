@@ -2,93 +2,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateParticipants = /* GraphQL */ `
-  subscription OnCreateParticipants(
-    $sessionId: String
-    $userId: String
-    $joinedAt: AWSDateTime
-    $role: String
-    $jobTitle: String
-  ) {
-    onCreateParticipants(
-      sessionId: $sessionId
-      userId: $userId
-      joinedAt: $joinedAt
-      role: $role
-      jobTitle: $jobTitle
-    ) {
-      sessionId
-      userId
-      joinedAt
-      role
-      jobTitle
-      fullName
-      company
-      visibility
-      tags
-      sessionStatus
-      __typename
-    }
-  }
-`;
-export const onUpdateParticipants = /* GraphQL */ `
-  subscription OnUpdateParticipants(
-    $sessionId: String
-    $userId: String
-    $joinedAt: AWSDateTime
-    $role: String
-    $jobTitle: String
-  ) {
-    onUpdateParticipants(
-      sessionId: $sessionId
-      userId: $userId
-      joinedAt: $joinedAt
-      role: $role
-      jobTitle: $jobTitle
-    ) {
-      sessionId
-      userId
-      joinedAt
-      role
-      jobTitle
-      fullName
-      company
-      visibility
-      tags
-      sessionStatus
-      __typename
-    }
-  }
-`;
-export const onDeleteParticipants = /* GraphQL */ `
-  subscription OnDeleteParticipants(
-    $sessionId: String
-    $userId: String
-    $joinedAt: AWSDateTime
-    $role: String
-    $jobTitle: String
-  ) {
-    onDeleteParticipants(
-      sessionId: $sessionId
-      userId: $userId
-      joinedAt: $joinedAt
-      role: $role
-      jobTitle: $jobTitle
-    ) {
-      sessionId
-      userId
-      joinedAt
-      role
-      jobTitle
-      fullName
-      company
-      visibility
-      tags
-      sessionStatus
-      __typename
-    }
-  }
-`;
 export const onCreateSessions = /* GraphQL */ `
   subscription OnCreateSessions(
     $sessionId: ID
@@ -194,78 +107,6 @@ export const onDeleteTagSet = /* GraphQL */ `
     }
   }
 `;
-export const onCreateChats = /* GraphQL */ `
-  subscription OnCreateChats(
-    $senderId: String
-    $timestamp: String
-    $receiverId: String
-    $messageContent: String
-    $chatTypeStatus: String
-  ) {
-    onCreateChats(
-      senderId: $senderId
-      timestamp: $timestamp
-      receiverId: $receiverId
-      messageContent: $messageContent
-      chatTypeStatus: $chatTypeStatus
-    ) {
-      senderId
-      timestamp
-      receiverId
-      messageContent
-      chatTypeStatus
-      __typename
-    }
-  }
-`;
-export const onUpdateChats = /* GraphQL */ `
-  subscription OnUpdateChats(
-    $senderId: String
-    $timestamp: String
-    $receiverId: String
-    $messageContent: String
-    $chatTypeStatus: String
-  ) {
-    onUpdateChats(
-      senderId: $senderId
-      timestamp: $timestamp
-      receiverId: $receiverId
-      messageContent: $messageContent
-      chatTypeStatus: $chatTypeStatus
-    ) {
-      senderId
-      timestamp
-      receiverId
-      messageContent
-      chatTypeStatus
-      __typename
-    }
-  }
-`;
-export const onDeleteChats = /* GraphQL */ `
-  subscription OnDeleteChats(
-    $senderId: String
-    $timestamp: String
-    $receiverId: String
-    $messageContent: String
-    $chatTypeStatus: String
-  ) {
-    onDeleteChats(
-      senderId: $senderId
-      timestamp: $timestamp
-      receiverId: $receiverId
-      messageContent: $messageContent
-      chatTypeStatus: $chatTypeStatus
-    ) {
-      senderId
-      timestamp
-      receiverId
-      messageContent
-      chatTypeStatus
-      __typename
-    }
-  }
-`;
 export const onCreateConnections = /* GraphQL */ `
   subscription OnCreateConnections($otherUserId: String, $userId: String) {
     onCreateConnections(otherUserId: $otherUserId, userId: $userId) {
@@ -365,78 +206,6 @@ export const onDeleteLocations = /* GraphQL */ `
     }
   }
 `;
-export const onCreateUserTags = /* GraphQL */ `
-  subscription OnCreateUserTags(
-    $sessionId: String
-    $userTagId: String
-    $userId: String
-    $tagId: String
-    $fullName: String
-  ) {
-    onCreateUserTags(
-      sessionId: $sessionId
-      userTagId: $userTagId
-      userId: $userId
-      tagId: $tagId
-      fullName: $fullName
-    ) {
-      sessionId
-      userTagId
-      userId
-      tagId
-      fullName
-      __typename
-    }
-  }
-`;
-export const onUpdateUserTags = /* GraphQL */ `
-  subscription OnUpdateUserTags(
-    $sessionId: String
-    $userTagId: String
-    $userId: String
-    $tagId: String
-    $fullName: String
-  ) {
-    onUpdateUserTags(
-      sessionId: $sessionId
-      userTagId: $userTagId
-      userId: $userId
-      tagId: $tagId
-      fullName: $fullName
-    ) {
-      sessionId
-      userTagId
-      userId
-      tagId
-      fullName
-      __typename
-    }
-  }
-`;
-export const onDeleteUserTags = /* GraphQL */ `
-  subscription OnDeleteUserTags(
-    $sessionId: String
-    $userTagId: String
-    $userId: String
-    $tagId: String
-    $fullName: String
-  ) {
-    onDeleteUserTags(
-      sessionId: $sessionId
-      userTagId: $userTagId
-      userId: $userId
-      tagId: $tagId
-      fullName: $fullName
-    ) {
-      sessionId
-      userTagId
-      userId
-      tagId
-      fullName
-      __typename
-    }
-  }
-`;
 export const onCreateUserProfiles = /* GraphQL */ `
   subscription OnCreateUserProfiles(
     $userId: String
@@ -526,6 +295,213 @@ export const onDeleteUserProfiles = /* GraphQL */ `
       profilePicture
       location
       socialLinks
+      __typename
+    }
+  }
+`;
+export const onCreateChats = /* GraphQL */ `
+  subscription OnCreateChats(
+    $receiverIdTimestamp: String
+    $senderId: String
+    $receiverId: String
+    $chatTypeStatus: String
+    $displayed: Boolean
+  ) {
+    onCreateChats(
+      receiverIdTimestamp: $receiverIdTimestamp
+      senderId: $senderId
+      receiverId: $receiverId
+      chatTypeStatus: $chatTypeStatus
+      displayed: $displayed
+    ) {
+      receiverIdTimestamp
+      senderId
+      receiverId
+      messageContent
+      chatTypeStatus
+      displayed
+      __typename
+    }
+  }
+`;
+export const onUpdateChats = /* GraphQL */ `
+  subscription OnUpdateChats(
+    $receiverIdTimestamp: String
+    $senderId: String
+    $receiverId: String
+    $chatTypeStatus: String
+    $displayed: Boolean
+  ) {
+    onUpdateChats(
+      receiverIdTimestamp: $receiverIdTimestamp
+      senderId: $senderId
+      receiverId: $receiverId
+      chatTypeStatus: $chatTypeStatus
+      displayed: $displayed
+    ) {
+      receiverIdTimestamp
+      senderId
+      receiverId
+      messageContent
+      chatTypeStatus
+      displayed
+      __typename
+    }
+  }
+`;
+export const onDeleteChats = /* GraphQL */ `
+  subscription OnDeleteChats(
+    $receiverIdTimestamp: String
+    $senderId: String
+    $receiverId: String
+    $chatTypeStatus: String
+    $displayed: Boolean
+  ) {
+    onDeleteChats(
+      receiverIdTimestamp: $receiverIdTimestamp
+      senderId: $senderId
+      receiverId: $receiverId
+      chatTypeStatus: $chatTypeStatus
+      displayed: $displayed
+    ) {
+      receiverIdTimestamp
+      senderId
+      receiverId
+      messageContent
+      chatTypeStatus
+      displayed
+      __typename
+    }
+  }
+`;
+export const onCreateUserTags = /* GraphQL */ `
+  subscription OnCreateUserTags(
+    $tagId: String
+    $userId: String
+    $fullName: String
+  ) {
+    onCreateUserTags(tagId: $tagId, userId: $userId, fullName: $fullName) {
+      tagId
+      userId
+      fullName
+      __typename
+    }
+  }
+`;
+export const onUpdateUserTags = /* GraphQL */ `
+  subscription OnUpdateUserTags(
+    $tagId: String
+    $userId: String
+    $fullName: String
+  ) {
+    onUpdateUserTags(tagId: $tagId, userId: $userId, fullName: $fullName) {
+      tagId
+      userId
+      fullName
+      __typename
+    }
+  }
+`;
+export const onDeleteUserTags = /* GraphQL */ `
+  subscription OnDeleteUserTags(
+    $tagId: String
+    $userId: String
+    $fullName: String
+  ) {
+    onDeleteUserTags(tagId: $tagId, userId: $userId, fullName: $fullName) {
+      tagId
+      userId
+      fullName
+      __typename
+    }
+  }
+`;
+export const onCreateParticipants = /* GraphQL */ `
+  subscription OnCreateParticipants(
+    $sessionId: String
+    $userId: String
+    $joinedAt: AWSDateTime
+    $role: String
+    $jobTitle: String
+  ) {
+    onCreateParticipants(
+      sessionId: $sessionId
+      userId: $userId
+      joinedAt: $joinedAt
+      role: $role
+      jobTitle: $jobTitle
+    ) {
+      sessionId
+      userId
+      joinedAt
+      role
+      jobTitle
+      fullName
+      company
+      visibility
+      tags
+      sessionStatus
+      userStatus
+      __typename
+    }
+  }
+`;
+export const onUpdateParticipants = /* GraphQL */ `
+  subscription OnUpdateParticipants(
+    $sessionId: String
+    $userId: String
+    $joinedAt: AWSDateTime
+    $role: String
+    $jobTitle: String
+  ) {
+    onUpdateParticipants(
+      sessionId: $sessionId
+      userId: $userId
+      joinedAt: $joinedAt
+      role: $role
+      jobTitle: $jobTitle
+    ) {
+      sessionId
+      userId
+      joinedAt
+      role
+      jobTitle
+      fullName
+      company
+      visibility
+      tags
+      sessionStatus
+      userStatus
+      __typename
+    }
+  }
+`;
+export const onDeleteParticipants = /* GraphQL */ `
+  subscription OnDeleteParticipants(
+    $sessionId: String
+    $userId: String
+    $joinedAt: AWSDateTime
+    $role: String
+    $jobTitle: String
+  ) {
+    onDeleteParticipants(
+      sessionId: $sessionId
+      userId: $userId
+      joinedAt: $joinedAt
+      role: $role
+      jobTitle: $jobTitle
+    ) {
+      sessionId
+      userId
+      joinedAt
+      role
+      jobTitle
+      fullName
+      company
+      visibility
+      tags
+      sessionStatus
+      userStatus
       __typename
     }
   }

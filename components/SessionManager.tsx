@@ -4,8 +4,11 @@ import {
   createSessions,
   updateSessions,
   createOrUpdateParticipants,
+  updateUserTags,
+  updateParticipants,
+  updateLocations,
 } from "../src/graphql/mutations";
-import { listParticipants, getParticipants } from "../src/graphql/queries";
+import { listParticipants, getParticipants, listUserTags, listLocations } from "../src/graphql/queries";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import "react-native-get-random-values";
 import { v4 } from "uuid";
@@ -18,12 +21,17 @@ const generateUniqueSessionId = () => {
   return v4();
 };
 
-export async function getParticipantVisibility(userId, log) {
-  log.debug("getParticipantVisibility on userId: ", userId);
+export async function getParticipantVisibility(userId, sessionId, log) {
+  log.debug("getParticipantVisibility on userId: " + userId + " and sessionId: " + sessionId);
   try {
     const userIdParticipant = await API.graphql(
-      graphqlOperation(getParticipants, { userId: userId })
+      graphqlOperation(getParticipants, { userId: userId, sessionId: sessionId })
     );
+
+    if (!userIdParticipant || !userIdParticipant.visibility) {
+      log.debug("Visibility data not found, returning false.");
+      return false;
+    }
 
     const visibility = userIdParticipant.data.getParticipants.visibility;
     log.debug("visibility: ", visibility);
@@ -73,7 +81,7 @@ export async function getSessionData(log) {
   return {sessionId: "INACTIVE"};
 }
 
-async function removeSessionData(log) {
+export async function removeSessionData(log) {
   log.debug("removeSessionData");
   await AsyncStorage.removeItem("sessionData");
 }
@@ -85,7 +93,7 @@ export const fetchParticipants = async (log) => {
     const userId = user?.username;
     const sessionData = await getSessionData(log);
     log.debug(
-      "fetchParticipants on user: " + user + " and sessionData: " + sessionData
+      "fetchParticipants on user: " + JSON.stringify(user) + " and sessionData: " + JSON.stringify(sessionData)
     );
     const response = await API.graphql(
       graphqlOperation(listParticipants, {
@@ -127,12 +135,13 @@ export const getSessionIdForUser = async (userId, log) => {
     const filter = {
       userId: { eq: userId },
       sessionStatus: { ne: "INACTIVE" },
+      userStatus: {ne: "INACTIVE"}
     };
 
+    log.debug("listParticipants on filter: ", filter);
     const listParticipantsResponse = await API.graphql(
       graphqlOperation(listParticipants, { filter })
     );
-    log.debug("listParticipants on filter: ", filter);
     const participants = listParticipantsResponse.data.listParticipants.items;
     log.debug("participants: ", participants);
 
@@ -202,6 +211,32 @@ const createSessionWithRetry = async (userId, title, log, retryAttempt = 1) => {
   }
 };
 
+const propagateSessionIdUpdate = async (userId, sessionId, sessionStatus, userStatus, log) => {
+  try {
+    log.debug('propagateSessionIdUpdate on userId: ' + userId + ' and sessionId: ' + sessionId + ' and sessionStatus: ' + sessionStatus + ' and userStatus: ' + userStatus);
+
+  const updateParticipantsInput = {
+    input: {
+      userId,
+      sessionId,
+      sessionStatus,
+      userStatus
+    }
+  };
+
+  // Call the updateParticipants mutation to update sessionIds
+  log.debug('updateParticipants on input: ', updateParticipantsInput);
+  await API.graphql(graphqlOperation(updateParticipants, updateParticipantsInput));
+
+    // Log success or any other necessary information
+    log.debug('Session updates propagated successfully');
+  } catch (error) {
+    // Handle errors
+    console.error('Error propagating session updates:', error);
+    log.error('Error propagating session updates:', error);
+  }
+};
+
 export const createOrUpdateParticipant = async (
   userId,
   fullName,
@@ -226,6 +261,7 @@ export const createOrUpdateParticipant = async (
       fullName: fullName,
       visibility: "VISIBLE",
       sessionStatus: "ACTIVE",
+      userStatus: "ACTIVE"
     },
   };
 
@@ -272,9 +308,32 @@ export const startSession = async (userProfileData, title, log) => {
   }
 };
 
-export const endSession = async (sessionId, startTime, log) => {
+export const exitSession = async (userId, sessionId, log) => {
+log.debug('exitSession on userId: ' + userId + ' and sessionId: ' + sessionId);
+  try {
+    // Prepare the input for the deleteParticipants mutation
+    const input = {
+      input: {
+        userId,
+        sessionId,
+        userStatus: "INACTIVE"
+      },
+    };
+
+    // Call the updateParticipants mutation to remove the participant from the session
+    const response = await API.graphql(graphqlOperation(updateParticipants, input));
+
+    log.debug('Participant exited from session:', response.data.updateParticipants);
+  } catch (error) {
+    console.error('Error exiting participant from session:', error);
+    log.error('Error exiting participant from session:', error);
+    throw error; // Re-throw the error to be handled by the caller if needed
+  }
+};
+
+export const endSession = async (userId, sessionId, startTime, log) => {
   log.debug(
-    "endSession on sessionId: " + sessionId + " and startTime: " + startTime
+    "endSession on userId: " + userId + " and sessionId: " + sessionId + " and startTime: " + startTime
   );
   try {
     const now = new Date().toISOString();
@@ -297,6 +356,8 @@ export const endSession = async (sessionId, startTime, log) => {
     const updatedSession = response.data.updateSessions;
     removeSessionData(log);
     await clearAllIntervals(log);
+
+    await propagateSessionIdUpdate(userId, sessionId, "INACTIVE", "INACTIVE", log);
 
     console.log("Session ended:", updatedSession);
     log.debug("Session ended:", updatedSession);
