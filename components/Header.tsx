@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Text, View, Image, TouchableOpacity, SafeAreaView, StatusBar } from "react-native";
 import { Auth } from "aws-amplify";
 import { useAuth } from "../QueryCaching";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import styles, { palette, fonts } from "./style";
 import participantsData from "../dummies/dummy_accounts.json";
 import CrowdSyncLogo from "../images/Crowdsync_Logo.png";
@@ -29,6 +29,22 @@ const Header = () => {
 
         getProfileImageUri();
     }, [userProfileData]);
+
+useFocusEffect(
+    React.useCallback(() => {
+        const getUserProfileData = async () => {
+          if (user) {
+            fetchedUserProfileData = await fetchUserProfileData();
+          } else {
+            // Pick a random user from participantsData
+            const randomIndex = Math.floor(Math.random() * participantsData.length);
+            fetchedUserProfileData = participantsData[randomIndex];
+          }
+          setUserProfileData(fetchedUserProfileData);
+        };
+        getUserProfileData();
+    }, [])
+  );
 
   useEffect(() => {
     const getUserProfileData = async () => {
@@ -58,6 +74,7 @@ const Header = () => {
   const handleProfilePress = async () => {
     log.debug('handleProfilePress...');
     // Navigate to the ProfileScreen and pass the user profile data as params
+    console.log("here", userProfileData);
     navigation.navigate("Profile", { userProfileData });
   };
 
