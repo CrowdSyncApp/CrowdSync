@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, Pressable, Linking } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { getSessionData } from "./SessionManager";
+import { getSessionData, getParticipantVisibility } from "./SessionManager";
 import styles, { palette, fonts } from "./style";
 import { useAuth } from "../QueryCaching";
 import { useLog } from "../CrowdSyncLogManager";
@@ -10,7 +10,7 @@ import { useLog } from "../CrowdSyncLogManager";
 const OtherUserProfileScreen = () => {
   const navigation = useNavigation(); // Get navigation instance
   const route = useRoute(); // Get route object
-  const { fetchUserProfileImage, getParticipantVisibility } = useAuth();
+  const { fetchUserProfileImage } = useAuth();
   const [profilePictureUri, setProfilePictureUri] = useState("");
   const log = useLog();
 
@@ -41,7 +41,7 @@ const OtherUserProfileScreen = () => {
                 visible = false;
             }
         } else {
-            visible = await getParticipantVisibility(userData.userId, log);
+            visible = await getParticipantVisibility(userData.userId, sessionId, log);
            }
            log.debug('getVisibility results: ', visible);
            setVisible(visible);

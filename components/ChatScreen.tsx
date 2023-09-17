@@ -11,9 +11,8 @@ import {
 import { Auth, API, graphqlOperation } from "aws-amplify";
 import { createChats } from "../src/graphql/mutations";
 import { listChatsBetweenUsers } from "../src/graphql/queries";
-import { onCreateChats } from '../src/graphql/subscriptions';
+import { onCreateChats } from "../src/graphql/subscriptions";
 import "react-native-get-random-values";
-import { v4 } from "uuid";
 import { useAuth } from "../QueryCaching";
 import styles, { palette, fonts } from "./style";
 import { useLog } from "../CrowdSyncLogManager";
@@ -29,14 +28,21 @@ const ChatScreen = ({ route }) => {
   const { user } = useAuth();
   const { participants, chatType } = route.params;
 
-    log.debug("Entering ChatScreen with participants: " + participants + " and chatType: " + chatType);
+  log.debug(
+    "Entering ChatScreen with participants: " +
+      JSON.stringify(participants) +
+      " and chatType: " +
+      JSON.stringify(chatType)
+  );
 
   useEffect(() => {
     log.debug("senderId: ", user?.attributes.sub);
     setSenderId(user?.attributes.sub);
     log.debug("participantsList: ", participants);
     setParticipantsList(participants);
-    const participantIds = participants.map(participant => participant.userId);
+    const participantIds = participants.map(
+      (participant) => participant.userId
+    );
     log.debug("participantIdsList: ", participantIds);
     setParticipantIdsList(participantIds);
   }, []);
@@ -49,38 +55,41 @@ const ChatScreen = ({ route }) => {
 
     log.debug("Subscribing to onCreateChats");
     const subscription = API.graphql(
-          graphqlOperation(onCreateChats, {
-            chatTypeStatus: `${chatType}#ACTIVE`,
-          })
-        ).subscribe({
-          next: (data) => {
-            // Handle incoming subscription data (new chat messages)
-            const newChatMessage = data.value.data.onCreateChats;
-            log.debug("newChatMessage: ", newChatMessage);
+      graphqlOperation(onCreateChats, {
+        chatTypeStatus: `${chatType}#ACTIVE`,
+        displayed: true
+      })
+    ).subscribe({
+      next: (data) => {
+        // Handle incoming subscription data (new chat messages)
+        const newChatMessage = data.value.data.onCreateChats;
+        log.debug("newChatMessage: ", newChatMessage);
 
-            const isMessageValid =
-                  (newChatMessage.senderId === user?.attributes.sub &&
-                    participantIdsList.includes(newChatMessage.receiverId)) ||
-                  (participantIdsList.includes(newChatMessage.senderId) &&
-                    newChatMessage.receiverId === user?.attributes.sub);
+        const parts = newChatMessage.receiverIdTimestamp.split("#");
+        const receiverId = parts[0];
 
-            log.debug("isMessageValid: ", isMessageValid);
+        const isMessageValid =
+          (newChatMessage.senderId === user?.attributes.sub &&
+            participantIdsList.includes(receiverId)) ||
+          (participantIdsList.includes(newChatMessage.senderId) &&
+            receiverId === user?.attributes.sub);
 
-            // If the message meets your filtering criteria, update the state
-            if (isMessageValid) {
-              setMessages((prevMessages) => [...prevMessages, newChatMessage]);
-            log.debug("messages: ", messages);
-            }
-          },
-          error: (error) => {
-            console.error('Subscription error:', error);
-            log.error('Subscription error:', error);
-          },
-        });
+        log.debug("isMessageValid: ", isMessageValid);
+
+        if (isMessageValid) {
+          setMessages((prevMessages) => [...prevMessages, newChatMessage]);
+          log.debug("messages: ", messages);
+        }
+      },
+      error: (error) => {
+        console.error("Subscription error:", error);
+        log.error("Subscription error:", error);
+      },
+    });
 
     return () => {
-        subscription.unsubscribe();
-    }
+      subscription.unsubscribe();
+    };
   }, [senderId]);
 
   const renderChatBubble = (item, isUser) => {
@@ -100,7 +109,7 @@ const ChatScreen = ({ route }) => {
       <View style={chatBubbleStyle}>
         <Text style={textStyle}>{item.messageContent}</Text>
         <Text style={styles.detailText}>
-          {formatTimestamp(item.timestamp)}
+          {formatTimestamp(item.receiverIdTimestamp)}
         </Text>
       </View>
     );
@@ -111,36 +120,36 @@ const ChatScreen = ({ route }) => {
     log.debug("handleSend...");
     if (newMessage.trim() !== "") {
       const now = new Date().toISOString();
-      const chatId = v4();
 
       try {
         let chatTypeStatus = `${chatType}#ACTIVE`;
 
         // Send chat messages to all visible participants
         const sendMessagePromises = participantsList.map(
-          async (participant) => {
+          async (participant, index) => {
             if (
               (participant.visibility === "VISIBLE" && chatType === "GROUP") ||
               chatType === "INDIVIDUAL"
             ) {
-                const input = {
-                  senderId: senderId,
-                  timestamp: now,
-                  receiverId: participant.userId,
-                  messageContent: newMessage.trim(),
-                  chatTypeStatus,
-                }
-                log.debug("createChats input: ", input);
+            const displayed = index === 0;
+
+              const input = {
+                senderId: senderId,
+                receiverIdTimestamp: `${participant.userId}#${now}`,
+                receiverId: participant.userId,
+                messageContent: newMessage.trim(),
+                chatTypeStatus,
+                displayed,
+              };
+              log.debug("createChats input: ", input);
+
               await API.graphql(
-                graphqlOperation(createChats, {
-                  input: input,
-                })
+                graphqlOperation(createChats, { input: input })
               );
             }
           }
         );
 
-        // Wait for all messages to be sent
         await Promise.all(sendMessagePromises);
 
         // Clear the text input after sending the message
@@ -152,7 +161,8 @@ const ChatScreen = ({ route }) => {
     }
   };
 
-  const formatTimestamp = (timestamp) => {
+  const formatTimestamp = (receiverIdTimestamp) => {
+    const timestamp = receiverIdTimestamp.split("#")[1];
     const date = new Date(timestamp);
     const month = date.getMonth() + 1;
     const day = date.getDate();
@@ -164,29 +174,25 @@ const ChatScreen = ({ route }) => {
   const fetchChatMessages = async () => {
     log.debug("fetchChatMessages...");
     try {
-
-    const userId = user?.attributes.sub;
-    const chatTypeStatus = `${chatType}#ACTIVE`;
-    log.debug("userId: ", userId);
-    log.debug("chatTypeStatus: ", chatTypeStatus);
-    log.debug("otherUserIds: ", participantIdsList);
+      const userId = user?.attributes.sub;
+      const chatTypeStatus = `${chatType}#ACTIVE`;
+      log.debug("userId: ", userId);
+      log.debug("chatTypeStatus: ", chatTypeStatus);
+      log.debug("otherUserIds: ", participantIdsList);
 
       const response = await API.graphql(
         graphqlOperation(listChatsBetweenUsers, {
-            userId: userId,
-            otherUserIds: participantIdsList,
-            chatTypeStatus: chatTypeStatus,
+          userId: userId,
+          otherUserIds: participantIdsList,
+          chatTypeStatus: chatTypeStatus,
+          displayed: true,
         })
       );
       const chatMessages = response.data.listChatsBetweenUsers.items;
 
       chatMessages.sort((a, b) => {
-        const timestampA = new Date(
-          a.timestamp
-        );
-        const timestampB = new Date(
-          b.timestamp
-        );
+        const timestampA = new Date(a.timestamp);
+        const timestampB = new Date(b.timestamp);
         return timestampA - timestampB;
       });
 

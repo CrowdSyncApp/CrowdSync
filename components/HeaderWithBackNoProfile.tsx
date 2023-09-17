@@ -34,7 +34,7 @@ const HeaderWithBackNoProfile = () => {
        const sessionData = await getSessionData(log);
        log.debug('handleTitlePress on sessionData: ', sessionData);
 
-       if (sessionData) {
+       if (sessionData.sessionId !== 'INACTIVE') {
           navigation.navigate("SessionHome", { sessionData: sessionData });
        } else {
           navigation.navigate("FindSession");

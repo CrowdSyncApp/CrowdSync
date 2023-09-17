@@ -10,7 +10,6 @@ import {
   listConnections,
 } from "./src/graphql/queries";
 import {
-  getSessionIdForUser,
   getSessionData,
 } from "./components/SessionManager";
 import { v4 } from "uuid";
@@ -158,10 +157,10 @@ async function fetchUserProfile(userId, log) {
         log.debug("updateUserProfiles complete.");
       }
 
-      const currSessionId = await getSessionIdForUser(userId, log);
-      data.getUserProfiles.sessionId = currSessionId;
+      const currSessionData = await getSessionData(log);
+      data.getUserProfiles.sessionId = currSessionData.sessionId;
 
-      const userTags = await getAllUserTags(userId, currSessionId, log);
+      const userTags = await getAllUserTags(userId, log);
       data.getUserProfiles.tags = userTags;
 
       await AsyncStorage.setItem(
@@ -389,16 +388,15 @@ const fetchConnectionsAndProfiles = async (userId, log) => {
   }
 };
 
-const getUserTagsIds = async (userId, sessionId, log) => {
+const getUserTagsIds = async (userId, log) => {
   log.debug(
-    "getUserTagsIds on userId: " + userId + " and sessionId: " + sessionId
+    "getUserTagsIds on userId: " + userId
   );
   try {
     const response = await API.graphql(
       graphqlOperation(listUserTags, {
         filter: {
           userId: { eq: userId },
-          sessionId: { eq: sessionId },
         },
       })
     );
@@ -416,12 +414,12 @@ const getUserTagsIds = async (userId, sessionId, log) => {
   }
 };
 
-const getAllUserTags = async (userId, sessionId, log) => {
+const getAllUserTags = async (userId, log) => {
   log.debug(
-    "getAllUserTags on userId: " + userId + " and sessionId: " + sessionId
+    "getAllUserTags on userId: " + userId
   );
   try {
-    const tagIds = await getUserTagsIds(userId, sessionId, log);
+    const tagIds = await getUserTagsIds(userId, log);
     const tagSets = await getTagSets(log);
 
     const userTagsWithTags = tagIds
@@ -569,18 +567,15 @@ const populateTagSet = async (log) => {
   }
 };
 
-const createUserTagsWithSession = async (
+const addUserTags = async (
   userId,
-  sessionId,
   tagIds,
   fullName,
   log
 ) => {
   log.debug(
-    "createUserTagsWithSession on userId: " +
+    "addUserTags on userId: " +
       userId +
-      " and sessionId: " +
-      sessionId +
       " and tagIds: " +
       tagIds +
       " and fullName: " +
@@ -591,7 +586,6 @@ const createUserTagsWithSession = async (
       const currTagId = tagId.tagId;
       const input = {
         userTagId: v4(),
-        sessionId: sessionId,
         userId: userId,
         tagId: currTagId,
         fullName: fullName,
@@ -615,12 +609,10 @@ const createUserTagsWithSession = async (
   }
 };
 
-const removeUserTagsByTagId = async (userId, sessionId, tagIds, log) => {
+const removeUserTagsByTagId = async (userId, tagIds, log) => {
   log.debug(
     "removeUserTagsByTagId on userId: " +
       userId +
-      " and sessionId: " +
-      sessionId +
       " and tagIds: " +
       tagIds
   );
@@ -646,7 +638,7 @@ const removeUserTagsByTagId = async (userId, sessionId, tagIds, log) => {
       // Create an array of promises to delete user tags in a batch for the current tagId
       const deleteTagPromises = userTags.map(async (userTag) => {
         try {
-          const input = { userTagId: userTag.userTagId, sessionId: sessionId };
+          const input = { userTagId: userTag.userTagId };
           return await API.graphql(graphqlOperation(deleteUserTags, { input }));
         } catch (error) {
           console.error("Error deleting user tag:", error);
@@ -770,7 +762,7 @@ export function AuthProvider({ children }) {
     fetchUserProfileData,
     getUserProfileFromId,
     storeInterval,
-    createUserTagsWithSession,
+    addUserTags,
     fetchUserProfileImage,
     refreshLocation,
     refreshToken,
