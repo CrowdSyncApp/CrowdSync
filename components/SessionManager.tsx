@@ -4,11 +4,10 @@ import {
   createSessions,
   updateSessions,
   createOrUpdateParticipants,
-  updateUserTags,
   updateParticipants,
   updateLocations,
 } from "../src/graphql/mutations";
-import { listParticipants, getParticipants, listUserTags, listLocations } from "../src/graphql/queries";
+import { listParticipants, getParticipants, listLocations } from "../src/graphql/queries";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import "react-native-get-random-values";
 import { v4 } from "uuid";
@@ -28,7 +27,7 @@ export async function getParticipantVisibility(userId, sessionId, log) {
       graphqlOperation(getParticipants, { userId: userId, sessionId: sessionId })
     );
 
-    if (!userIdParticipant || !userIdParticipant.visibility) {
+    if (!userIdParticipant) {
       log.debug("Visibility data not found, returning false.");
       return false;
     }
@@ -316,7 +315,8 @@ log.debug('exitSession on userId: ' + userId + ' and sessionId: ' + sessionId);
       input: {
         userId,
         sessionId,
-        userStatus: "INACTIVE"
+        userStatus: "INACTIVE",
+        visibility: "INVISIBLE",
       },
     };
 

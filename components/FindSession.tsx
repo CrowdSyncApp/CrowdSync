@@ -12,7 +12,6 @@ import {
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
 import { startSession, removeSessionData } from "./SessionManager";
-import { Auth } from "aws-amplify";
 import styles, { palette, fonts } from "./style";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { StatusBar } from "react-native";

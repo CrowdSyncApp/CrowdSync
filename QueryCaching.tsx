@@ -320,10 +320,9 @@ async function fetchUser(log) {
 }
 
 async function login(credentials, log) {
-  log.debug("login with credentials: ", credentials);
+  log.debug("login with username: ", credentials.username);
   try {
     const user = await Auth.signIn(credentials.username, credentials.password);
-    log.debug("user: ", user);
     return user;
   } catch (error) {
     if (error.message === "User is not confirmed.") {
@@ -465,7 +464,6 @@ const getTagSets = async (log) => {
     // Store the tag sets in AsyncStorage
     await AsyncStorage.setItem("tagSet", JSON.stringify(allTagSets));
 
-    log.debug("All tag sets: ", allTagSets);
     return allTagSets;
   } catch (error) {
     console.error("Error listing TagSets:", error);
@@ -711,8 +709,10 @@ export function AuthProvider({ children }) {
   const isUserLoggedIn = user !== null;
 
   const fetchUserProfileData = async () => {
-    if (user && user.username) {
-      const userProfileData = await fetchUserProfile(user.username, log);
+   // TODO this is a temp fix. Really should figure out why it's caching the previous log in
+    const storedUser = await Auth.currentAuthenticatedUser();
+    if (storedUser && storedUser.username) {
+      const userProfileData = await fetchUserProfile(storedUser.username, log);
       return userProfileData;
     }
     return null;
@@ -748,6 +748,7 @@ export function AuthProvider({ children }) {
     refreshLocation,
     refreshToken,
     isUserLoggedIn,
+    getAllUserTags,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
