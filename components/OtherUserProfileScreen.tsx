@@ -10,8 +10,9 @@ import { useLog } from "../CrowdSyncLogManager";
 const OtherUserProfileScreen = () => {
   const navigation = useNavigation(); // Get navigation instance
   const route = useRoute(); // Get route object
-  const { fetchUserProfileImage } = useAuth();
+  const { fetchUserProfileImage, getAllUserTags } = useAuth();
   const [profilePictureUri, setProfilePictureUri] = useState("");
+  const [userTags, setUserTags] = useState([]);
   const log = useLog();
 
   const { userData, sessionId } = route.params;
@@ -47,6 +48,13 @@ const OtherUserProfileScreen = () => {
            setVisible(visible);
         }
 
+        async function getUserTags() {
+            const allUserTags = await getAllUserTags(userData.userId, log);
+            log.debug('userTags retrieved: ', JSON.stringify(allUserTags));
+            setUserTags(allUserTags);
+        }
+
+        getUserTags();
         getVisibility();
         getProfileImageUri();
     }, []);
@@ -165,9 +173,9 @@ useEffect(() => {
           <View>
             <Text style={styles.secondaryHeaderTitle}>My Tags:</Text>
             <Text style={styles.detailText}>
-              {userData.tags && userData.tags.length > 0
-                ? userData.tags.map((tag, index) =>
-                    index === userData.tags.length - 1
+              {userTags && userTags.length > 0
+                ? userTags.map((tag, index) =>
+                    index === userTags.length - 1
                       ? tag.tag
                       : tag.tag + ", "
                   )

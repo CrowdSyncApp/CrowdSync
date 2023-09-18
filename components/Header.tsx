@@ -23,7 +23,7 @@ const Header = () => {
                 const profilePicture = await fetchUserProfileImage(userProfileData.identityId, userProfileData.profilePicture, log);
                 setProfilePictureUri(profilePicture);
             } catch (error) {
-                log.debug('Error saving profile picture in Header: ', error);
+                log.error('Error saving profile picture in Header: ', error);
             }
         }
 
@@ -35,30 +35,12 @@ useFocusEffect(
         const getUserProfileData = async () => {
           if (user) {
             fetchedUserProfileData = await fetchUserProfileData();
-          } else {
-            // Pick a random user from participantsData
-            const randomIndex = Math.floor(Math.random() * participantsData.length);
-            fetchedUserProfileData = participantsData[randomIndex];
           }
           setUserProfileData(fetchedUserProfileData);
         };
         getUserProfileData();
     }, [])
   );
-
-  useEffect(() => {
-    const getUserProfileData = async () => {
-      if (user) {
-        fetchedUserProfileData = await fetchUserProfileData();
-      } else {
-        // Pick a random user from participantsData
-        const randomIndex = Math.floor(Math.random() * participantsData.length);
-        fetchedUserProfileData = participantsData[randomIndex];
-      }
-      setUserProfileData(fetchedUserProfileData);
-    };
-    getUserProfileData();
-  }, [user]);
 
   const handleTitlePress = async () => {
      const sessionData = await getSessionData(log);
@@ -74,7 +56,6 @@ useFocusEffect(
   const handleProfilePress = async () => {
     log.debug('handleProfilePress...');
     // Navigate to the ProfileScreen and pass the user profile data as params
-    console.log("here", userProfileData);
     navigation.navigate("Profile", { userProfileData });
   };
 

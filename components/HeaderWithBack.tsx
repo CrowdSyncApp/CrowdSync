@@ -23,7 +23,7 @@ const HeaderWithBack = () => {
             log.debug('HeaderWithBack profilePicture: ', profilePicture);
                 setProfilePictureUri(profilePicture);
                 } catch (error) {
-                    log.debug('Error saving profile picture in HeaderWithBack: ', error);
+                    log.error('Error saving profile picture in HeaderWithBack: ', error);
                 }
             }
             getProfileImageUri();
@@ -33,10 +33,6 @@ const HeaderWithBack = () => {
     const getUserProfileData = async () => {
       if (user) {
         fetchedUserProfileData = await fetchUserProfileData();
-      } else {
-        // Pick a random user from participantsData
-        const randomIndex = Math.floor(Math.random() * participantsData.length);
-        fetchedUserProfileData = participantsData[randomIndex];
       }
       log.debug('HeaderWithBack userProfileData: ', fetchedUserProfileData);
       setUserProfileData(fetchedUserProfileData);

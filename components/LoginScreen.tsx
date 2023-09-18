@@ -20,7 +20,7 @@ const LoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
-  const { login } = useAuth();
+  const { user, login } = useAuth();
   const log = useLog();
 
   log.debug('Login screen...');
