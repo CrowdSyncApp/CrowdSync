@@ -29,7 +29,7 @@ const ChatScreen = ({ route }) => {
   const [recIds, setRecIds] = useState([]);
   const log = useLog();
   const [ttlExpiration, setTtlExpiration] = useState(0);
-  const { user } = useAuth();
+  const { user, getUserProfileFromId } = useAuth();
   const { participants, chatType } = route.params;
 
   log.debug(
@@ -190,10 +190,9 @@ const ChatScreen = ({ route }) => {
             chatId: { eq: chatId },
         };
         const response = await API.graphql(
-              graphqlOperation(listChats, { filter })
+              graphqlOperation(listChats, { filter, nextToken })
             );
         const chatMessages = response.data.listChats.items;
-        console.log("chatMessages: ", chatMessages);
 
           if (chatMessages.length > 0) {
             allMessages = allMessages.concat(chatMessages);
