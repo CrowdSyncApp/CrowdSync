@@ -168,71 +168,6 @@ export const listUserProfiles = /* GraphQL */ `
     }
   }
 `;
-export const getChats = /* GraphQL */ `
-  query GetChats($senderId: String!, $receiverIdTimestamp: String!) {
-    getChats(senderId: $senderId, receiverIdTimestamp: $receiverIdTimestamp) {
-      receiverIdTimestamp
-      senderId
-      receiverId
-      messageContent
-      chatTypeStatus
-      displayed
-      __typename
-    }
-  }
-`;
-export const listChats = /* GraphQL */ `
-  query ListChats(
-    $filter: TableChatsFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listChats(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        receiverIdTimestamp
-        senderId
-        receiverId
-        messageContent
-        chatTypeStatus
-        displayed
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-export const listChatsBetweenUsers = /* GraphQL */ `
-  query ListChatsBetweenUsers(
-    $userId: String!
-    $otherUserIds: [String]!
-    $chatTypeStatus: String!
-    $displayed: Boolean!
-    $limit: Int
-    $nextToken: String
-  ) {
-    listChatsBetweenUsers(
-      userId: $userId
-      otherUserIds: $otherUserIds
-      chatTypeStatus: $chatTypeStatus
-      displayed: $displayed
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        receiverIdTimestamp
-        senderId
-        receiverId
-        messageContent
-        chatTypeStatus
-        displayed
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
 export const getUserTags = /* GraphQL */ `
   query GetUserTags($userId: String!, $tagId: String!) {
     getUserTags(userId: $userId, tagId: $tagId) {
@@ -298,6 +233,40 @@ export const listParticipants = /* GraphQL */ `
         tags
         sessionStatus
         userStatus
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getChats = /* GraphQL */ `
+  query GetChats($chatId: String!, $timestamp: String!) {
+    getChats(chatId: $chatId, timestamp: $timestamp) {
+      chatId
+      timestamp
+      messageContent
+      senderId
+      receiverId
+      chatTypeStatus
+      __typename
+    }
+  }
+`;
+export const listChats = /* GraphQL */ `
+  query ListChats(
+    $filter: TableChatsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listChats(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        chatId
+        timestamp
+        messageContent
+        senderId
+        receiverId
+        chatTypeStatus
         __typename
       }
       nextToken

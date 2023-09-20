@@ -299,81 +299,6 @@ export const onDeleteUserProfiles = /* GraphQL */ `
     }
   }
 `;
-export const onCreateChats = /* GraphQL */ `
-  subscription OnCreateChats(
-    $receiverIdTimestamp: String
-    $senderId: String
-    $receiverId: String
-    $chatTypeStatus: String
-    $displayed: Boolean
-  ) {
-    onCreateChats(
-      receiverIdTimestamp: $receiverIdTimestamp
-      senderId: $senderId
-      receiverId: $receiverId
-      chatTypeStatus: $chatTypeStatus
-      displayed: $displayed
-    ) {
-      receiverIdTimestamp
-      senderId
-      receiverId
-      messageContent
-      chatTypeStatus
-      displayed
-      __typename
-    }
-  }
-`;
-export const onUpdateChats = /* GraphQL */ `
-  subscription OnUpdateChats(
-    $receiverIdTimestamp: String
-    $senderId: String
-    $receiverId: String
-    $chatTypeStatus: String
-    $displayed: Boolean
-  ) {
-    onUpdateChats(
-      receiverIdTimestamp: $receiverIdTimestamp
-      senderId: $senderId
-      receiverId: $receiverId
-      chatTypeStatus: $chatTypeStatus
-      displayed: $displayed
-    ) {
-      receiverIdTimestamp
-      senderId
-      receiverId
-      messageContent
-      chatTypeStatus
-      displayed
-      __typename
-    }
-  }
-`;
-export const onDeleteChats = /* GraphQL */ `
-  subscription OnDeleteChats(
-    $receiverIdTimestamp: String
-    $senderId: String
-    $receiverId: String
-    $chatTypeStatus: String
-    $displayed: Boolean
-  ) {
-    onDeleteChats(
-      receiverIdTimestamp: $receiverIdTimestamp
-      senderId: $senderId
-      receiverId: $receiverId
-      chatTypeStatus: $chatTypeStatus
-      displayed: $displayed
-    ) {
-      receiverIdTimestamp
-      senderId
-      receiverId
-      messageContent
-      chatTypeStatus
-      displayed
-      __typename
-    }
-  }
-`;
 export const onCreateUserTags = /* GraphQL */ `
   subscription OnCreateUserTags(
     $tagId: String
@@ -502,6 +427,81 @@ export const onDeleteParticipants = /* GraphQL */ `
       tags
       sessionStatus
       userStatus
+      __typename
+    }
+  }
+`;
+export const onCreateChats = /* GraphQL */ `
+  subscription OnCreateChats(
+    $chatId: String
+    $timestamp: String
+    $messageContent: String
+    $senderId: String
+    $receiverId: String
+  ) {
+    onCreateChats(
+      chatId: $chatId
+      timestamp: $timestamp
+      messageContent: $messageContent
+      senderId: $senderId
+      receiverId: $receiverId
+    ) {
+      chatId
+      timestamp
+      messageContent
+      senderId
+      receiverId
+      chatTypeStatus
+      __typename
+    }
+  }
+`;
+export const onUpdateChats = /* GraphQL */ `
+  subscription OnUpdateChats(
+    $chatId: String
+    $timestamp: String
+    $messageContent: String
+    $senderId: String
+    $receiverId: String
+  ) {
+    onUpdateChats(
+      chatId: $chatId
+      timestamp: $timestamp
+      messageContent: $messageContent
+      senderId: $senderId
+      receiverId: $receiverId
+    ) {
+      chatId
+      timestamp
+      messageContent
+      senderId
+      receiverId
+      chatTypeStatus
+      __typename
+    }
+  }
+`;
+export const onDeleteChats = /* GraphQL */ `
+  subscription OnDeleteChats(
+    $chatId: String
+    $timestamp: String
+    $messageContent: String
+    $senderId: String
+    $receiverId: String
+  ) {
+    onDeleteChats(
+      chatId: $chatId
+      timestamp: $timestamp
+      messageContent: $messageContent
+      senderId: $senderId
+      receiverId: $receiverId
+    ) {
+      chatId
+      timestamp
+      messageContent
+      senderId
+      receiverId
+      chatTypeStatus
       __typename
     }
   }

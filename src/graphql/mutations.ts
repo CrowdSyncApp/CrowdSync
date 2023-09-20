@@ -203,45 +203,6 @@ export const deleteUserProfiles = /* GraphQL */ `
     }
   }
 `;
-export const createChats = /* GraphQL */ `
-  mutation CreateChats($input: CreateChatsInput!) {
-    createChats(input: $input) {
-      receiverIdTimestamp
-      senderId
-      receiverId
-      messageContent
-      chatTypeStatus
-      displayed
-      __typename
-    }
-  }
-`;
-export const updateChats = /* GraphQL */ `
-  mutation UpdateChats($input: UpdateChatsInput!) {
-    updateChats(input: $input) {
-      receiverIdTimestamp
-      senderId
-      receiverId
-      messageContent
-      chatTypeStatus
-      displayed
-      __typename
-    }
-  }
-`;
-export const deleteChats = /* GraphQL */ `
-  mutation DeleteChats($input: DeleteChatsInput!) {
-    deleteChats(input: $input) {
-      receiverIdTimestamp
-      senderId
-      receiverId
-      messageContent
-      chatTypeStatus
-      displayed
-      __typename
-    }
-  }
-`;
 export const createUserTags = /* GraphQL */ `
   mutation CreateUserTags($input: CreateUserTagsInput!) {
     createUserTags(input: $input) {
@@ -340,6 +301,45 @@ export const deleteParticipants = /* GraphQL */ `
       tags
       sessionStatus
       userStatus
+      __typename
+    }
+  }
+`;
+export const createChats = /* GraphQL */ `
+  mutation CreateChats($input: CreateChatsInput!) {
+    createChats(input: $input) {
+      chatId
+      timestamp
+      messageContent
+      senderId
+      receiverId
+      chatTypeStatus
+      __typename
+    }
+  }
+`;
+export const updateChats = /* GraphQL */ `
+  mutation UpdateChats($input: UpdateChatsInput!) {
+    updateChats(input: $input) {
+      chatId
+      timestamp
+      messageContent
+      senderId
+      receiverId
+      chatTypeStatus
+      __typename
+    }
+  }
+`;
+export const deleteChats = /* GraphQL */ `
+  mutation DeleteChats($input: DeleteChatsInput!) {
+    deleteChats(input: $input) {
+      chatId
+      timestamp
+      messageContent
+      senderId
+      receiverId
+      chatTypeStatus
       __typename
     }
   }

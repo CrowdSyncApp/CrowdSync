@@ -90,9 +90,10 @@ const LoginScreen = () => {
             resizeMode="contain"
             style={styles.splashLogo}
           />
+          <View style={{ marginTop: 20 }}/>
           <Text style={styles.headerTitle}>CrowdSync</Text>
         </View>
-        <View style={{ paddingVertical: 10 }}>
+        <View style={{ marginTop: 30 }}>
           <TextInput
             placeholder="Email"
             value={username}
@@ -102,7 +103,7 @@ const LoginScreen = () => {
             placeholderTextColor="#2a2e30"
           />
         </View>
-        <View style={{ paddingVertical: 10 }}>
+        <View style={{ paddingVertical: 20 }}>
           <TextInput
             placeholder="Password"
             value={password}
@@ -112,6 +113,7 @@ const LoginScreen = () => {
             placeholderTextColor="#2a2e30"
           />
         </View>
+        <View style={{ marginTop: 10 }}/>
         <View style={styles.flexButtonContainer}>
           <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
             <Text style={styles.buttonText}>Log In</Text>
@@ -133,7 +135,7 @@ const LoginScreen = () => {
             style={{
               color: palette.tertiaryColor,
               textAlign: "center",
-              marginTop: 10,
+              marginTop: 20,
             }}
           >
             Forgot Password?
