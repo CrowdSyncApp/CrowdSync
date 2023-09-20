@@ -56,7 +56,7 @@ const SessionHomeScreen = ({ route }) => {
         console.error("Error refreshing participants:", error);
         log.error("Error refreshing participants:", error);
       }
-    }, 1 * 60 * 1000);
+    }, 5 * 1000);
 
     const storeParticipantIntervalId = async () => {
       await storeInterval(participantsUpdateInterval, log);

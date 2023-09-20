@@ -23,7 +23,7 @@ const HeaderWithBack = () => {
             log.debug('HeaderWithBack profilePicture: ', profilePicture);
                 setProfilePictureUri(profilePicture);
                 } catch (error) {
-                    log.error('Error saving profile picture in HeaderWithBack: ', error);
+                    //log.error('Error saving profile picture in HeaderWithBack: ', error);
                 }
             }
             getProfileImageUri();

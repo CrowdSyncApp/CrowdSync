@@ -450,6 +450,7 @@ export const onCreateChats = /* GraphQL */ `
       timestamp
       messageContent
       senderId
+      senderName
       receiverId
       chatTypeStatus
       __typename
@@ -475,6 +476,7 @@ export const onUpdateChats = /* GraphQL */ `
       timestamp
       messageContent
       senderId
+      senderName
       receiverId
       chatTypeStatus
       __typename
@@ -500,6 +502,7 @@ export const onDeleteChats = /* GraphQL */ `
       timestamp
       messageContent
       senderId
+      senderName
       receiverId
       chatTypeStatus
       __typename

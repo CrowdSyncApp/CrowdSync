@@ -23,7 +23,7 @@ const Header = () => {
                 const profilePicture = await fetchUserProfileImage(userProfileData.identityId, userProfileData.profilePicture, log);
                 setProfilePictureUri(profilePicture);
             } catch (error) {
-                log.error('Error saving profile picture in Header: ', error);
+                //log.error('Error saving profile picture in Header: ', error);
             }
         }
 

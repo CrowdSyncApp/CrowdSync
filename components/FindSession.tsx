@@ -63,13 +63,13 @@ useEffect(() => {
         console.error("Error refreshing location:", error);
         log.error("Error refreshing location:", error);
       }
-    }, 1 * 60 * 1000);
+    }, 5 * 1000);
 
     const storeLocationIntervalId = async () => {
         await storeInterval(locationUpdateInterval, log);
     }
     storeLocationIntervalId();
-}, []);
+}, [user]);
 
   useEffect(() => {
         navigation.addListener('beforeRemove', nav => {

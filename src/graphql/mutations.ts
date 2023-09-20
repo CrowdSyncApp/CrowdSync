@@ -312,6 +312,7 @@ export const createChats = /* GraphQL */ `
       timestamp
       messageContent
       senderId
+      senderName
       receiverId
       chatTypeStatus
       __typename
@@ -325,6 +326,7 @@ export const updateChats = /* GraphQL */ `
       timestamp
       messageContent
       senderId
+      senderName
       receiverId
       chatTypeStatus
       __typename
@@ -338,6 +340,7 @@ export const deleteChats = /* GraphQL */ `
       timestamp
       messageContent
       senderId
+      senderName
       receiverId
       chatTypeStatus
       __typename
