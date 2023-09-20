@@ -117,12 +117,18 @@ const ChatScreen = ({ route }) => {
       marginBottom: 10,
     };
 
+    let senderName;
+    console.log("item", item);
+
     const textStyle = {
       color: isUser ? "#000" : "#000",
     };
 
     return (
       <View style={chatBubbleStyle}>
+      <Text style={styles.detailText}>
+        {item.senderName}
+      </Text>
         <Text style={textStyle}>{item.messageContent}</Text>
         <Text style={styles.detailText}>
           {formatTimestamp(item.timestamp)}
@@ -139,12 +145,14 @@ const ChatScreen = ({ route }) => {
 
       try {
         const chatTypeStatus = `${chatType}#ACTIVE`;
+        const senderName = await getUserProfileFromId(senderId, log);
 
           const input = {
             chatId: chatId,
             timestamp: now,
             messageContent: newMessage.trim(),
             senderId: senderId,
+            senderName: senderName.fullName,
             receiverId: recIds,
             chatTypeStatus,
           };
@@ -212,9 +220,8 @@ const ChatScreen = ({ route }) => {
     <KeyboardAvoidingView
       style={{ flex: 1 }} // Set the flex property to 1 to fill the available space
       behavior={Platform.OS === "ios" ? "padding" : "height"} // Adjust behavior based on platform
-      keyboardVerticalOffset={50}
+      keyboardVerticalOffset={90}
     >
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.index}>
           <View style={styles.div}>
             <View
@@ -228,7 +235,7 @@ const ChatScreen = ({ route }) => {
               }}
             >
               {/* Chat Messages */}
-              <ScrollView>
+              <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                 {messages.map((message, index) => (
                   <View key={index}>
                     {senderId === message.senderId
@@ -257,7 +264,6 @@ const ChatScreen = ({ route }) => {
             </View>
           </View>
         </View>
-      </ScrollView>
     </KeyboardAvoidingView>
   );
 };

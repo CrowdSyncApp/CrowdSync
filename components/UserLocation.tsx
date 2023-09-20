@@ -113,7 +113,7 @@ const UserLocation = () => {
           <Text>Loading...</Text> // Display a loading indicator while waiting for location
         )}
       <Image
-          source={{ uri: "https://davenaoffice.com/wp-content/uploads/2019/11/DSC04285.jpg" }}
+          source={{ uri: "https://www.thebalancemoney.com/thmb/OYJMT9EXjkDIQNx9k-McfXkwZ0Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/business-people-networking-in-office-lobby-719876715-5ae6212ceb97de0039a49a3c.jpg" }}
           style={{
             width: 350,
             height: 350,
@@ -129,7 +129,7 @@ const UserLocation = () => {
             borderRadius: 10,
           }}
         >
-        <Text style={styles.buttonText}>I am near the cubicle in the corner!</Text>
+        <Text style={styles.buttonText}>I am near the front entrance!</Text>
         </View>
       </View>
     </View>

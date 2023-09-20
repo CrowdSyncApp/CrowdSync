@@ -247,6 +247,7 @@ export const getChats = /* GraphQL */ `
       timestamp
       messageContent
       senderId
+      senderName
       receiverId
       chatTypeStatus
       __typename
@@ -265,6 +266,7 @@ export const listChats = /* GraphQL */ `
         timestamp
         messageContent
         senderId
+        senderName
         receiverId
         chatTypeStatus
         __typename
