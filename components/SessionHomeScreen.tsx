@@ -34,8 +34,6 @@ const SessionHomeScreen = ({ route }) => {
     startTime: sessionData.startTime,
     title: sessionData.title,
     creatorId: sessionData.creatorId,
-    endTime: sessionData.endTime,
-    ownerId: sessionData.ownerId,
     status: sessionData.status,
   });
 
