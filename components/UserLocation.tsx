@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Image, ScrollView } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import styles, { palette, fonts } from "./style";
 import { API, graphqlOperation } from "aws-amplify";
@@ -18,7 +18,7 @@ const UserLocation = () => {
   const [location, setLocation] = useState(null);
   const [otherUserLocation, setOtherUserLocation] = useState(null);
 
-    log.debug("Entering UserLocation screen on userData: " + userData + " and sessionId: " + sessionId);
+    log.debug("Entering UserLocation screen on userData: " + JSON.stringify(userData) + " and sessionId: " + JSON.stringify(sessionId));
 
   useEffect(() => {
     const fetchUserLocations = async () => {
@@ -65,6 +65,7 @@ const UserLocation = () => {
   }, []);
 
   return (
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
     <View style={styles.index}>
       <View style={styles.div}>
         {location && otherUserLocation ? (
@@ -111,8 +112,28 @@ const UserLocation = () => {
         ) : (
           <Text>Loading...</Text> // Display a loading indicator while waiting for location
         )}
+      <Image
+          source={{ uri: "https://davenaoffice.com/wp-content/uploads/2019/11/DSC04285.jpg" }}
+          style={{
+            width: 350,
+            height: 350,
+            resizeMode: "contain",
+            marginTop: -40,
+            marginBottom: -40,
+          }}
+        />
+        <View
+          style={{
+            backgroundColor: "#AAA", // White background
+            padding: 10, // Add padding to create the white box
+            borderRadius: 10,
+          }}
+        >
+        <Text style={styles.buttonText}>I am near the cubicle in the corner!</Text>
+        </View>
       </View>
     </View>
+    </ScrollView>
   );
 };
 

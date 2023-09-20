@@ -15,7 +15,6 @@ import { startSession, removeSessionData } from "./SessionManager";
 import styles, { palette, fonts } from "./style";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { StatusBar } from "react-native";
-import { createTagSet, listTagSets } from "../src/graphql/mutations";
 import MapView, { Marker } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import { useLog } from "../CrowdSyncLogManager";

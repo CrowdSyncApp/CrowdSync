@@ -33,6 +33,10 @@ const SessionHomeScreen = ({ route }) => {
     sessionId: sessionData.sessionId,
     startTime: sessionData.startTime,
     title: sessionData.title,
+    creatorId: sessionData.creatorId,
+    endTime: sessionData.endTime,
+    ownerId: sessionData.ownerId,
+    status: sessionData.status,
   });
 
   useEffect(() => {
@@ -276,6 +280,7 @@ const handleExitSession = async () => {
           </View>
         )}
 
+        <View style={{ marginTop: 10 }}/>
         <View style={styles.flexButtonContainer}>
           <TouchableOpacity
             style={styles.loginButton}
