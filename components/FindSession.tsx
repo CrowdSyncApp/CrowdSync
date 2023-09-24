@@ -134,7 +134,7 @@ useEffect(() => {
     return null;
   };
 
-    const handleNearbySessionPress = (sessionText) => {
+    const handleNearbySessionPress = async (sessionText) => {
         log.debug("handleNearbySessionPress on sessionText: ", sessionText);
 
         const userProfileData = await fetchUserProfileData();
