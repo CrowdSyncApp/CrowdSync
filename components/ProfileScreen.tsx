@@ -79,7 +79,7 @@ useFocusEffect(
     log.debug('handleLinkPress on url: ', JSON.stringify(url));
     if (url) {
       Linking.openURL(url).catch((err) =>
-        log.error("Error opening URL:", JSON.stringify(err));
+        log.error("Error opening URL:", JSON.stringify(err))
       );
     }
   };
