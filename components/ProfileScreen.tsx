@@ -1,5 +1,5 @@
 // ProfileScreen.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
   Linking,
   Pressable,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
 import MyConnections from "./MyConnections";
 import { getParticipants } from "../src/graphql/queries";
@@ -30,15 +30,21 @@ const ProfileScreen = ({ route }) => {
 
   log.debug('ProfileScreen on userProfileData: ', JSON.stringify(userProfileData));
 
-useEffect(() => {
-    async function getProfileImageUri() {
+useFocusEffect(
+  React.useCallback(() => {
+    const fetchData = async () => {
+      async function getProfileImageUri() {
         const profilePicture = await fetchUserProfileImage(userProfileData.identityId, userProfileData.profilePicture, log);
-        log.debug('getProfileImageUri results: ', profilePicture);
+        log.debug('getProfileImageUri results: ', JSON.stringify(profilePicture));
         setProfilePictureUri(profilePicture);
-    }
+      }
 
-    getProfileImageUri();
-}, []);
+      await getProfileImageUri();
+    };
+
+    fetchData();
+  }, [userProfileData.identityId, userProfileData.profilePicture])
+);
 
   const handleLogout = () => {
   log.debug('Logging out and navigating to Login screen...');
@@ -59,21 +65,21 @@ useEffect(() => {
   };
 
   const handleMyConnectionsPress = () => {
-    log.debug('handleMyConnectionsPress on userProfileData: ', userProfileData);
+    log.debug('handleMyConnectionsPress on userProfileData: ', JSON.stringify(userProfileData));
     // Navigate to the ProfileScreen and pass the user data as params
     navigation.navigate("MyConnections", { userProfileData });
   };
 
   const handleEditProfilePress = () => {
-  log.debug('handleEditProfilePress on userProfileData: ', userProfileData);
+  log.debug('handleEditProfilePress on userProfileData: ', JSON.stringify(userProfileData));
     navigation.navigate("EditProfile", { userProfileData, updatedTags: userProfileData.tags });
   };
 
   const handleLinkPress = (url) => {
-    log.debug('handleLinkPress on url: ', url);
+    log.debug('handleLinkPress on url: ', JSON.stringify(url));
     if (url) {
       Linking.openURL(url).catch((err) =>
-        log.error("Error opening URL:", err)
+        log.error("Error opening URL:", JSON.stringify(err));
       );
     }
   };

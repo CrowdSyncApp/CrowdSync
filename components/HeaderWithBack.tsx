@@ -20,10 +20,10 @@ const HeaderWithBack = () => {
             async function getProfileImageUri() {
             try {
                 const profilePicture = await fetchUserProfileImage(userProfileData.identityId, userProfileData.profilePicture, log);
-            log.debug('HeaderWithBack profilePicture: ', profilePicture);
+            log.debug('HeaderWithBack profilePicture: ', JSON.stringify(profilePicture));
                 setProfilePictureUri(profilePicture);
                 } catch (error) {
-                    //log.error('Error saving profile picture in HeaderWithBack: ', error);
+                    log.error('Error saving profile picture in HeaderWithBack: ', JSON.stringify(error));
                 }
             }
             getProfileImageUri();
@@ -34,7 +34,7 @@ const HeaderWithBack = () => {
       if (user) {
         fetchedUserProfileData = await fetchUserProfileData();
       }
-      log.debug('HeaderWithBack userProfileData: ', fetchedUserProfileData);
+      log.debug('HeaderWithBack userProfileData: ', JSON.stringify(fetchedUserProfileData));
       setUserProfileData(fetchedUserProfileData);
     };
     getUserProfileData();
@@ -42,7 +42,7 @@ const HeaderWithBack = () => {
 
   const handleTitlePress = async () => {
        const sessionData = await getSessionData(log);
-       log.debug('handleTitlePress on sessionData: ', sessionData);
+       log.debug('handleTitlePress on sessionData: ', JSON.stringify(sessionData));
 
        if (sessionData.sessionId !== 'INACTIVE') {
           navigation.navigate("SessionHome", { sessionData: sessionData });
@@ -52,7 +52,7 @@ const HeaderWithBack = () => {
     };
 
   const handleProfilePress = async () => {
-  log.debug('handleProfilePress on userProfileData: ', userProfileData);
+  log.debug('handleProfilePress on userProfileData: ', JSON.stringify(userProfileData));
     // Navigate to the ProfileScreen and pass the user profile data as params
     navigation.navigate("Profile", { userProfileData });
   };

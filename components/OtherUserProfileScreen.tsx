@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, Pressable, Linking } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native";
 import { getSessionData, getParticipantVisibility } from "./SessionManager";
 import styles, { palette, fonts } from "./style";
 import { useAuth } from "../QueryCaching";
@@ -17,54 +17,50 @@ const OtherUserProfileScreen = () => {
 
   const { userData, sessionId } = route.params;
 
-  log.debug('OtherUserProfileScreen on userData: ' + userData + ' and sessionId: ' + sessionId);
+  log.debug('OtherUserProfileScreen on userData: ' + JSON.stringify(userData) + ' and sessionId: ' + JSON.stringify(sessionId));
 
   const [showLocationButton, setShowLocationButton] = useState(false);
   const [visible, setVisible] = useState(false);
 
-    useEffect(() => {
-        async function getProfileImageUri() {
-           let profilePicture;
+    useFocusEffect(
+      React.useCallback(() => {
+        const fetchData = async () => {
+          async function getProfileImageUri() {
+            let profilePicture;
             if (userData.userId === "1" || userData.userId === "2" || userData.userId === "3" || userData.userId === "4" || userData.userId === "5") {
-                profilePicture = userData.profilePicture;
+              profilePicture = userData.profilePicture;
             } else {
-                profilePicture = await fetchUserProfileImage(userData.identityId, userData.profilePicture, log);
-               }
-               log.debug('getProfileImageUri results: ', profilePicture);
-            setProfilePictureUri(profilePicture);
-        }
-
-        async function getVisibility() {
-            let visible;
-        if (userData.userId === "1" || userData.userId === "2" || userData.userId === "3" || userData.userId === "4" || userData.userId === "5") {
-            visible = true;
-            if (userData.userId == "3") {
-                visible = false;
+              profilePicture = await fetchUserProfileImage(userData.identityId, userData.profilePicture, log);
             }
-        } else {
-            visible = await getParticipantVisibility(userData.userId, sessionId, log);
-           }
-           log.debug('getVisibility results: ', visible);
-           setVisible(visible);
-        }
+            log.debug('getProfileImageUri results: ', JSON.stringify(profilePicture));
+            setProfilePictureUri(profilePicture);
+          }
 
-        async function getUserTags() {
+          async function getVisibility() {
+            let visible;
+            if (userData.userId === "1" || userData.userId === "2" || userData.userId === "3" || userData.userId === "4" || userData.userId === "5") {
+              visible = true;
+              if (userData.userId == "3") {
+                visible = false;
+              }
+            } else {
+              visible = await getParticipantVisibility(userData.userId, sessionId, log);
+            }
+            log.debug('getVisibility results: ', JSON.stringify(visible));
+            setVisible(visible);
+          }
+
+          async function getUserTags() {
             const allUserTags = await getAllUserTags(userData.userId, log);
             log.debug('userTags retrieved: ', JSON.stringify(allUserTags));
             setUserTags(allUserTags);
-        }
+          }
 
-        getUserTags();
-        getVisibility();
-        getProfileImageUri();
-    }, []);
-
-useEffect(() => {
-    async function checkSessionId() {
-    log.debug('checkSessionId...');
+    async function checkShouldShowLocation() {
+    log.debug('checkShouldShowLocation...');
       try {
         const currentUserSessionData = await getSessionData(log);
-        log.debug('currentUserSessionData: ', currentUserSessionData);
+        log.debug('currentUserSessionData: ', JSON.stringify(currentUserSessionData));
         if (sessionId === currentUserSessionData.sessionId && sessionId !== "INACTIVE") {
           setShowLocationButton(true);
           log.debug('showLocationButton is true');
@@ -74,19 +70,26 @@ useEffect(() => {
         }
       } catch (error) {
         console.error("Error fetching current user's sessionId:", error);
-        log.error("Error fetching current user's sessionId:", error);
+        log.error("Error fetching current user's sessionId:", JSON.stringify(error));
         setShowLocationButton(false); // Handle the error by not showing the button
       }
     }
 
-    checkSessionId();
-  }, [sessionId]);
+          await getUserTags();
+          await getVisibility();
+          await getProfileImageUri();
+            await checkShouldShowLocation();
+        };
+
+        fetchData();
+      }, [userData.userId, sessionId])
+    );
 
   const handleLinkPress = (url) => {
-    log.debug('handleLinkPress on url: ', url);
+    log.debug('handleLinkPress on url: ', JSON.stringify(url));
       if (url) {
         Linking.openURL(url).catch((err) =>
-          log.error("Error opening URL:", err)
+          log.error("Error opening URL:", JSON.stringify(err))
         );
       }
     };
@@ -105,7 +108,7 @@ useEffect(() => {
 
   // Function to handle opening the chat (you can implement your chat logic here)
   const handleChatPress = () => {
-  log.debug('handleChatPress on participants: ' + [userData] + ' and chatType: INDIVIDUAL');
+  log.debug('handleChatPress on participants: ' + JSON.stringify([userData]) + ' and chatType: INDIVIDUAL');
     // Implement your chat logic here
     navigation.navigate("ChatScreen", {
       participants: [userData],
@@ -114,7 +117,7 @@ useEffect(() => {
   };
 
   const handleLocationPress = () => {
-    log.debug('handleLocationPress on userData: ' + userData + ' and sessionId: ' + sessionId);
+    log.debug('handleLocationPress on userData: ' + JSON.stringify(userData) + ' and sessionId: ' + JSON.stringify(sessionId));
       // Implement your chat logic here
       navigation.navigate("UserLocation", { userData: userData, sessionId: sessionId });
     };

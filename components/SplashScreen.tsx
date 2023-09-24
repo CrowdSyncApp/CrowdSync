@@ -17,8 +17,8 @@ const SplashScreen = () => {
   useEffect(() => {
     async function checkLogin() {
     // Check if isLoading is false and isUserLoggedIn has a value
-    log.debug("isLoading: ", isLoading);
-    log.debug("isUserLoggedIn: ", isUserLoggedIn);
+    log.debug("isLoading: ", JSON.stringify(isLoading));
+    log.debug("isUserLoggedIn: ", JSON.stringify(isUserLoggedIn));
     if (!isLoading && isUserLoggedIn !== undefined) {
       if (isUserLoggedIn) {
       await AsyncStorage.removeItem("userProfileData");

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
 import participantsData from "../dummies/dummy_accounts.json";
 import { getSessionIdForUser } from "./SessionManager";
@@ -22,30 +22,32 @@ const MyConnections = ({ route }) => {
   const [connectionsData, setConnectionsData] = useState([]);
   const log = useLog();
 
-  log.debug('MyConnections screen on userProfileData: ', userProfileData);
+  log.debug('MyConnections screen on userProfileData: ', JSON.stringify(userProfileData));
 
-  useEffect(() => {
-        const getConnections = async () => {
-          const profiles = await fetchConnectionsAndProfiles(userProfileData.userId, log);
-          log.debug('getConnections profiles: ', profiles);
-          const mergedData = [...participantsData, ...profiles];
-          log.debug('mergedData: ', mergedData);
-          setConnectionsData(mergedData);
-         }
-         getConnections();
-    }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      const getConnections = async () => {
+        const profiles = await fetchConnectionsAndProfiles(userProfileData.userId, log);
+        log.debug('getConnections profiles: ', profiles);
+        const mergedData = [...participantsData, ...profiles];
+        log.debug('mergedData: ', mergedData);
+        setConnectionsData(mergedData);
+      };
+      getConnections();
+    }, [userProfileData.userId, participantsData])
+  );
 
   const handleConnectionPress = async (connectionData) => {
-    log.debug('handleConnectionPress on connectionData: ', connectionData);
+    log.debug('handleConnectionPress on connectionData: ', JSON.stringify(connectionData));
     try {
     const userData = await getUserProfileFromId(connectionData.userId, log);
       const sessionId = await getSessionIdForUser(connectionData.userId, log);
 
-        log.debug('Navigating to OtherUserProfile on userData: ' + userData + ' and sessionId: ' + sessionId);
+        log.debug('Navigating to OtherUserProfile on userData: ' + JSON.stringify(userData) + ' and sessionId: ' + JSON.stringify(sessionId));
       navigation.navigate("OtherUserProfile", { userData: userData, sessionId: sessionId });
     } catch (error) {
       console.error("Error in handleConnectionPress:", error);
-      log.error("Error in handleConnectionPress:", error);
+      log.error("Error in handleConnectionPress:", JSON.stringify(error));
     }
   };
 

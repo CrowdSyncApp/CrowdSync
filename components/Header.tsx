@@ -19,11 +19,11 @@ const Header = () => {
     useEffect(() => {
         async function getProfileImageUri() {
             try {
-                log.debug("getProfileImageUri on userProfileData: ", userProfileData);
+                log.debug("getProfileImageUri on userProfileData: ", JSON.stringify(userProfileData));
                 const profilePicture = await fetchUserProfileImage(userProfileData.identityId, userProfileData.profilePicture, log);
                 setProfilePictureUri(profilePicture);
             } catch (error) {
-                //log.error('Error saving profile picture in Header: ', error);
+                log.error('Error saving profile picture in Header: ', JSON.stringify(error));
             }
         }
 
@@ -44,7 +44,7 @@ useFocusEffect(
 
   const handleTitlePress = async () => {
      const sessionData = await getSessionData(log);
-     log.debug('handleTitlePress on sessionData: ', sessionData);
+     log.debug('handleTitlePress on sessionData: ', JSON.stringify(sessionData));
 
      if (sessionData.sessionId !== 'INACTIVE') {
         navigation.navigate("SessionHome", { sessionData: sessionData });

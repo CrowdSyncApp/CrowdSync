@@ -49,16 +49,16 @@ const EditProfileScreen = ({ route }) => {
         userProfileData.profilePicture,
         log
       );
-      log.debug("profilePictureUri: ", profilePicture);
+      log.debug("profilePictureUri: ", JSON.stringify(profilePicture));
       setProfilePictureUri(profilePicture);
     }
 
     getProfileImageUri();
-  }, []);
+  }, [userProfileData]);
 
   useEffect(() => {
     if (updatedTags) {
-      log.debug("currTags: ", updatedTags);
+      log.debug("currTags: ", JSON.stringify(updatedTags));
       setCurrTags(updatedTags);
     }
   }, [updatedTags]);
@@ -72,7 +72,7 @@ const EditProfileScreen = ({ route }) => {
     profilePicture: userProfileData.profilePicture,
     socialLinks: userProfileData.socialLinks || [],
   });
-  log.debug("default editableFields: ", editableFields);
+  log.debug("default editableFields: ", JSON.stringify(editableFields));
   const [profilePictureUri, setProfilePictureUri] = useState(null);
 
   const handleAddSocialLink = () => {
@@ -92,7 +92,7 @@ const EditProfileScreen = ({ route }) => {
 
   const handleSocialLinkChange = (index, value) => {
     log.debug(
-      "handleSocialLinkChange on index: " + index + " and value: " + value
+      "handleSocialLinkChange on index: " + JSON.stringify(index) + " and value: " + JSON.stringify(value)
     );
     const updatedLinks = [...editableFields.socialLinks];
     updatedLinks[index] = value;
@@ -100,7 +100,7 @@ const EditProfileScreen = ({ route }) => {
   };
 
   const handleDeleteSocialLink = (index) => {
-    log.debug("handleDeleteSocialLink on index: ", index);
+    log.debug("handleDeleteSocialLink on index: ", JSON.stringify(index));
     const updatedLinks = [...editableFields.socialLinks];
     updatedLinks.splice(index, 1); // Remove the link at the given index
     setEditableFields({ ...editableFields, socialLinks: updatedLinks });
@@ -135,7 +135,7 @@ const EditProfileScreen = ({ route }) => {
         profilePictureUri !== null
           ? profilePictureUri
           : userProfileData?.profilePictureUri;
-      log.debug("newProfilePictureUri: ", newProfilePictureUri);
+      log.debug("newProfilePictureUri: ", JSON.stringify(newProfilePictureUri));
 
       const updatedFields = {
         userId: editableFields.userId,
@@ -146,7 +146,7 @@ const EditProfileScreen = ({ route }) => {
         profilePicture: profilePictureName || editableFields.profilePicture,
         socialLinks: editableFields.socialLinks,
       };
-      log.debug("updatedFields: ", updatedFields);
+      log.debug("updatedFields: ", JSON.stringify(updatedFields));
 
       const updatedUserData = await updateUserProfileTable(updatedFields, log);
 
@@ -156,13 +156,13 @@ const EditProfileScreen = ({ route }) => {
             (userTag) => userTag.tagId === currTag.tagId
           )
       );
-      log.debug("newTags: ", newTags);
+      log.debug("newTags: ", JSON.stringify(newTags));
 
       const removedTags = userProfileData.tags.filter(
         (userTag) =>
           !currTags.some((currTag) => currTag.tagId === userTag.tagId)
       );
-      log.debug("removedTags: ", removedTags);
+      log.debug("removedTags: ", JSON.stringify(removedTags));
       const sessionData = await getSessionData(log);
       const sessionId = sessionData.sessionId;
 
@@ -173,7 +173,7 @@ const EditProfileScreen = ({ route }) => {
         log
       );
       let combinedTags = [...userProfileData.tags, ...addedTags];
-      log.debug("combinedTags: ", combinedTags);
+      log.debug("combinedTags: ", JSON.stringify(combinedTags));
 
       const tagIds = removedTags;
       await removeUserTagsByTagId(
@@ -190,13 +190,13 @@ const EditProfileScreen = ({ route }) => {
 
       updatedUserData.profilePictureUri = newProfilePictureUri;
       updatedUserData.tags = combinedTags;
-      log.debug("Final updatedUserData: ", updatedUserData);
+      log.debug("Final updatedUserData: ", JSON.stringify(updatedUserData));
 
       alert("Changes saved successfully!");
       navigation.navigate("Profile", { userProfileData: updatedUserData });
     } catch (error) {
       console.error("Error saving changes:", error);
-      log.error("Error saving changes:", error);
+      log.error("Error saving changes:", JSON.stringify(error));
     }
   };
 

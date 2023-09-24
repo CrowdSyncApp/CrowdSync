@@ -23,8 +23,6 @@ const ChatScreen = ({ route }) => {
   const [messages, setMessages] = useState<string[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [chatId, setChatId] = useState("");
-  const [senderId, setSenderId] = useState("");
-  const [participantsList, setParticipantsList] = useState("");
   const [participantIdsList, setParticipantIdsList] = useState("");
   const [recIds, setRecIds] = useState([]);
   const log = useLog();
@@ -39,23 +37,18 @@ const ChatScreen = ({ route }) => {
       JSON.stringify(chatType)
   );
 
-  useEffect(() => {
-  }, []);
-
   useFocusEffect(
       React.useCallback(() => {
         async function setIdReceiverAndParticipantsList() {
             let id;
             let receiver;
 
-            log.debug("senderId: ", user?.attributes.sub);
-            setSenderId(user?.attributes.sub);
+            log.debug("senderId: ", JSON.stringify(user?.attributes.sub));
             log.debug("participantsList: ", JSON.stringify(participants));
-            setParticipantsList(participants);
             let participantIds = participants.map(
               (participant) => participant.userId
             );
-            log.debug("participantIdsList: ", participantIds);
+            log.debug("participantIdsList: ", JSON.stringify(participantIds));
             setParticipantIdsList(participantIds);
 
               if (chatType == "GROUP") {
@@ -67,23 +60,23 @@ const ChatScreen = ({ route }) => {
                    id = userList[0] + userList[1];
                    receiver = [participants[0].userId];
               }
-              log.debug('chatId: ', id);
-              log.debug('ReceiverIds: ', receiver);
+              log.debug('chatId: ', JSON.stringify(id));
+              log.debug('ReceiverIds: ', JSON.stringify(receiver));
               setChatId(id);
               setRecIds(receiver);
         }
 
         setIdReceiverAndParticipantsList();
+
+        if (user?.attributes.sub) {
+          fetchChatMessages();
+        }
       }, [])
     );
 
   useEffect(() => {
-    // Fetch chat messages when senderId is set
-    if (senderId) {
-      fetchChatMessages();
-    }
 
-    log.debug("Subscribing to onCreateChats with chatId: ", chatId);
+    log.debug("Subscribing to onCreateChats with chatId: ", JSON.stringify(chatId));
     const subscription = API.graphql(
       graphqlOperation(onCreateChats, {
         chatId: chatId,
@@ -92,14 +85,14 @@ const ChatScreen = ({ route }) => {
       next: (data) => {
         // Handle incoming subscription data (new chat messages)
         const newChatMessage = data.value.data.onCreateChats;
-        log.debug("newChatMessage: ", newChatMessage);
+        log.debug("newChatMessage: ", JSON.stringify(newChatMessage));
 
           setMessages((prevMessages) => [...prevMessages, newChatMessage]);
-          log.debug("messages: ", messages);
+          log.debug("messages: ", JSON.stringify(messages));
       },
       error: (error) => {
         console.error("Subscription error:", error);
-        log.error("Subscription error:", error);
+        log.error("Subscription error:", JSON.stringify(error));
       },
     });
 
@@ -118,7 +111,7 @@ const ChatScreen = ({ route }) => {
     };
 
     let senderName;
-    console.log("item", item);
+    console.log("item", JSON.stringify(item));
 
     const textStyle = {
       color: isUser ? "#000" : "#000",
@@ -145,18 +138,18 @@ const ChatScreen = ({ route }) => {
 
       try {
         const chatTypeStatus = `${chatType}#ACTIVE`;
-        const senderName = await getUserProfileFromId(senderId, log);
+        const senderName = await getUserProfileFromId(user?.attributes.sub, log);
 
           const input = {
             chatId: chatId,
             timestamp: now,
             messageContent: newMessage.trim(),
-            senderId: senderId,
+            senderId: user?.attributes.sub,
             senderName: senderName.fullName,
             receiverId: recIds,
             chatTypeStatus,
           };
-          log.debug("createChats input: ", input);
+          log.debug("createChats input: ", JSON.stringify(input));
 
           await API.graphql(
             graphqlOperation(createChats, { input: input })
@@ -166,7 +159,7 @@ const ChatScreen = ({ route }) => {
         setNewMessage("");
       } catch (error) {
         console.error("Error sending message:", error);
-        log.error("Error sending message:", error);
+        log.error("Error sending message:", JSON.stringify(error));
       }
     }
   };
@@ -185,10 +178,10 @@ const ChatScreen = ({ route }) => {
     try {
       const userId = user?.attributes.sub;
       const chatTypeStatus = `${chatType}#ACTIVE`;
-      log.debug('userId: ', userId);
-      log.debug('chatId: ', chatId);
-      log.debug('chatTypeStatus: ', chatTypeStatus);
-      log.debug('otherUserIds: ', participantIdsList);
+      log.debug('userId: ', JSON.stringify(userId));
+      log.debug('chatId: ', JSON.stringify(chatId));
+      log.debug('chatTypeStatus: ', JSON.stringify(chatTypeStatus));
+      log.debug('otherUserIds: ', JSON.stringify(participantIdsList));
 
       let allMessages = [];
       let nextToken = null;
@@ -212,7 +205,7 @@ const ChatScreen = ({ route }) => {
       setMessages(allMessages);
     } catch (error) {
       console.error('Error fetching chat messages:', error);
-      log.error('Error fetching chat messages:', error);
+      log.error('Error fetching chat messages:', JSON.stringify(error));
     }
   };
 
@@ -238,7 +231,7 @@ const ChatScreen = ({ route }) => {
               <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                 {messages.map((message, index) => (
                   <View key={index}>
-                    {senderId === message.senderId
+                    {user?.attributes.sub === message.senderId
                       ? renderChatBubble(message, true)
                       : renderChatBubble(message, false)}
                   </View>

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { View, Text, Image, ScrollView } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native";
 import styles, { palette, fonts } from "./style";
 import { API, graphqlOperation } from "aws-amplify";
 import { useAuth } from "../QueryCaching";
@@ -20,33 +20,34 @@ const UserLocation = () => {
 
     log.debug("Entering UserLocation screen on userData: " + JSON.stringify(userData) + " and sessionId: " + JSON.stringify(sessionId));
 
-  useEffect(() => {
-    const fetchUserLocations = async () => {
-      try {
-        let userId;
-        if (userData.userId === "1" || userData.userId === "2" || userData.userId === "3" || userData.userId === "4" || userData.userId === "5") {
-          userId = "0949d9ce-b0b1-7019-0aba-062ae33bdd92";
-        } else {
-          userId = userData.userId;
-        }
-        const response = await API.graphql(
-          graphqlOperation(getLocations, { userId: userId, sessionId: sessionId })
-        );
-        log.debug('getLocations response: ', response);
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        try {
+          let userId;
+          if (userData.userId === "1" || userData.userId === "2" || userData.userId === "3" || userData.userId === "4" || userData.userId === "5") {
+            userId = "0949d9ce-b0b1-7019-0aba-062ae33bdd92";
+          } else {
+            userId = userData.userId;
+          }
+          const response = await API.graphql(
+            graphqlOperation(getLocations, { userId: userId, sessionId: sessionId })
+          );
+          log.debug('getLocations response: ', JSON.stringify(response));
 
-        const userLocation = response.data.getLocations;
-        setLocation({
-          latitude: userLocation.latitude,
-          longitude: userLocation.longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        });
+          const userLocation = response.data.getLocations;
+          setLocation({
+            latitude: userLocation.latitude,
+            longitude: userLocation.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          });
 
-        const otherresponse = await API.graphql(
-              graphqlOperation(getLocations, { userId: user?.username, sessionId: sessionId })
-            );
+          const otherresponse = await API.graphql(
+            graphqlOperation(getLocations, { userId: user?.username, sessionId: sessionId })
+          );
 
-            log.debug('getLocations otherresponse', otherresponse);
+          log.debug('getLocations otherresponse', JSON.stringify(otherresponse));
 
           const otherUserLocation = otherresponse.data.getLocations;
           setOtherUserLocation({
@@ -55,14 +56,15 @@ const UserLocation = () => {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           });
-      } catch (error) {
-        console.error("Error fetching user locations:", error);
-        log.error("Error fetching user locations:", error);
-      }
-    };
+        } catch (error) {
+          console.error("Error fetching user locations:", error);
+          log.error("Error fetching user locations:", JSON.stringify(error));
+        }
+      };
 
-    fetchUserLocations(); // Call the GraphQL operation to fetch user locations
-  }, []);
+      fetchData();
+    }, [userData.userId, sessionId, setLocation, setOtherUserLocation])
+  );
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>

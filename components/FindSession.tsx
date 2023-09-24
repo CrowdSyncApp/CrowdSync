@@ -39,17 +39,17 @@ useFocusEffect(
   );
 
 useEffect(() => {
-    removeSessionData(log); // Should never have session data on this screen
+    removeSessionData(log);
 
   // Request location permission specifically for Android
   const requestLocationPermission = async () => {
     try {
         const currLocation = await refreshLocation(log);
-        log.debug("location: ", currLocation);
+        log.debug("location: ", JSON.stringify(currLocation));
         setLocation(currLocation);
     } catch (error) {
       console.error("Error requesting location permission:", error);
-      log.error("Error requesting location permission:", error);
+      log.error("Error requesting location permission:", JSON.stringify(error));
     }
   };
 
@@ -61,15 +61,15 @@ useEffect(() => {
         requestLocationPermission();
       } catch (error) {
         console.error("Error refreshing location:", error);
-        log.error("Error refreshing location:", error);
+        log.error("Error refreshing location:", JSON.stringify(error));
       }
-    }, 5 * 1000);
+    }, 5 * 60 * 1000); // 5 minutes
 
     const storeLocationIntervalId = async () => {
         await storeInterval(locationUpdateInterval, log);
     }
     storeLocationIntervalId();
-}, [user]);
+}, []);
 
   useEffect(() => {
         navigation.addListener('beforeRemove', nav => {
@@ -88,7 +88,7 @@ useEffect(() => {
   const handleStartSession = async () => {
     const userProfileData = await fetchUserProfileData();
     const newSession = await startSession(userProfileData, sessionTitle, log);
-    log.debug("handleStartSession with userProfileData: " + userProfileData + " and newSession: " + newSession);
+    log.debug("handleStartSession with userProfileData: " + JSON.stringify(userProfileData) + " and newSession: " + JSON.stringify(newSession));
 
     // Check if startSession was successful and navigate to SessionHomeScreen
     if (newSession) {
@@ -103,7 +103,7 @@ useEffect(() => {
       await populateTagSet(log);
     } catch (error) {
       console.error("Error populating TagSet table:", error);
-      log.error("Error populating TagSet table:", error);
+      log.error("Error populating TagSet table:", JSON.stringify(error));
     }
   };
 
@@ -111,7 +111,7 @@ useEffect(() => {
     log.debug('renderSessionButtons...');
     const userGroups =
       user?.signInUserSession?.idToken?.payload["cognito:groups"] || [];
-    log.debug('userGroups: ', userGroups);
+    log.debug('userGroups: ', JSON.stringify(userGroups));
 
     if (userGroups.includes("CrowdSync_UserPool_Admin")) {
       return (
@@ -133,6 +133,33 @@ useEffect(() => {
 
     return null;
   };
+
+    const handleNearbySessionPress = (sessionText) => {
+        log.debug("handleNearbySessionPress on sessionText: ", sessionText);
+
+        const userProfileData = await fetchUserProfileData();
+        const newSession = await startSession(userProfileData, sessionText, log);
+        log.debug("handleStartSession with userProfileData: " + JSON.stringify(userProfileData) + " and newSession: " + JSON.stringify(newSession));
+
+        // Check if startSession was successful and navigate to SessionHomeScreen
+        if (newSession) {
+          navigation.navigate("SessionHome", { sessionData: newSession });
+        }
+      };
+
+   const renderNearbySessions = () => {
+      const nearbySessions = ["Entrepreneur", "Cryptocurrency", "Machine Learning"];
+
+      return nearbySessions.map((sessionText, index) => (
+        <Pressable
+          key={index}
+          style={styles.nearbySessionText}
+          onPress={() => handleNearbySessionPress(sessionText)}
+        >
+          <Text style={styles.detailText}>{sessionText}</Text>
+        </Pressable>
+      ));
+    };
 
   return (
     <KeyboardAvoidingView
@@ -160,6 +187,8 @@ useEffect(() => {
                     <Text>Loading...</Text> // Display a loading indicator while waiting for location
                   )}
             <View style={styles.buttonContainer}>
+            <Text style={styles.headerText}>Nearby Sessions</Text>
+              {renderNearbySessions()}
               <Pressable
                 style={styles.basicButton}
                 onPress={handleJoinSessionWithQRCode}

@@ -20,7 +20,7 @@ const HeaderWithBackNoProfile = () => {
       if (user) {
         fetchedUserProfileData = await fetchUserProfileData();
       }
-      log.debug('HeaderWithBackNoProfile userProfileData: ', fetchedUserProfileData);
+      log.debug('HeaderWithBackNoProfile userProfileData: ', JSON.stringify(fetchedUserProfileData));
       setUserProfileData(fetchedUserProfileData);
     };
     getUserProfileData();
@@ -28,7 +28,7 @@ const HeaderWithBackNoProfile = () => {
 
   const handleTitlePress = async () => {
        const sessionData = await getSessionData(log);
-       log.debug('handleTitlePress on sessionData: ', sessionData);
+       log.debug('handleTitlePress on sessionData: ', JSON.stringify(sessionData));
 
        if (sessionData.sessionId !== 'INACTIVE') {
           navigation.navigate("SessionHome", { sessionData: sessionData });
@@ -38,7 +38,7 @@ const HeaderWithBackNoProfile = () => {
     };
 
   const handleProfilePress = async () => {
-  log.debug('handleProfilePress on userProfileData: ', userProfileData);
+  log.debug('handleProfilePress on userProfileData: ', JSON.stringify(userProfileData));
     // Navigate to the ProfileScreen and pass the user profile data as params
     navigation.navigate("Profile", { userProfileData });
   };

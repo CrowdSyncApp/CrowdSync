@@ -17,13 +17,13 @@ const ForgotPasswordScreen = () => {
   log.debug("Entering ForgotPasswordScreen...");
 
   const handleSendCode = async () => {
-    log.debug('handleSendCode on username: ', username);
+    log.debug('handleSendCode on username: ', JSON.stringify(username));
     try {
       await Auth.forgotPassword(username);
       setIsCodeSent(true);
     } catch (error) {
       console.error("Forgot password error:", error);
-      log.error("Forgot password error:", error);
+      log.error("Forgot password error:", JSON.stringify(error));
       alert("An error occurred. Please try again.");
     }
   };
@@ -37,7 +37,7 @@ const ForgotPasswordScreen = () => {
       navigation.navigate("Login");
     } catch (error) {
       console.error("Reset password error:", error);
-      log.error("Reset password error:", error);
+      log.error("Reset password error:", JSON.stringify(error));
       alert("An error occurred. Please try again.");
     }
   };
