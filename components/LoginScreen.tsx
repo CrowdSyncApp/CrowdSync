@@ -36,11 +36,11 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-        log.debug('Attempted login on username: ', username);
+        log.debug('Attempted login on username: ', JSON.stringify(username));
       await login({ username, password }, log);
       navigation.navigate("FindSession");
     } catch (error) {
-    log.debug('Failed login: ', error);
+    log.debug('Failed login: ', JSON.stringify(error));
       throw error;
     }
   };
@@ -61,7 +61,7 @@ const LoginScreen = () => {
       navigation.navigate("FindSession");
     } catch (error) {
       console.error("Guest Sign In error:", error);
-      log.error("Guest Sign In error:", error);
+      log.error("Guest Sign In error:", JSON.stringify(error));
       alert("Guest Sign In failed. Please try again.");
     }
   };

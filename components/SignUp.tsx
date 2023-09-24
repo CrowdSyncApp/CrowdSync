@@ -51,7 +51,7 @@ const SignUpScreen = () => {
         updatedAt: now,
       };
 
-        log.debug('userProfileInput: ', userProfileInput);
+        log.debug('userProfileInput: ', JSON.stringify(userProfileInput));
 
       try {
         const response = await API.graphql(
@@ -60,13 +60,13 @@ const SignUpScreen = () => {
         const data = response.data;
       } catch (error) {
         console.error("Error storing data:", error);
-        log.error("Error storing data:", error);
+        log.error("Error storing data:", JSON.stringify(error));
       }
 
       navigation.navigate("Login");
     } catch (error) {
       console.error("Sign up error:", error);
-      log.error("Sign up error:", error);
+      log.error("Sign up error:", JSON.stringify(error));
       if (error.code === "UsernameExistsException") {
         setErrorMessage(
           "Username already exists. Please choose a different email or phone number."

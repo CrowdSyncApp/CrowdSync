@@ -26,7 +26,7 @@ const AddTags = ({ route }) => {
   const navigation = useNavigation();
   const [currentTags, setCurrentTags] = useState(currTags);
 
-  log.debug("Entering AddTags screen with currTags: ", currTags);
+  log.debug("Entering AddTags screen with currTags: ", JSON.stringify(currTags));
 
   useEffect(() => {
     const fetchTagSet = async () => {
@@ -56,7 +56,7 @@ const AddTags = ({ route }) => {
   };
 
   const handleAddTag = (tag) => {
-    log.debug("Adding tag: ", tag);
+    log.debug("Adding tag: ", JSON.stringify(tag));
     const matchingTag = allTags.find(
       (tagData) => tagData.tag.toLowerCase() === tag.toLowerCase()
     );

@@ -21,7 +21,7 @@ const generateUniqueSessionId = () => {
 };
 
 export async function getParticipantVisibility(userId, sessionId, log) {
-  log.debug("getParticipantVisibility on userId: " + userId + " and sessionId: " + sessionId);
+  log.debug("getParticipantVisibility on userId: " + JSON.stringify(userId) + " and sessionId: " + JSON.stringify(sessionId));
   try {
     const userIdParticipant = await API.graphql(
       graphqlOperation(getParticipants, { userId: userId, sessionId: sessionId })
@@ -33,11 +33,11 @@ export async function getParticipantVisibility(userId, sessionId, log) {
     }
 
     const visibility = userIdParticipant.data.getParticipants.visibility;
-    log.debug("visibility: ", visibility);
+    log.debug("visibility: ", JSON.stringify(visibility));
     return visibility == "VISIBLE";
   } catch (error) {
     console.error("Error getting participant visibility:", error);
-    log.error("Error getting participant visibility:", error);
+    log.error("Error getting participant visibility:", JSON.stringify(error));
   }
 }
 
@@ -47,7 +47,7 @@ async function clearAllIntervals(log) {
     // Retrieve the list of intervalIds from AsyncStorage
     const intervalIdsJson = await AsyncStorage.getItem("intervalIds");
     const intervalIds = intervalIdsJson ? JSON.parse(intervalIdsJson) : [];
-    log.debug("intervalIds: ", intervalIds);
+    log.debug("intervalIds: ", JSON.stringify(intervalIds));
 
     // Clear each interval using clearInterval
     intervalIds.forEach((intervalId) => {
@@ -62,18 +62,18 @@ async function clearAllIntervals(log) {
     log.debug("All intervals cleared");
   } catch (error) {
     console.error("Error clearing intervals:", error);
-    log.error("Error clearing intervals:", error);
+    log.error("Error clearing intervals:", JSON.stringify(error));
   }
 }
 
 export async function storeSessionData(sessionData, log) {
-  log.debug("storeSessionData on sessionData: ", sessionData);
+  log.debug("storeSessionData on sessionData: ", JSON.stringify(sessionData));
   await AsyncStorage.setItem("sessionData", JSON.stringify(sessionData));
 }
 
 export async function getSessionData(log) {
   const sessionData = await AsyncStorage.getItem("sessionData");
-  log.debug("getSessionData on sessionData: ", sessionData);
+  log.debug("getSessionData on sessionData: ", JSON.stringify(sessionData));
   if (sessionData) {
     return JSON.parse(sessionData);
   }
@@ -110,26 +110,26 @@ export const fetchParticipants = async (log) => {
       })
     );
     fetchedParticipants = response.data.listParticipants.items;
-    log.debug("listParticipants response: ", response.data.listParticipants);
+    log.debug("listParticipants response: ", JSON.stringify(response.data.listParticipants));
   } catch (error) {
     console.error("Error fetching participants:", error);
-    log.error("Error fetching participants:", error);
+    log.error("Error fetching participants:", JSON.stringify(error));
   }
   const filteredFakeParticipants = participantsData.filter(
     (participant) => participant.visibility === "VISIBLE"
   );
-  log.debug("filteredFakeParticipants: ", filteredFakeParticipants);
+  log.debug("filteredFakeParticipants: ", JSON.stringify(filteredFakeParticipants));
   const filteredParticipantsList = [
     ...fetchedParticipants,
     ...filteredFakeParticipants,
   ];
-  log.debug("filteredParticipantsList: ", filteredParticipantsList);
+  log.debug("filteredParticipantsList: ", JSON.stringify(filteredParticipantsList));
 
   return filteredParticipantsList;
 };
 
 export const getSessionIdForUser = async (userId, log) => {
-  log.debug("getSessionIdForUser on userId: ", userId);
+  log.debug("getSessionIdForUser on userId: ", JSON.stringify(userId));
   try {
     const filter = {
       userId: { eq: userId },
@@ -137,23 +137,23 @@ export const getSessionIdForUser = async (userId, log) => {
       userStatus: {ne: "INACTIVE"}
     };
 
-    log.debug("listParticipants on filter: ", filter);
+    log.debug("listParticipants on filter: ", JSON.stringify(filter));
     const listParticipantsResponse = await API.graphql(
       graphqlOperation(listParticipants, { filter })
     );
     const participants = listParticipantsResponse.data.listParticipants.items;
-    log.debug("participants: ", participants);
+    log.debug("participants: ", JSON.stringify(participants));
 
     if (participants.length === 0) {
       log.debug("getSessionIdForUser sessionId: INACTIVE");
       return "INACTIVE";
     }
 
-    log.debug('getSessionIdForUser sessionId: ', participants[0].sessionId);
+    log.debug('getSessionIdForUser sessionId: ', JSON.stringify(participants[0].sessionId));
     return participants[0].sessionId;
   } catch (error) {
     console.error("Error fetching session ID for user:", error);
-    log.error("Error fetching session ID for user:", error);
+    log.error("Error fetching session ID for user:", JSON.stringify(error));
     return "INACTIVE";
   }
 };
@@ -161,11 +161,11 @@ export const getSessionIdForUser = async (userId, log) => {
 const createSessionWithRetry = async (userId, title, log, retryAttempt = 1) => {
   log.debug(
     "createSessionWithRetry on userId: " +
-      userId +
+      JSON.stringify(userId) +
       " and title: " +
-      title +
+      JSON.stringify(title) +
       " and retryAttempt: " +
-      retryAttempt
+      JSON.stringify(retryAttempt)
   );
   if (retryAttempt > MAX_RETRY_ATTEMPTS) {
     log.error(`Failed to create session after ${MAX_RETRY_ATTEMPTS} attempts`);
@@ -187,7 +187,7 @@ const createSessionWithRetry = async (userId, title, log, retryAttempt = 1) => {
       status: "ACTIVE",
     },
   };
-  log.debug("createSessions on input: ", input);
+  log.debug("createSessions on input: ", JSON.stringify(input));
 
   try {
     const response = await API.graphql({
@@ -198,12 +198,12 @@ const createSessionWithRetry = async (userId, title, log, retryAttempt = 1) => {
     const newSession = response.data.createSessions;
 
     console.log("Session started:", newSession);
-    log.debug("Session started:", newSession);
+    log.debug("Session started:", JSON.stringify(newSession));
 
     return newSession; // Optionally, you can return the new session object
   } catch (error) {
     console.error("Error starting session:", error);
-    log.error("Error starting session:", error);
+    log.error("Error starting session:", JSON.stringify(error));
 
     // Retry with a new session ID
     return createSessionWithRetry(userId, title, log, retryAttempt + 1);
@@ -212,7 +212,7 @@ const createSessionWithRetry = async (userId, title, log, retryAttempt = 1) => {
 
 const propagateSessionIdUpdate = async (userId, sessionId, sessionStatus, userStatus, log) => {
   try {
-    log.debug('propagateSessionIdUpdate on userId: ' + userId + ' and sessionId: ' + sessionId + ' and sessionStatus: ' + sessionStatus + ' and userStatus: ' + userStatus);
+    log.debug('propagateSessionIdUpdate on userId: ' + JSON.stringify(userId) + ' and sessionId: ' + JSON.stringify(sessionId) + ' and sessionStatus: ' + JSON.stringify(sessionStatus) + ' and userStatus: ' + JSON.stringify(userStatus));
 
   const updateParticipantsInput = {
     input: {
@@ -224,7 +224,7 @@ const propagateSessionIdUpdate = async (userId, sessionId, sessionStatus, userSt
   };
 
   // Call the updateParticipants mutation to update sessionIds
-  log.debug('updateParticipants on input: ', updateParticipantsInput);
+  log.debug('updateParticipants on input: ', JSON.stringify(updateParticipantsInput));
   await API.graphql(graphqlOperation(updateParticipants, updateParticipantsInput));
 
     // Log success or any other necessary information
@@ -232,7 +232,7 @@ const propagateSessionIdUpdate = async (userId, sessionId, sessionStatus, userSt
   } catch (error) {
     // Handle errors
     console.error('Error propagating session updates:', error);
-    log.error('Error propagating session updates:', error);
+    log.error('Error propagating session updates:', JSON.stringify(error));
   }
 };
 
@@ -244,11 +244,11 @@ export const createOrUpdateParticipant = async (
 ) => {
   log.debug(
     "createOrUpdateParticipant on userId: " +
-      userId +
+      JSON.stringify(userId) +
       " and fullName: " +
-      fullName +
+      JSON.stringify(fullName) +
       " and sessionId: " +
-      sessionId
+      JSON.stringify(sessionId)
   );
   const now = new Date().toISOString();
 
@@ -264,7 +264,7 @@ export const createOrUpdateParticipant = async (
     },
   };
 
-  log.debug("createOrUpdateParticipants on input: ", input);
+  log.debug("createOrUpdateParticipants on input: ", JSON.stringify(input));
   try {
     const response = await API.graphql({
       query: createOrUpdateParticipants,
@@ -274,10 +274,10 @@ export const createOrUpdateParticipant = async (
     const newParticipant = response.data.createOrUpdateParticipants;
 
     console.log("Participant joined:", newParticipant);
-    log.debug("Participant joined:", newParticipant);
+    log.debug("Participant joined:", JSON.stringify(newParticipant));
   } catch (error) {
     console.error("Error joining participant:", error);
-    log.error("Error joining participant:", error);
+    log.error("Error joining participant:", JSON.stringify(error));
     throw error;
   }
 };
@@ -285,9 +285,9 @@ export const createOrUpdateParticipant = async (
 export const startSession = async (userProfileData, title, log) => {
   log.debug(
     "startSession on userProfileData: " +
-      userProfileData +
+      JSON.stringify(userProfileData) +
       " and title: " +
-      title
+      JSON.stringify(title)
   );
   try {
     const userId = userProfileData.userId;
@@ -297,18 +297,18 @@ export const startSession = async (userProfileData, title, log) => {
     await createOrUpdateParticipant(userId, fullName, newSession.sessionId, log);
 
     storeSessionData(newSession, log);
-    log.debug("Started new session: ", newSession);
+    log.debug("Started new session: ", JSON.stringify(newSession));
 
     return newSession;
   } catch (error) {
     // Handle the error as needed
-    log.error("Failed to start session: ", error);
+    log.error("Failed to start session: ", JSON.stringify(error));
     throw error;
   }
 };
 
 export const exitSession = async (userId, sessionId, log) => {
-log.debug('exitSession on userId: ' + userId + ' and sessionId: ' + sessionId);
+log.debug('exitSession on userId: ' + JSON.stringify(userId) + ' and sessionId: ' + JSON.stringify(sessionId));
   try {
     // Prepare the input for the deleteParticipants mutation
     const input = {
@@ -323,17 +323,17 @@ log.debug('exitSession on userId: ' + userId + ' and sessionId: ' + sessionId);
     // Call the updateParticipants mutation to remove the participant from the session
     const response = await API.graphql(graphqlOperation(updateParticipants, input));
 
-    log.debug('Participant exited from session:', response.data.updateParticipants);
+    log.debug('Participant exited from session:', JSON.stringify(response.data.updateParticipants));
   } catch (error) {
     console.error('Error exiting participant from session:', error);
-    log.error('Error exiting participant from session:', error);
+    log.error('Error exiting participant from session:', errorJSON.stringify());
     throw error; // Re-throw the error to be handled by the caller if needed
   }
 };
 
 export const endSession = async (userId, sessionId, startTime, log) => {
   log.debug(
-    "endSession on userId: " + userId + " and sessionId: " + sessionId + " and startTime: " + startTime
+    "endSession on userId: " + JSON.stringify(userId) + " and sessionId: " + JSON.stringify(sessionId) + " and startTime: " + JSON.stringify(startTime)
   );
   try {
     const now = new Date().toISOString();
@@ -347,7 +347,7 @@ export const endSession = async (userId, sessionId, startTime, log) => {
       },
     };
 
-    log.debug("updateSessions on input: ", input);
+    log.debug("updateSessions on input: ", JSON.stringify(input));
     const response = await API.graphql({
       query: updateSessions,
       variables: input,
@@ -360,11 +360,11 @@ export const endSession = async (userId, sessionId, startTime, log) => {
     await propagateSessionIdUpdate(userId, sessionId, "INACTIVE", "INACTIVE", log);
 
     console.log("Session ended:", updatedSession);
-    log.debug("Session ended:", updatedSession);
+    log.debug("Session ended:", JSON.stringify(updatedSession));
     return updatedSession;
   } catch (error) {
     console.error("Error ending session:", error);
-    log.error("Error ending session:", error);
+    log.error("Error ending session:", JSON.stringify(error));
     throw error;
   }
 };

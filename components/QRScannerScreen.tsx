@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
@@ -16,7 +16,7 @@ const QRScannerScreen = () => {
   // Function to handle QR code scanning
   const handleBarCodeScanned = async (event) => {
     const { data } = event;
-    log.debug('handleBarCodeScanned on data: ', data);
+    log.debug('handleBarCodeScanned on data: ', JSON.stringify(data));
 
     try {
       const userProfileData = await fetchUserProfileData();
@@ -33,7 +33,7 @@ const QRScannerScreen = () => {
     } catch (error) {
       // Handle errors, e.g., show an error message to the user
       console.error("Error joining session:", error);
-      log.error("Error joining session:", error);
+      log.error("Error joining session:", JSON.stringify(error));
     }
   };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,15 +6,20 @@ import {
   FlatList,
   TouchableOpacity,
   Pressable,
+  Modal,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { API, graphqlOperation } from "aws-amplify";
 import QRCode from "react-native-qrcode-svg";
 import { useAuth } from "../QueryCaching";
 import { endSession, fetchParticipants, exitSession } from "./SessionManager";
 import { getParticipants, listParticipants } from "../src/graphql/queries";
 import { updateParticipants } from "../src/graphql/mutations";
-import { onCreateParticipants } from "../src/graphql/subscriptions";
+import {
+  onCreateParticipants,
+  onDeleteParticipants,
+  onUpdateParticipants,
+} from "../src/graphql/subscriptions";
 import styles, { palette, fonts } from "./style";
 import { useLog } from "../CrowdSyncLogManager";
 
@@ -26,6 +31,7 @@ const SessionHomeScreen = ({ route }) => {
   const log = useLog();
   const [participants, setParticipants] = useState([]);
   const [isVisible, setIsVisible] = useState(true);
+  const [isQRCodeModalVisible, setIsQRCodeModalVisible] = useState(false);
 
   log.debug("SessionHomeScreen on sessionData: ", sessionData);
 
@@ -37,77 +43,157 @@ const SessionHomeScreen = ({ route }) => {
     status: sessionData.status,
   });
 
-  useEffect(() => {
-    async function storeParticipantData() {
-      log.debug("storeParticipantData on user: ", user);
-      // Fetch participant data for the current session
-      const userId = user?.username;
-      const participantsList = await fetchParticipants(log);
-      log.debug("participantsList: ", participantsList);
-      setParticipants(participantsList);
-    }
-    storeParticipantData();
+  const handleQRCodePress = () => {
+    setIsQRCodeModalVisible(true);
+  };
 
-    const participantsUpdateInterval = setInterval(async () => {
-      try {
-        const participantsList = await fetchParticipants(log);
-        setParticipants(participantsList);
-      } catch (error) {
-        console.error("Error refreshing participants:", error);
-        log.error("Error refreshing participants:", error);
-      }
-    }, 5 * 1000);
+  const handleCloseModal = () => {
+    setIsQRCodeModalVisible(false);
+  };
 
-    const storeParticipantIntervalId = async () => {
-      await storeInterval(participantsUpdateInterval, log);
-    };
-    storeParticipantIntervalId();
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        const storeParticipantData = async () => {
+          log.debug("storeParticipantData on user: ", user);
+          // Fetch participant data for the current session
+          const participantsList = await fetchParticipants(log);
+          log.debug("participantsList: ", participantsList);
+          setParticipants(participantsList);
+        };
+        storeParticipantData();
 
-    const fetchVisibility = async () => {
-      log.debug("fetchVisibility");
-      const userProfileData = await fetchUserProfileData();
-      try {
-        const response = await API.graphql({
-          query: getParticipants,
-          variables: {
-            sessionId: sessionData.sessionId,
-            userId: userProfileData.userId,
-          },
-        });
+        // TODO update to remove an extra API call and just get the result from the storeParticipantData call
+        const fetchVisibility = async () => {
+          log.debug("fetchVisibility");
+          const userProfileData = await fetchUserProfileData();
+          try {
+            const response = await API.graphql({
+              query: getParticipants,
+              variables: {
+                sessionId: sessionData.sessionId,
+                userId: userProfileData.userId,
+              },
+            });
 
-        log.debug("visibility: ", response.data.getParticipants.visibility);
-        // Update the visibility state
-        setIsVisible(response.data.getParticipants.visibility === "VISIBLE");
-      } catch (error) {
-        console.error("Error fetching visibility:", error);
-        log.error("Error fetching visibility:", error);
-      }
-    };
+            log.debug("visibility: ", response.data.getParticipants.visibility);
+            // Update the visibility state
+            setIsVisible(
+              response.data.getParticipants.visibility === "VISIBLE"
+            );
+          } catch (error) {
+            console.error("Error fetching visibility:", error);
+            log.error("Error fetching visibility:", JSON.stringify(error));
+          }
+        };
 
-    fetchVisibility();
+        fetchVisibility();
 
-    const subscription = API.graphql(
-      graphqlOperation(onCreateParticipants, {
-        sessionId: sessionData.sessionId,
-      })
-    ).subscribe({
-      next: (response) => {
-        const newParticipant = response.value.data.onCreateParticipants;
-        setParticipants((prevParticipants) => [
-          ...prevParticipants,
-          newParticipant,
-        ]);
-      },
-      error: (error) => {
-        console.error("Error subscribing to participant joined:", error);
-        log.error("Error subscribing to participant joined:", error);
-      },
-    });
+        const createSubscription = () => {
+          // Create subscription for adding new participants
+          const subscription = API.graphql(
+            graphqlOperation(onCreateParticipants, {
+              sessionId: sessionData.sessionId,
+            })
+          ).subscribe({
+            next: (response) => {
+              const newParticipant = response.value.data.onCreateParticipants;
+              setParticipants((prevParticipants) => [
+                ...prevParticipants,
+                newParticipant,
+              ]);
+            },
+            error: (error) => {
+              console.error("Error subscribing to participant joined:", error);
+              log.error(
+                "Error subscribing to participant joined:",
+                JSON.stringify(error)
+              );
+            },
+          });
+          return subscription;
+        };
 
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [sessionData.sessionId]);
+        const deleteSubscription = () => {
+          // Create subscription for deleting participants
+          const subscription = API.graphql(
+            graphqlOperation(onDeleteParticipants, {
+              sessionId: sessionData.sessionId,
+            })
+          ).subscribe({
+            next: (response) => {
+              const deletedParticipant =
+                response.value.data.onDeleteParticipants;
+              setParticipants((prevParticipants) =>
+                prevParticipants.filter(
+                  (participant) =>
+                    participant.userId !== deletedParticipant.userId
+                )
+              );
+            },
+            error: (error) => {
+              console.error("Error subscribing to participant deleted:", error);
+              log.error(
+                "Error subscribing to participant deleted:",
+                JSON.stringify(error)
+              );
+            },
+          });
+          return subscription;
+        };
+
+        const updateSubscription = () => {
+          // Create subscription for updating participant visibility
+          const subscription = API.graphql(
+            graphqlOperation(onUpdateParticipants, {
+              sessionId: sessionData.sessionId,
+            })
+          ).subscribe({
+            next: (response) => {
+              const updatedParticipant =
+                response.value.data.onUpdateParticipants;
+              if (
+                updatedParticipant.visibility === "VISIBLE" &&
+                updatedParticipant.userStatus === "ACTIVE"
+              ) {
+                setParticipants((prevParticipants) => [
+                  ...prevParticipants,
+                  updatedParticipant,
+                ]);
+              } else {
+                setParticipants((prevParticipants) =>
+                  prevParticipants.filter(
+                    (participant) =>
+                      participant.userId !== updatedParticipant.userId
+                  )
+                );
+              }
+            },
+            error: (error) => {
+              console.error("Error subscribing to participant updated:", error);
+              log.error(
+                "Error subscribing to participant updated:",
+                JSON.stringify(error)
+              );
+            },
+          });
+          return subscription;
+        };
+
+        const onCreateSubscription = createSubscription();
+        const onDeleteSubscription = deleteSubscription();
+        const onUpdateSubscription = updateSubscription();
+
+        return () => {
+          onCreateSubscription.unsubscribe();
+          onDeleteSubscription.unsubscribe();
+          onUpdateSubscription.unsubscribe();
+        };
+      };
+
+      fetchData();
+    }, [user, fetchParticipants, fetchUserProfileData, sessionData.sessionId])
+  );
 
   const handleJoinSessionWithQRCode = () => {
     log.debug("handleJoinSessionWithQRCode");
@@ -116,7 +202,10 @@ const SessionHomeScreen = ({ route }) => {
 
   // Function to handle pressing the Search For People button
   const handleSearchForPeople = () => {
-    log.debug("handleSearchForPeople on sessionData: ", sessionData);
+    log.debug(
+      "handleSearchForPeople on sessionData: ",
+      JSON.stringify(sessionData)
+    );
     // Handle the action when Search For People button is pressed
     // For now, let's log a message to the console
     navigation.navigate("SearchForPeople", { sessionData: sessionData });
@@ -130,25 +219,24 @@ const SessionHomeScreen = ({ route }) => {
     navigation.navigate("ChatScreen");
   };
 
-const handleExitSession = async () => {
-    log.debug("handleExitSession on sessionData: ", sessionData);
+  const handleExitSession = async () => {
+    log.debug(
+      "handleExitSession on sessionData: ",
+      JSON.stringify(sessionData)
+    );
     try {
-      await exitSession(
-        user?.username,
-        sessionData.sessionId,
-        log
-      );
+      await exitSession(user?.username, sessionData.sessionId, log);
 
       navigation.navigate("FindSession");
     } catch (error) {
       // Handle the error as needed
       console.error("Error exiting session:", error);
-      log.error("Error exiting session:", error);
+      log.error("Error exiting session:", JSON.stringify(error));
     }
   };
 
   const handleEndSession = async () => {
-    log.debug("handleEndSession on sessionData: ", sessionData);
+    log.debug("handleEndSession on sessionData: ", JSON.stringify(sessionData));
     try {
       await endSession(
         user?.username,
@@ -161,7 +249,7 @@ const handleExitSession = async () => {
     } catch (error) {
       // Handle the error as needed
       console.error("Error ending session:", error);
-      log.error("Error ending session:", error);
+      log.error("Error ending session:", JSON.stringify(error));
     }
   };
 
@@ -173,11 +261,11 @@ const handleExitSession = async () => {
 
       log.debug(
         "updateParticipants on sessionId: " +
-          sessionData.sessionId +
+          JSON.stringify(sessionData.sessionId) +
           " and userId: " +
-          userProfileData.userId +
+          JSON.stringify(userProfileData.userId) +
           " and visibility: " +
-          newVisibility
+          JSON.stringify(newVisibility)
       );
       await API.graphql(
         graphqlOperation(updateParticipants, {
@@ -193,16 +281,16 @@ const handleExitSession = async () => {
       setIsVisible(!isVisible);
     } catch (error) {
       console.error("Error toggling visibility:", error);
-      log.error("Error toggling visibility:", error);
+      log.error("Error toggling visibility:", JSON.stringify(error));
     }
   };
 
   const handleUserProfilePress = async (userProfileData) => {
     log.debug(
       "handleUserProfilePress on userProfileData: " +
-        userProfileData +
+        JSON.stringify(userProfileData) +
         " and sessionId: " +
-        sessionData.sessionId
+        JSON.stringify(sessionData.sessionId)
     );
     let userData = await getUserProfileFromId(userProfileData.userId, log);
 
@@ -220,9 +308,11 @@ const handleExitSession = async () => {
     <View style={styles.index}>
       <View style={styles.div}>
         {/* QR Code */}
-        <View style={{ marginBottom: 10, alignItems: "center" }}>
-          <QRCode value={qrCodeData} size={200} />
-        </View>
+        <TouchableOpacity onPress={handleQRCodePress}>
+          <View style={{ marginBottom: 10, alignItems: "center" }}>
+            <QRCode value={qrCodeData} size={200} />
+          </View>
+        </TouchableOpacity>
 
         <View style={{ alignItems: "center" }}>
           <Text style={styles.headerTitle}>{sessionData.title}</Text>
@@ -278,7 +368,7 @@ const handleExitSession = async () => {
           </View>
         )}
 
-        <View style={{ marginTop: 10 }}/>
+        <View style={{ marginTop: 10 }} />
         <View style={styles.flexButtonContainer}>
           <TouchableOpacity
             style={styles.loginButton}
@@ -301,6 +391,41 @@ const handleExitSession = async () => {
             </TouchableOpacity>
           )}
         </View>
+        <Modal
+          visible={isQRCodeModalVisible}
+          transparent={true}
+          onRequestClose={handleCloseModal}
+        >
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "rgba(0, 0, 0, 0.5)", // Add a semi-transparent black background
+            }}
+          >
+            <View
+              style={{
+                padding: 20,
+                backgroundColor: "#fff",
+                borderRadius: 10,
+              }}
+            >
+              <QRCode value={qrCodeData} size={300} />
+              <TouchableOpacity
+                style={{
+                  marginTop: 20,
+                  padding: 10,
+                  backgroundColor: "#ff0000",
+                  borderRadius: 5,
+                }}
+                onPress={handleCloseModal}
+              >
+                <Text style={{ color: "#fff" }}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </View>
     </View>
   );

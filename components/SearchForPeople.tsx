@@ -26,7 +26,7 @@ const [tagQuery, setTagQuery] = useState("");
   const log = useLog();
   const [searchResults, setSearchResults] = useState<string[]>([]);
 
-    log.debug('SearchForPeople with sessionData: ', sessionData);
+    log.debug('SearchForPeople with sessionData: ', JSON.stringify(sessionData));
 
   // Function to handle the search button press
   const handleSearch = async () => {
@@ -34,8 +34,8 @@ const [tagQuery, setTagQuery] = useState("");
     try {
       // Split the tagQuery string into an array of tag strings
       const tagQueryArray = tagQuery.trim().split(',');
-      log.debug('tagQueryArray: ', tagQueryArray);
-      log.debug('nameQuery: ', nameQuery);
+      log.debug('tagQueryArray: ', JSON.stringify(tagQueryArray));
+      log.debug('nameQuery: ', JSON.stringify(nameQuery));
 
       let participants = [];
       let userTags = [];
@@ -47,7 +47,7 @@ const [tagQuery, setTagQuery] = useState("");
           visibility: { eq: 'VISIBLE' },
           fullName: { beginsWith: nameQuery.trim() }, // Match participants whose name starts with nameQuery
         };
-        log.debug('listParticipants with filter: ', participantsFilter);
+        log.debug('listParticipants with filter: ', JSON.stringify(participantsFilter));
 
         // Make the GraphQL API call to search for participants
         const participantsResponse = await API.graphql(
@@ -56,7 +56,7 @@ const [tagQuery, setTagQuery] = useState("");
 
         // Extract the list of participants from the response
         participants = participantsResponse.data.listParticipants.items;
-        log.debug('participants: ', participants);
+        log.debug('participants: ', JSON.stringify(participants));
       }
 
       if (tagQuery.trim() !== '') {
@@ -79,18 +79,18 @@ const [tagQuery, setTagQuery] = useState("");
 
         // Fetch all tagId values asynchronously
         const tagIdValues = await Promise.all(tagIdPromises);
-        log.debug('listTagSets returns: ', tagIdValues);
+        log.debug('listTagSets returns: ', JSON.stringify(tagIdValues));
 
         // Remove null values (tags not found)
         const validTagIds = tagIdValues.filter((tagId) => tagId !== null);
-        log.debug('validTagIds: ', validTagIds);
+        log.debug('validTagIds: ', JSON.stringify(validTagIds));
 
         if (validTagIds.length > 0) {
           // Create a filter to match user tags with the valid tagId values
           const userTagsFilter = {
             sessionId: { eq: sessionData.sessionId },
           };
-          log.debug('listUserTags with filter: ', userTagsFilter);
+          log.debug('listUserTags with filter: ', JSON.stringify(userTagsFilter));
 
           // Make the GraphQL API call to search for user tags
           const userTagsResponse = await API.graphql(
@@ -102,7 +102,7 @@ const [tagQuery, setTagQuery] = useState("");
           userTags = userTags.filter((userTag) =>
               validTagIds.includes(userTag.tagId)
             );
-            log.debug('userTags: ', userTags);
+            log.debug('userTags: ', JSON.stringify(userTags));
         }
       }
 
@@ -117,7 +117,7 @@ const [tagQuery, setTagQuery] = useState("");
       } else {
         results = participants;
       }
-      log.debug('handleSearch results: ', results);
+      log.debug('handleSearch results: ', JSON.stringify(results));
 
       if (results.length === 0) {
         results = [{ userId: 0, fullName: "No results found..." }]
@@ -127,24 +127,24 @@ const [tagQuery, setTagQuery] = useState("");
       setSearchResults(results);
     } catch (error) {
       console.error("Error searching for participants and user tags:", error);
-      log.error("Error searching for participants and user tags:", error);
+      log.error("Error searching for participants and user tags:", JSON.stringify(error));
     }
   };
 
   const handleUserProfileLinkPress = async (user) => {
-  log.debug('handleUserProfileLinkPress on user: ', user);
+  log.debug('handleUserProfileLinkPress on user: ', JSON.stringify(user));
     try {
       if (user.userId === 0) {
         return;
       }
       // Call the getUserProfileFromId function to fetch the user's profile data
       const userProfileData = await getUserProfileFromId(user.userId, log);
-      log.debug('Navigating to OtherUserProfile on userData: ' + userProfileData + ' and sessionId: ' + sessionData.sessionId);
+      log.debug('Navigating to OtherUserProfile on userData: ' + JSON.stringify(userProfileData) + ' and sessionId: ' + JSON.stringify(sessionData.sessionId));
 
       navigation.navigate('OtherUserProfile', { userData: userProfileData, sessionId: sessionData.sessionId });
     } catch (error) {
       console.error('Error fetching user profile:', error);
-      log.error('Error fetching user profile:', error);
+      log.error('Error fetching user profile:', JSON.stringify(error));
       // Handle the error as needed, e.g., show an error message to the user
     }
   };
