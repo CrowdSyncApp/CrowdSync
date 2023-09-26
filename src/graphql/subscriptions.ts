@@ -345,16 +345,16 @@ export const onCreateParticipants = /* GraphQL */ `
   subscription OnCreateParticipants(
     $sessionId: String
     $userId: String
-    $joinedAt: AWSDateTime
+    $visibility: String
     $role: String
-    $jobTitle: String
+    $userStatus: String
   ) {
     onCreateParticipants(
       sessionId: $sessionId
       userId: $userId
-      joinedAt: $joinedAt
+      visibility: $visibility
       role: $role
-      jobTitle: $jobTitle
+      userStatus: $userStatus
     ) {
       sessionId
       userId
@@ -375,16 +375,16 @@ export const onUpdateParticipants = /* GraphQL */ `
   subscription OnUpdateParticipants(
     $sessionId: String
     $userId: String
-    $joinedAt: AWSDateTime
+    $visibility: String
     $role: String
-    $jobTitle: String
+    $userStatus: String
   ) {
     onUpdateParticipants(
       sessionId: $sessionId
       userId: $userId
-      joinedAt: $joinedAt
+      visibility: $visibility
       role: $role
-      jobTitle: $jobTitle
+      userStatus: $userStatus
     ) {
       sessionId
       userId
@@ -405,16 +405,16 @@ export const onDeleteParticipants = /* GraphQL */ `
   subscription OnDeleteParticipants(
     $sessionId: String
     $userId: String
-    $joinedAt: AWSDateTime
+    $visibility: String
     $role: String
-    $jobTitle: String
+    $userStatus: String
   ) {
     onDeleteParticipants(
       sessionId: $sessionId
       userId: $userId
-      joinedAt: $joinedAt
+      visibility: $visibility
       role: $role
-      jobTitle: $jobTitle
+      userStatus: $userStatus
     ) {
       sessionId
       userId

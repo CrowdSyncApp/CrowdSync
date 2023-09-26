@@ -91,6 +91,7 @@ const SessionHomeScreen = ({ route }) => {
 
         const createSubscription = () => {
           // Create subscription for adding new participants
+          log.debug("onCreateParticipants on sessionData: ", sessionData);
           const subscription = API.graphql(
             graphqlOperation(onCreateParticipants, {
               sessionId: sessionData.sessionId,

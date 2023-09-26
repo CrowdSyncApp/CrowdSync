@@ -13,7 +13,7 @@ export const palette = {
 };
 
 export const fonts = {
-  baseFontFamily: "Alatsi, Helvetica",
+  baseFontFamily: "GlacialIndifference-Regular",
 };
 
 const styles = {
@@ -42,8 +42,8 @@ const styles = {
     alignItems: "center",
   },
   splashLogo: {
-    width: 175,
-    height: 175,
+    width: 250,
+    height: 250,
   },
   div: {
     backgroundColor: palette.primaryBgColor,
