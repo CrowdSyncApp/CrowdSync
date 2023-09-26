@@ -41,22 +41,30 @@ const [tagQuery, setTagQuery] = useState("");
       let userTags = [];
 
       if (nameQuery.trim() !== '') {
-        // Create a filter to match participants with the specified criteria
-        const participantsFilter = {
-          sessionId: { eq: sessionData.sessionId }, // Replace with your actual session ID
-          visibility: { eq: 'VISIBLE' },
-          fullName: { beginsWith: nameQuery.trim() }, // Match participants whose name starts with nameQuery
-        };
-        log.debug('listParticipants with filter: ', JSON.stringify(participantsFilter));
+        let nextToken = null;
 
-        // Make the GraphQL API call to search for participants
-        const participantsResponse = await API.graphql(
-          graphqlOperation(listParticipants, { filter: participantsFilter })
-        );
+        do {
+          const participantsFilter = {
+            sessionId: { eq: sessionData.sessionId }, // Replace with your actual session ID
+            visibility: { eq: 'VISIBLE' },
+            fullName: { beginsWith: nameQuery.trim() }, // Match participants whose name starts with nameQuery
+          };
+          log.debug('listParticipants with filter: ', JSON.stringify(participantsFilter));
 
-        // Extract the list of participants from the response
-        participants = participantsResponse.data.listParticipants.items;
-        log.debug('participants: ', JSON.stringify(participants));
+          const participantsResponse = await API.graphql(
+            graphqlOperation(listParticipants, { filter: participantsFilter, nextToken })
+          );
+
+          const { items, nextToken: newNextToken } = participantsResponse.data.listParticipants;
+
+          // Concatenate the participants from this batch to the existing participants array
+          participants = participants.concat(items);
+
+          // Update the nextToken for the next iteration
+          nextToken = newNextToken;
+        } while (nextToken);
+
+        log.debug('All participants: ', JSON.stringify(participants));
       }
 
       if (tagQuery.trim() !== '') {

@@ -188,18 +188,18 @@ const ChatScreen = ({ route }) => {
 
       do {
         const filter = {
-            chatId: { eq: chatId },
+          chatId: { eq: chatId },
         };
         const response = await API.graphql(
-              graphqlOperation(listChats, { filter, nextToken })
-            );
+          graphqlOperation(listChats, { filter, nextToken })
+        );
         const chatMessages = response.data.listChats.items;
 
-          if (chatMessages.length > 0) {
-            allMessages = allMessages.concat(chatMessages);
-          }
+        if (chatMessages.length > 0) {
+          allMessages = allMessages.concat(chatMessages);
+        }
 
-          nextToken = response.data.listChats.nextToken;
+        nextToken = response.data.listChats.nextToken;
       } while (nextToken);
 
       setMessages(allMessages);

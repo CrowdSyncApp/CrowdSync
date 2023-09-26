@@ -86,39 +86,52 @@ export async function removeSessionData(log) {
 }
 
 export const fetchParticipants = async (log) => {
-  let fetchedParticipants;
+  let fetchedParticipants = [];
+  let nextToken = null;
+
   try {
     const user = await Auth.currentAuthenticatedUser();
     const userId = user?.username;
     const sessionData = await getSessionData(log);
     log.debug(
-      "fetchParticipants on user: " + JSON.stringify(user) + " and sessionData: " + JSON.stringify(sessionData)
+      "fetchParticipants on user: " +
+        JSON.stringify(user) +
+        " and sessionData: " +
+        JSON.stringify(sessionData)
     );
-    const response = await API.graphql(
-      graphqlOperation(listParticipants, {
-        filter: {
-          sessionId: {
-            eq: sessionData.sessionId,
-          },
-          visibility: {
-            eq: "VISIBLE",
-          },
-          userId: {
-            ne: userId,
-          },
-        },
-      })
-    );
-    fetchedParticipants = response.data.listParticipants.items;
-    log.debug("listParticipants response: ", JSON.stringify(response.data.listParticipants));
+
+    do {
+      const listParticipantsFilter = {
+        sessionId: { eq: sessionData.sessionId },
+        visibility: { eq: "VISIBLE" },
+        userId: { ne: userId },
+      };
+      log.debug("listParticipants on listParticipantsFilter: ", listParticipantsFilter);
+
+      const response = await API.graphql(
+        graphqlOperation(listParticipants, {
+          filter: listParticipantsFilter,
+          limit: 10, // Adjust the limit as needed
+          nextToken: nextToken,
+        })
+      );
+
+      const { items, nextToken: newNextToken } = response.data.listParticipants;
+      fetchedParticipants = [...fetchedParticipants, ...items];
+      nextToken = newNextToken;
+    } while (nextToken);
+
+    log.debug("Fetched participants:", JSON.stringify(fetchedParticipants));
   } catch (error) {
     console.error("Error fetching participants:", error);
     log.error("Error fetching participants:", JSON.stringify(error));
   }
+
   const filteredFakeParticipants = participantsData.filter(
     (participant) => participant.visibility === "VISIBLE"
   );
   log.debug("filteredFakeParticipants: ", JSON.stringify(filteredFakeParticipants));
+
   const filteredParticipantsList = [
     ...fetchedParticipants,
     ...filteredFakeParticipants,

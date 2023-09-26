@@ -1485,9 +1485,9 @@ export type OnDeleteUserTagsSubscription = {
 export type OnCreateParticipantsSubscriptionVariables = {
   sessionId?: string | null,
   userId?: string | null,
-  joinedAt?: string | null,
+  visibility?: string | null,
   role?: string | null,
-  jobTitle?: string | null,
+  userStatus?: string | null,
 };
 
 export type OnCreateParticipantsSubscription = {
@@ -1510,9 +1510,9 @@ export type OnCreateParticipantsSubscription = {
 export type OnUpdateParticipantsSubscriptionVariables = {
   sessionId?: string | null,
   userId?: string | null,
-  joinedAt?: string | null,
+  visibility?: string | null,
   role?: string | null,
-  jobTitle?: string | null,
+  userStatus?: string | null,
 };
 
 export type OnUpdateParticipantsSubscription = {
@@ -1535,9 +1535,9 @@ export type OnUpdateParticipantsSubscription = {
 export type OnDeleteParticipantsSubscriptionVariables = {
   sessionId?: string | null,
   userId?: string | null,
-  joinedAt?: string | null,
+  visibility?: string | null,
   role?: string | null,
-  jobTitle?: string | null,
+  userStatus?: string | null,
 };
 
 export type OnDeleteParticipantsSubscription = {
