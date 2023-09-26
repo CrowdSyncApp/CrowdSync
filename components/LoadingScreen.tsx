@@ -24,7 +24,7 @@ const LoadingScreen = () => {
           resizeMode="contain"
           style={styles.splashLogo}
         />
-        <Text style={styles.splashTitle}>CrowdSync</Text>
+        <Text style={styles.splashTitle}>Loading...</Text>
       </View>
     </View>
   );

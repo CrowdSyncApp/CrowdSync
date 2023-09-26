@@ -137,10 +137,16 @@ const styles = {
       },
   splashTitle: {
     fontFamily: fonts.baseFontFamily,
-    fontSize: 48,
+    fontSize: 50,
     fontWeight: "300",
     color: palette.textColor,
   },
+  tertiaryHeaderTitle: {
+      fontFamily: fonts.baseFontFamily,
+      fontSize: 20,
+      fontWeight: "300",
+      color: "black",
+    },
   secondaryHeaderTitle: {
     fontFamily: fonts.baseFontFamily,
     fontSize: 20,
