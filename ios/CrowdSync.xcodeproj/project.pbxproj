@@ -14,8 +14,9 @@
 		37E725E6A0E8A3E25E1E29E5 /* libPods-CrowdSync.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B6D96913BAF68CED7EBEAE6 /* libPods-CrowdSync.a */; };
 		40BB9E1647029E355B18DBFB /* libPods-CrowdSync-CrowdSyncTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EF577266A7887E44D38ED9C6 /* libPods-CrowdSync-CrowdSyncTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		8B18A6B32AA3EC3800CCF31B /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B18A6B22AA3EC3800CCF31B /* Media.xcassets */; };
-		8B32CEB52AB2A2A800CE1B15 /* anything.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B32CEB42AB2A2A800CE1B15 /* anything.swift */; };
+		B57FFA1C249F41FA9AC888F5 /* GlacialIndifference-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = EC97A152F9CD41439676BBCC /* GlacialIndifference-Bold.otf */; };
+		78BE6FE36D4C41658BDE0623 /* GlacialIndifference-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = D39A81720B2E4375AA11A66C /* GlacialIndifference-Italic.otf */; };
+		EB40A6736C6E44F09569F0FF /* GlacialIndifference-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 27276584FE2A4FBFAB611BDC /* GlacialIndifference-Regular.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,7 +49,9 @@
 		C5AEBB3603568CAB6C406279 /* Pods-CrowdSync-CrowdSyncTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CrowdSync-CrowdSyncTests.release.xcconfig"; path = "Target Support Files/Pods-CrowdSync-CrowdSyncTests/Pods-CrowdSync-CrowdSyncTests.release.xcconfig"; sourceTree = "<group>"; };
 		C5D1196864E60E2C0538DCB2 /* Pods-CrowdSync.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CrowdSync.debug.xcconfig"; path = "Target Support Files/Pods-CrowdSync/Pods-CrowdSync.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		EF577266A7887E44D38ED9C6 /* libPods-CrowdSync-CrowdSyncTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CrowdSync-CrowdSyncTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC97A152F9CD41439676BBCC /* GlacialIndifference-Bold.otf */ = {isa = PBXFileReference; name = "GlacialIndifference-Bold.otf"; path = "../assets/fonts/GlacialIndifference-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D39A81720B2E4375AA11A66C /* GlacialIndifference-Italic.otf */ = {isa = PBXFileReference; name = "GlacialIndifference-Italic.otf"; path = "../assets/fonts/GlacialIndifference-Italic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		27276584FE2A4FBFAB611BDC /* GlacialIndifference-Regular.otf */ = {isa = PBXFileReference; name = "GlacialIndifference-Regular.otf"; path = "../assets/fonts/GlacialIndifference-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +133,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				A7D5D3C348784B19A02FF916 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -155,6 +159,17 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		A7D5D3C348784B19A02FF916 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				EC97A152F9CD41439676BBCC /* GlacialIndifference-Bold.otf */,
+				D39A81720B2E4375AA11A66C /* GlacialIndifference-Italic.otf */,
+				27276584FE2A4FBFAB611BDC /* GlacialIndifference-Regular.otf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -254,6 +269,9 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				8B18A6B32AA3EC3800CCF31B /* Media.xcassets in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				B57FFA1C249F41FA9AC888F5 /* GlacialIndifference-Bold.otf in Resources */,
+				78BE6FE36D4C41658BDE0623 /* GlacialIndifference-Italic.otf in Resources */,
+				EB40A6736C6E44F09569F0FF /* GlacialIndifference-Regular.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

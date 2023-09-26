@@ -52,7 +52,7 @@ const SplashScreen = () => {
           resizeMode="contain"
           style={styles.splashLogo}
         />
-        <Text style={styles.headerTitle}>CrowdSync</Text>
+        <Text style={styles.splashTitle}>CrowdSync</Text>
       </View>
     </View>
   );

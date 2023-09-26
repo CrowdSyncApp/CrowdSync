@@ -341,6 +341,7 @@ async function logout(log) {
   try {
     const response = await Auth.signOut();
     await AsyncStorage.removeItem("userProfileData");
+    await AsyncStorage.removeItem("sessionData");
     await clearAllIntervals(log);
     log.debug("Logged out");
   } catch (error) {

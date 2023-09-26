@@ -91,7 +91,7 @@ const LoginScreen = () => {
             style={styles.splashLogo}
           />
           <View style={{ marginTop: 20 }}/>
-          <Text style={styles.headerTitle}>CrowdSync</Text>
+          <Text style={styles.splashTitle}>CrowdSync</Text>
         </View>
         <View style={{ marginTop: 30 }}>
           <TextInput
