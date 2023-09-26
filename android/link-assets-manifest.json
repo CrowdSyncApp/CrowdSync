@@ -1,0 +1,17 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/GlacialIndifference-Bold.otf",
+      "sha1": "3de2363bbe5afcc79bcbc64ddf95626663137317"
+    },
+    {
+      "path": "assets/fonts/GlacialIndifference-Italic.otf",
+      "sha1": "6329a38f8d1599a30c75a6ed997109c47ccabf8b"
+    },
+    {
+      "path": "assets/fonts/GlacialIndifference-Regular.otf",
+      "sha1": "15bfdfd55e31ad2c56f7bee8ebffc8147945ae68"
+    }
+  ]
+}

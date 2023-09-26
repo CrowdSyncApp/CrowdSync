@@ -158,7 +158,7 @@ const AppNavigator = () => {
         component={OtherUserProfileScreen}
         options={{
           title: "Other User",
-          header: () => <Header />,
+          header: () => <HeaderWithBack />,
         }}
       />
       <Stack.Screen
@@ -182,7 +182,7 @@ const AppNavigator = () => {
         component={AddTags}
         options={{
           title: "Add Tags",
-          header: () => <SimplifiedHeader />,
+          header: () => <HeaderWithBack />,
         }}
       />
       <Stack.Screen

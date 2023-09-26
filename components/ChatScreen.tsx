@@ -53,10 +53,12 @@ const ChatScreen = ({ route }) => {
 
               if (chatType == "GROUP") {
                    const sessionData = await getSessionData(log);
+                   log.debug("Creating chatId with sessionData: ", sessionData);
                    id = sessionData.sessionId + sessionData.creatorId;
                    receiver = participantIds;
               } else {
                    const userList: string[] = [user?.username, participants[0].userId];
+                   log.debug("Creating chatId with userList: ", userList);
                    id = userList[0] + userList[1];
                    receiver = [participants[0].userId];
               }
@@ -67,10 +69,6 @@ const ChatScreen = ({ route }) => {
         }
 
         setIdReceiverAndParticipantsList();
-
-        if (user?.attributes.sub) {
-          fetchChatMessages();
-        }
       }, [])
     );
 
@@ -173,6 +171,12 @@ const ChatScreen = ({ route }) => {
     return `${month}/${day}, ${hours}:${minutes}`;
   };
 
+  React.useEffect(() => {
+    if (chatId) {
+      fetchChatMessages();
+    }
+  }, [chatId]);
+
   const fetchChatMessages = async () => {
     log.debug('fetchChatMessages...');
     try {
@@ -181,7 +185,6 @@ const ChatScreen = ({ route }) => {
       log.debug('userId: ', JSON.stringify(userId));
       log.debug('chatId: ', JSON.stringify(chatId));
       log.debug('chatTypeStatus: ', JSON.stringify(chatTypeStatus));
-      log.debug('otherUserIds: ', JSON.stringify(participantIdsList));
 
       let allMessages = [];
       let nextToken = null;

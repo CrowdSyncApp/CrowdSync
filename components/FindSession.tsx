@@ -18,6 +18,7 @@ import { StatusBar } from "react-native";
 import MapView, { Marker } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import { useLog } from "../CrowdSyncLogManager";
+import LoadingScreen from "./LoadingScreen";
 
 import SampleFindSessionMap from "../images/sample_find_session.png";
 
@@ -162,46 +163,48 @@ useEffect(() => {
     };
 
   return (
+    <>
+    {location ? (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View style={styles.index}>
-          <View style={styles.div}>
-            {location ? (
-                    <MapView
-                      style={{ flex: 1 }}
-                      initialRegion={location}
-                    >
-                      <Marker
-                        coordinate={{
-                          latitude: location.latitude,
-                          longitude: location.longitude,
-                        }}
-                        title="Your Location"
-                        description="This is your current location"
-                      />
-                    </MapView>
-                  ) : (
-                    <Text>Loading...</Text> // Display a loading indicator while waiting for location
-                  )}
-            <View style={styles.buttonContainer}>
-            <Text style={styles.headerText}>Nearby Sessions</Text>
-              {renderNearbySessions()}
-              <Pressable
-                style={styles.basicButton}
-                onPress={handleJoinSessionWithQRCode}
-              >
-                <Text style={styles.buttonText}>Join Session with QR Code</Text>
-              </Pressable>
-              <View style={{ paddingVertical: 10 }} />
-              {renderSessionButtons()}
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <View style={styles.index}>
+              <View style={styles.div}>
+                <MapView
+                  style={{ flex: 1 }}
+                  initialRegion={location}
+                >
+                  <Marker
+                    coordinate={{
+                      latitude: location.latitude,
+                      longitude: location.longitude,
+                    }}
+                    title="Your Location"
+                    description="This is your current location"
+                  />
+                </MapView>
+                <View style={styles.buttonContainer}>
+                <Text style={styles.headerText}>Nearby Sessions</Text>
+                  {renderNearbySessions()}
+                  <Pressable
+                    style={styles.basicButton}
+                    onPress={handleJoinSessionWithQRCode}
+                  >
+                    <Text style={styles.buttonText}>Join Session with QR Code</Text>
+                  </Pressable>
+                  <View style={{ paddingVertical: 10 }} />
+                  {renderSessionButtons()}
+                </View>
+              </View>
             </View>
-          </View>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+          </ScrollView>
+        </KeyboardAvoidingView>
+    ) : (
+    <LoadingScreen />
+    )}
+    </>
   );
 };
 

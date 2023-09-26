@@ -153,21 +153,24 @@ const SessionHomeScreen = ({ route }) => {
             next: (response) => {
               const updatedParticipant =
                 response.value.data.onUpdateParticipants;
-              if (
-                updatedParticipant.visibility === "VISIBLE" &&
-                updatedParticipant.userStatus === "ACTIVE"
-              ) {
-                setParticipants((prevParticipants) => [
-                  ...prevParticipants,
-                  updatedParticipant,
-                ]);
-              } else {
-                setParticipants((prevParticipants) =>
-                  prevParticipants.filter(
-                    (participant) =>
-                      participant.userId !== updatedParticipant.userId
-                  )
-                );
+
+              if (updatedParticipant.userId !== user?.attributes.sub) {
+                if (
+                    updatedParticipant.visibility === "VISIBLE" &&
+                    updatedParticipant.userStatus === "ACTIVE"
+                  ) {
+                    setParticipants((prevParticipants) => [
+                      ...prevParticipants,
+                      updatedParticipant,
+                    ]);
+                  } else {
+                    setParticipants((prevParticipants) =>
+                      prevParticipants.filter(
+                        (participant) =>
+                          participant.userId !== updatedParticipant.userId
+                      )
+                    );
+                  }
               }
             },
             error: (error) => {

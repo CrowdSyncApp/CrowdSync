@@ -42,8 +42,8 @@ const styles = {
     alignItems: "center",
   },
   splashLogo: {
-    width: 250,
-    height: 250,
+    width: 200,
+    height: 200,
   },
   div: {
     backgroundColor: palette.primaryBgColor,
@@ -130,8 +130,14 @@ const styles = {
     paddingVertical: 10,
   },
   headerTitle: {
+        fontFamily: fonts.baseFontFamily,
+        fontSize: 40,
+        fontWeight: "300",
+        color: palette.textColor,
+      },
+  splashTitle: {
     fontFamily: fonts.baseFontFamily,
-    fontSize: 36,
+    fontSize: 48,
     fontWeight: "300",
     color: palette.textColor,
   },
