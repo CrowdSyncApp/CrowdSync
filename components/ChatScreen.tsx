@@ -57,10 +57,14 @@ const ChatScreen = ({ route }) => {
                    id = sessionData.sessionId + sessionData.creatorId;
                    receiver = participantIds;
               } else {
-                   const userList: string[] = [user?.username, participants[0].userId];
-                   log.debug("Creating chatId with userList: ", userList);
-                   id = userList[0] + userList[1];
-                   receiver = [participants[0].userId];
+                const userList: string[] = [user?.username, participants[0].userId];
+                userList.sort();  // Sort the user IDs
+
+                log.debug("Creating chatId with userList: ", userList);
+
+                // Combine the sorted user IDs
+                id = userList[0] + userList[1];
+                receiver = [participants[0].userId];
               }
               log.debug('chatId: ', JSON.stringify(id));
               log.debug('ReceiverIds: ', JSON.stringify(receiver));
