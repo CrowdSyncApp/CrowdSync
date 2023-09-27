@@ -11,6 +11,7 @@ import {
   StyleSheet,
   Image,
   Modal,
+  TouchableWithoutFeedback, Animated,
 } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
@@ -18,7 +19,7 @@ import { startSession, removeSessionData } from "./SessionManager";
 import styles, { palette, fonts } from "./style";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { StatusBar } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import Geolocation from "react-native-geolocation-service";
 import { useLog } from "../CrowdSyncLogManager";
 import LoadingScreen from "./LoadingScreen";
@@ -52,7 +53,6 @@ const FindSessionScreen = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
     const [modalData, setModalData] = useState({
       title: 'General',
-      description: 'My session, come say hi!',
     });
 
     const nearbySessions = [
@@ -136,6 +136,7 @@ const FindSessionScreen = () => {
 
   const handleCreateSession = async () => {
       // Toggle the visibility of the modal
+        setIsModalVisible(false);
         await handleStartSession();
     };
 
@@ -144,8 +145,6 @@ const FindSessionScreen = () => {
       setIsModalVisible(false);
       setModalData({
         title: 'General',
-        description: 'My session, come say hi!',
-        tags: 'Add tags...',
       });
     };
 
@@ -306,6 +305,23 @@ const FindSessionScreen = () => {
 
   const renderNearbySessions = () => {
 
+  const handleSessionPress = async (session) => {
+      // Handle session press here with the session data
+      // This function will be defined later
+      const userProfileData = await fetchUserProfileData();
+          const newSession = await startSession(userProfileData, session.title, log);
+          log.debug(
+            "handleSessionPress with userProfileData: " +
+              JSON.stringify(userProfileData) +
+              " and newSession: " +
+              JSON.stringify(newSession)
+          );
+
+          if (newSession) {
+            navigation.navigate("SessionHome", { sessionData: newSession });
+          }
+    };
+
     const handleItemLayout = (index, event) => {
         const { height } = event.nativeEvent.layout;
         const updatedItemHeights = [...itemHeights];
@@ -341,86 +357,88 @@ const FindSessionScreen = () => {
     return (
         <ScrollView
           ref={(ref) => setScrollViewRef(ref)}
-          onScroll={(event) => handleScroll(event)}
           scrollEventThrottle={16}
           contentContainerStyle={overlayStyles.scrollViewContent}
           showsVerticalScrollIndicator={false}
         >
-          {nearbySessions.map((session, index) => (
-            <View
-              key={index}
-              style={overlayStyles.nearbySessionContainer}
-              onLayout={(event) => handleItemLayout(index, event)}
-            >
-              <View style={overlayStyles.sessionInfoContainer}>
-                <Text style={overlayStyles.sessionTitle}>{session.title}</Text>
-                <Text style={overlayStyles.sessionDescription}>
-                  {session.description}
-                </Text>
-              </View>
-              <View style={overlayStyles.sessionDetailsContainer}>
-                <View style={overlayStyles.sessionDetailSection}>
-                  <Text style={overlayStyles.sessionDetailText}>
-                    Your Connections:
-                  </Text>
-                  <Text style={overlayStyles.sessionDetailText}>User1, User2</Text>
+          <View style={{ marginBottom: -10 }}>
+            {nearbySessions.map((session, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => handleSessionPress(session)}
+              >
+                <View
+                  style={overlayStyles.nearbySessionContainer}
+                  onLayout={(event) => handleItemLayout(index, event)}
+                >
+                  <View style={overlayStyles.sessionInfoContainer}>
+                    <Text style={overlayStyles.sessionTitle}>{session.title}</Text>
+                    <Text style={overlayStyles.sessionDescription}>
+                      {session.description}
+                    </Text>
+                  </View>
+                  <View style={overlayStyles.sessionDetailsContainer}>
+                    <View style={overlayStyles.sessionDetailSection}>
+                      <Text style={overlayStyles.sessionDetailText}>
+                        Your Connections:
+                      </Text>
+                      <Text style={overlayStyles.sessionDetailText}>Jane Smith, Emily Brown, Michael Wilson</Text>
+                    </View>
+                    <View style={overlayStyles.sessionDetailSection}>
+                      <Text style={overlayStyles.sessionDetailText}>
+                        Compatibility:
+                      </Text>
+                      <Text style={overlayStyles.sessionDetailText}>90%</Text>
+                    </View>
+                  </View>
                 </View>
-                <View style={overlayStyles.sessionDetailSection}>
-                  <Text style={overlayStyles.sessionDetailText}>
-                    Compatibility:
-                  </Text>
-                  <Text style={overlayStyles.sessionDetailText}>90%</Text>
-                </View>
-              </View>
-            </View>
-          ))}
+              </TouchableOpacity>
+            ))}
+          </View>
         </ScrollView>
       );
     };
 
   return (
-    <>
-      {location ? (
-        <View style={StyleSheet.absoluteFillObject}>
-          <MapView
-            style={StyleSheet.absoluteFillObject}
-            initialRegion={location}
-            provider="google"
-          >
-            <Marker
-              coordinate={{
-                latitude: location.latitude,
-                longitude: location.longitude,
-              }}
-              title="Your Location"
-              description="This is your current location"
-            />
-          </MapView>
-          <View style={overlayStyles.topBar}>
-            <TextInput
-              style={overlayStyles.searchInput}
-              placeholder="Search for nearby sessions..."
-              placeholderTextColor="black"
-              color="black"
-              onChangeText={handleSearchQueryChange}
-                value={searchQuery}
-            />
-            <Pressable onPress={handleSessionSearch}>
-              <Image source={SearchIcon} style={overlayStyles.searchIcon} />
-            </Pressable>
-            <Pressable onPress={toggleMenu}>
-              <Image source={MenuIcon} style={overlayStyles.menuIcon} />
-            </Pressable>
-          </View>
-          {renderSearchResultsDropdown()}
-          <View style={overlayStyles.topLeftButtonContainer}></View>
-          <View style={overlayStyles.buttonContainer}>
-          <Text style={styles.tertiaryHeaderTitle}>Nearby Sessions</Text>
-            <View style={{ marginBottom: -10 }} />
+      <>
+        {location ? (
+          <View style={StyleSheet.absoluteFillObject}>
+            <MapView
+              style={StyleSheet.absoluteFillObject}
+              initialRegion={location}
+              provider={PROVIDER_GOOGLE}
+            >
+              <Marker
+                coordinate={{
+                  latitude: location.latitude,
+                  longitude: location.longitude,
+                }}
+                title="Your Location"
+                description="This is your current location"
+              />
+            </MapView>
+            <View style={overlayStyles.topRightContainer}>
+            <View style={overlayStyles.circleContainer}>
+              <Pressable onPress={handleQRCodeScan}>
+                <Image source={QRCodeIcon} style={overlayStyles.qrCodeIcon} />
+              </Pressable>
+            </View>
+              <View style={overlayStyles.circleContainer}>
+                <Pressable onPress={handleCreateSessionRequest}>
+                  <Image
+                    source={CreateSessionIcon}
+                    style={overlayStyles.createSessionIcon}
+                  />
+                </Pressable>
+              </View>
+              </View>
+            <View style={overlayStyles.topLeftButtonContainer}></View>
+            <View style={overlayStyles.buttonContainer}>
+              <Text style={styles.tertiaryHeaderTitle}>Nearby Sessions</Text>
               {renderNearbySessions()}
+            </View>
+            {isMenuOpen && renderMenu()}
           </View>
-          {isMenuOpen && renderMenu()}
-        </View>
       ) : (
         <LoadingScreen />
       )}
@@ -433,20 +451,6 @@ const FindSessionScreen = () => {
                   placeholderTextColor="black"
                   onChangeText={(text) => handleModalInputChange('title', text)}
                   value={modalData.title}
-                />
-                <TextInput
-                  style={overlayStyles.modalInput}
-                  placeholder="Description"
-                  placeholderTextColor="black"
-                  onChangeText={(text) => handleModalInputChange('description', text)}
-                  value={modalData.description}
-                />
-                <TextInput
-                  style={overlayStyles.modalInput}
-                  placeholder="Tags"
-                  placeholderTextColor="black"
-                  onChangeText={(text) => handleModalInputChange('tags', text)}
-                  value={modalData.tags}
                 />
                 <View style={overlayStyles.modalButtons}>
                   <TouchableOpacity onPress={handleCancel}>
@@ -612,6 +616,32 @@ const overlayStyles = StyleSheet.create({
         color: 'black',
         fontSize: 16,
       },
+      topRightContainer: {
+          position: 'absolute',
+          top: 20,
+          right: 20,
+          flexDirection: 'row',
+        },
+      circleContainer: {
+          width: 40,
+          height: 40,
+          borderRadius: 20, // Half of the width and height for a circle
+          backgroundColor: 'white',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginLeft: 5, // Add some margin between the circles
+              borderWidth: 1, // Add a 1-pixel border
+              borderColor: 'black', // Border color
+        },
+        qrCodeIcon: {
+            width: 20,
+            height: 20,
+          },
+
+          createSessionIcon: {
+            width: 20,
+            height: 20,
+          },
 });
 
 export default FindSessionScreen;
