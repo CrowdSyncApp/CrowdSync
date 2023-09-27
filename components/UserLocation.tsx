@@ -4,7 +4,7 @@ import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/nativ
 import styles, { palette, fonts } from "./style";
 import { API, graphqlOperation } from "aws-amplify";
 import { useAuth } from "../QueryCaching";
-import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import { getLocations } from "../src/graphql/queries";
 import { useLog } from "../CrowdSyncLogManager";
@@ -74,7 +74,6 @@ const UserLocation = () => {
           <MapView
             style={{ flex: 1 }}
             initialRegion={location}
-            provider={PROVIDER_GOOGLE}
           >
             {/* Your Marker */}
             <Marker
