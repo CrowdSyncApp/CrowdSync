@@ -21,26 +21,31 @@
       "size" : "29x29"
     },
     {
+      "filename" : "CrowdSync_80x80 Non Transparent.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
+      "filename" : "CrowdSync_120x120 Non Transparent 1.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "40x40"
     },
     {
+      "filename" : "CrowdSync_120x120 Non Transparent.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
+      "filename" : "CrowdSync_180x180 Non Transparent.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
+      "filename" : "CrowdSync_1024x1024 Non Transparent.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"
