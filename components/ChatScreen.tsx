@@ -167,13 +167,41 @@ const ChatScreen = ({ route }) => {
         // Clear the text input after sending the message
         setNewMessage("");
 
-        // Randomly select a message and user
-      const randomMessage = fakeChats[Math.floor(Math.random() * fakeChats.length)];
-      const randomUserId = recIds[Math.floor(Math.random() * recIds.length)];
-      const randomSenderName = ['Jane Smith', 'Emily Brown', 'Michael Wilson'][Math.floor(Math.random() * 3)];
-      const randomTimestamp = new Date(new Date().getTime() + 1).toISOString();
+        if (chatType === "INDIVIDUAL" && recIds.length === 1 && (recIds[0] !== "2" && recIds[0] !== "4" && recIds[0] !== "5" && recIds[0] !== "3")) {
+            return;
+        }
 
-        // Create a new message with random content and sender
+      // Randomly select a message and user
+      let randomMessage, randomUserId, randomSenderName, randomTimestamp;
+
+      if (chatType === "INDIVIDUAL" && recIds.length === 1) {
+        if (recIds[0] === "2") {
+            randomUserId = 2;
+            randomSenderName = "Jane Smith";
+        } else if (recIds[0] === "4") {
+            randomUserId = 4;
+            randomSenderName = "Emily Brown";
+        } else if (recIds[0] === "5") {
+            randomUserId = 5;
+            randomSenderName = "Michael Wilson";
+        } else if (recIds[0] === '3') {
+            randomUserId = 3;
+            randomSenderName = "Alex Johnson";
+        } else {
+            randomUserId = 1;
+            randomSenderName = "John Doe";
+        }
+        randomMessage = fakeChats[Math.floor(Math.random() * fakeChats.length)];
+        randomTimestamp = new Date(new Date().getTime() + 1).toISOString();
+      } else {
+        // For other cases, pick random values as before
+        randomMessage = fakeChats[Math.floor(Math.random() * fakeChats.length)];
+        randomUserId = recIds[Math.floor(Math.random() * recIds.length)];
+        randomSenderName = ['Jane Smith', 'Emily Brown', 'Michael Wilson'][Math.floor(Math.random() * 3)];
+        randomTimestamp = new Date(new Date().getTime() + 1).toISOString();
+      }
+
+      // Create a new message with random content and sender
       const randomMessageInput = {
         chatId: chatId,
         timestamp: randomTimestamp,
@@ -187,7 +215,6 @@ const ChatScreen = ({ route }) => {
 
       // Send the randomly generated message
       await API.graphql(graphqlOperation(createChats, { input: randomMessageInput }));
-
       } catch (error) {
         console.error("Error sending message:", error);
         log.error("Error sending message:", JSON.stringify(error));

@@ -26,7 +26,7 @@ import { useLog } from "../CrowdSyncLogManager";
 
 const SessionHomeScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { user, fetchUserProfileData, getUserProfileFromId, storeInterval } =
+  const { user, fetchUserProfileData, getUserProfileFromId, storeInterval, refreshLocation } =
     useAuth();
   const { sessionData } = route.params;
   const log = useLog();
@@ -54,6 +54,8 @@ const SessionHomeScreen = ({ route }) => {
 
   useFocusEffect(
     React.useCallback(() => {
+      refreshLocation(log);
+
       const fetchData = async () => {
         const storeParticipantData = async () => {
           log.debug("storeParticipantData on user: ", user);
@@ -242,6 +244,11 @@ const SessionHomeScreen = ({ route }) => {
 
   const handleEndSession = async () => {
     log.debug("handleEndSession on sessionData: ", JSON.stringify(sessionData));
+    if (sessionData.sessionId === "52caeecf-8b99-463c-9e7c-b5a3168cb08c" || sessionData.sessionId === "f9fc3662-a75e-4d9b-bba3-d28475a707d1" || sessionData.sessionId === "6d377c2c-ec25-4410-bf0f-81d4c99bbfa9") {
+        // Don't end the permanent sessions, TEMP CODE
+        await handleExitSession();
+        return;
+    }
     try {
       await endSession(
         user?.username,

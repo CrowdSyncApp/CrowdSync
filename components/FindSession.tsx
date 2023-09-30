@@ -11,11 +11,12 @@ import {
   StyleSheet,
   Image,
   Modal,
-  TouchableWithoutFeedback, Animated,
+  TouchableWithoutFeedback,
+  Animated,
 } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
-import { startSession, removeSessionData } from "./SessionManager";
+import { startSession, removeSessionData, createOrUpdateParticipant, storeSessionData } from "./SessionManager";
 import styles, { palette, fonts } from "./style";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { StatusBar } from "react-native";
@@ -51,37 +52,30 @@ const FindSessionScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-    const [modalData, setModalData] = useState({
-      title: 'General',
-    });
+  const [modalData, setModalData] = useState({
+    title: "General",
+  });
 
-    const nearbySessions = [
-      {
-        title: "Entrepreneur",
-        description: "Learn about startups and entrepreneurship",
-        tags: ["Entrepreneur", "Founders"],
-      },
-      {
-        title: "Cryptocurrency",
-        description: "Discuss the world of cryptocurrencies",
-        tags: ["Block chain", "Bitcoin"],
-      },
-      {
-        title: "Machine Learning",
-        description: "Explore machine learning technologies",
-        tags: ["AI", "ChatGPT"],
-      },
-    ];
-
-  useFocusEffect(
-    React.useCallback(() => {
-      log.debug("Entering FindSessionScreen screen...");
-      removeSessionData(log); // Should never have session data on this screen
-    }, [])
-  );
-
-  useEffect(() => {
-    removeSessionData(log);
+  const nearbySessions = [
+    {
+      title: "Entrepreneur",
+      description: "Learn about startups and entrepreneurship",
+      tags: ["Entrepreneur", "Founders"],
+      sessionId: "52caeecf-8b99-463c-9e7c-b5a3168cb08c",
+    },
+    {
+      title: "Cryptocurrency",
+      description: "Discuss the world of cryptocurrencies",
+      tags: ["Block chain", "Bitcoin"],
+      sessionId: "f9fc3662-a75e-4d9b-bba3-d28475a707d1",
+    },
+    {
+      title: "Machine Learning",
+      description: "Explore machine learning technologies",
+      tags: ["AI", "ChatGPT"],
+      sessionId: "6d377c2c-ec25-4410-bf0f-81d4c99bbfa9",
+    },
+  ];
 
     const requestLocationPermission = async () => {
       try {
@@ -97,7 +91,15 @@ const FindSessionScreen = () => {
       }
     };
 
-    requestLocationPermission();
+  useFocusEffect(
+    React.useCallback(() => {
+      log.debug("Entering FindSessionScreen screen...");
+      removeSessionData(log); // Should never have session data on this screen
+    }, [])
+  );
+
+  useEffect(() => {
+  requestLocationPermission();
 
     const locationUpdateInterval = setInterval(async () => {
       try {
@@ -106,7 +108,7 @@ const FindSessionScreen = () => {
         console.error("Error refreshing location:", error);
         log.error("Error refreshing location:", JSON.stringify(error));
       }
-    }, 5 * 60 * 1000); // 5 minutes
+    }, 3 * 60 * 1000); // 3 minutes
 
     const storeLocationIntervalId = async () => {
       await storeInterval(locationUpdateInterval, log);
@@ -116,7 +118,7 @@ const FindSessionScreen = () => {
 
   useEffect(() => {
     if (targetIndex !== -1 && scrollViewRef) {
-        console.log("targetIndex changed");
+      console.log("targetIndex changed");
       const targetOffset = targetIndex * 150; // Adjust based on your item height
       scrollViewRef.scrollTo({ y: targetOffset, animated: true });
     }
@@ -135,26 +137,26 @@ const FindSessionScreen = () => {
   };
 
   const handleCreateSession = async () => {
-      // Toggle the visibility of the modal
-        setIsModalVisible(false);
-        await handleStartSession();
-    };
+    // Toggle the visibility of the modal
+    setIsModalVisible(false);
+    await handleStartSession();
+  };
 
   const handleCancel = () => {
-      // Close the modal and clear the results
-      setIsModalVisible(false);
-      setModalData({
-        title: 'General',
-      });
-    };
+    // Close the modal and clear the results
+    setIsModalVisible(false);
+    setModalData({
+      title: "General",
+    });
+  };
 
   const handleModalInputChange = (field, text) => {
-      // Update the modal data based on the input field
-      setModalData({
-        ...modalData,
-        [field]: text,
-      });
-    };
+    // Update the modal data based on the input field
+    setModalData({
+      ...modalData,
+      [field]: text,
+    });
+  };
 
   const handleQRCodeScan = () => {
     log.debug("handleQRCodeScan...");
@@ -167,7 +169,7 @@ const FindSessionScreen = () => {
     const searchText = searchQuery.toLowerCase(); // Convert to lowercase for case-insensitive search
 
     // Filter the nearbySessions based on session titles that begin with the search text
-    const filteredSessions = nearbySessions.filter(session =>
+    const filteredSessions = nearbySessions.filter((session) =>
       session.title.toLowerCase().startsWith(searchText)
     );
 
@@ -187,7 +189,11 @@ const FindSessionScreen = () => {
 
   const handleStartSession = async () => {
     const userProfileData = await fetchUserProfileData();
-    const newSession = await startSession(userProfileData, modalData.title, log);
+    const newSession = await startSession(
+      userProfileData,
+      modalData.title,
+      log
+    );
     log.debug(
       "handleStartSession with userProfileData: " +
         JSON.stringify(userProfileData) +
@@ -246,7 +252,10 @@ const FindSessionScreen = () => {
           <Image source={QRCodeIcon} style={overlayStyles.menuIcon} />
           <Text style={overlayStyles.menuText}>Scan QR Code</Text>
         </Pressable>
-        <Pressable style={overlayStyles.menuItem} onPress={handleCreateSessionRequest}>
+        <Pressable
+          style={overlayStyles.menuItem}
+          onPress={handleCreateSessionRequest}
+        >
           <Image source={CreateSessionIcon} style={overlayStyles.menuIcon} />
           <Text style={overlayStyles.menuText}>Create Session</Text>
         </Pressable>
@@ -254,217 +263,209 @@ const FindSessionScreen = () => {
     );
   };
 
-  const handleNearbySessionPress = async (sessionText) => {
-    log.debug("handleNearbySessionPress on sessionText: ", sessionText);
+  const handleNearbySessionPress = async (session) => {
+    log.debug("handleNearbySessionPress on session: ", session);
 
     const userProfileData = await fetchUserProfileData();
-    const newSession = await startSession(userProfileData, sessionText, log);
-    log.debug(
-      "handleStartSession with userProfileData: " +
-        JSON.stringify(userProfileData) +
-        " and newSession: " +
-        JSON.stringify(newSession)
-    );
+    const fullName = userProfileData.fullName;
 
-    if (newSession) {
-      navigation.navigate("SessionHome", { sessionData: newSession });
-    }
+    const userId = userProfileData.userId;
+    const sessionId = session.sessionId;
+    await createOrUpdateParticipant(userId, fullName, sessionId, log);
+
+    await storeSessionData(session, log);
+
+    navigation.navigate("SessionHome", { sessionData: session });
   };
 
-    const renderSearchResultsDropdown = () => {
-        if (searchResults.length === 0) {
-          return (
-            <View style={overlayStyles.searchResultsContainer}>
-              <Text style={overlayStyles.searchResultText}>No results found</Text>
-            </View>
-          );
-        }
+  const renderSearchResultsDropdown = () => {
+    if (searchResults.length === 0) {
+      return (
+        <View style={overlayStyles.searchResultsContainer}>
+          <Text style={overlayStyles.searchResultText}>No results found</Text>
+        </View>
+      );
+    }
 
-        return (
-          <View style={overlayStyles.searchResultsContainer}>
-            {searchResults.map((result, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => handleSearchResultPress(result)}
-              >
-                <Text style={overlayStyles.searchResultText}>{result.title}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        );
-      };
+    return (
+      <View style={overlayStyles.searchResultsContainer}>
+        {searchResults.map((result, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => handleSearchResultPress(result)}
+          >
+            <Text style={overlayStyles.searchResultText}>{result.title}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    );
+  };
 
-    const handleSearchQueryChange = (query) => {
-        setSearchQuery(query);
-      };
+  const handleSearchQueryChange = (query) => {
+    setSearchQuery(query);
+  };
 
-    const handleSearchResultPress = (result) => {
-        // Handle the selection of a search result
-        // For example, you can navigate to a specific screen or perform an action based on the selected result
-      };
+  const handleSearchResultPress = (result) => {
+    // Handle the selection of a search result
+    // For example, you can navigate to a specific screen or perform an action based on the selected result
+  };
 
   const renderNearbySessions = () => {
 
-  const handleSessionPress = async (session) => {
-      // Handle session press here with the session data
-      // This function will be defined later
-      const userProfileData = await fetchUserProfileData();
-          const newSession = await startSession(userProfileData, session.title, log);
-          log.debug(
-            "handleSessionPress with userProfileData: " +
-              JSON.stringify(userProfileData) +
-              " and newSession: " +
-              JSON.stringify(newSession)
-          );
-
-          if (newSession) {
-            navigation.navigate("SessionHome", { sessionData: newSession });
-          }
-    };
-
     const handleItemLayout = (index, event) => {
-        const { height } = event.nativeEvent.layout;
-        const updatedItemHeights = [...itemHeights];
-        updatedItemHeights[index] = height;
-        console.log("updatedItemHeights: ", updatedItemHeights);
-        setItemHeights(updatedItemHeights);
-      };
+      const { height } = event.nativeEvent.layout;
+      const updatedItemHeights = [...itemHeights];
+      updatedItemHeights[index] = height;
+      console.log("updatedItemHeights: ", updatedItemHeights);
+      setItemHeights(updatedItemHeights);
+    };
 
     const handleScroll = (event) => {
-    console.log("itemHeights: ", itemHeights);
-        const { contentOffset, layoutMeasurement } = event.nativeEvent;
-        const scrollViewCenterY = contentOffset.y + layoutMeasurement.height / 2;
+      console.log("itemHeights: ", itemHeights);
+      const { contentOffset, layoutMeasurement } = event.nativeEvent;
+      const scrollViewCenterY = contentOffset.y + layoutMeasurement.height / 2;
 
-        let minDistance = Infinity;
-        let nearestIndex = -1;
+      let minDistance = Infinity;
+      let nearestIndex = -1;
 
-        nearbySessions.forEach((session, index) => {
-          const itemLayout = index < itemHeights.length ? itemHeights.slice(0, index).reduce((acc, height) => acc + height, 0) : 0;
-          const itemCenterY = itemLayout - scrollViewCenterY;
-          const distance = Math.abs(scrollViewCenterY - itemCenterY);
+      nearbySessions.forEach((session, index) => {
+        const itemLayout =
+          index < itemHeights.length
+            ? itemHeights
+                .slice(0, index)
+                .reduce((acc, height) => acc + height, 0)
+            : 0;
+        const itemCenterY = itemLayout - scrollViewCenterY;
+        const distance = Math.abs(scrollViewCenterY - itemCenterY);
 
-          if (distance < minDistance) {
-            minDistance = distance;
-            nearestIndex = index;
-          }
-        });
+        if (distance < minDistance) {
+          minDistance = distance;
+          nearestIndex = index;
+        }
+      });
 
-        console.log("nearestIndex: ", nearestIndex);
+      console.log("nearestIndex: ", nearestIndex);
 
-        setTargetIndex(nearestIndex);
-      };
-
-    return (
-        <ScrollView
-          ref={(ref) => setScrollViewRef(ref)}
-          scrollEventThrottle={16}
-          contentContainerStyle={overlayStyles.scrollViewContent}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={{ marginBottom: -10 }}>
-            {nearbySessions.map((session, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => handleSessionPress(session)}
-              >
-                <View
-                  style={overlayStyles.nearbySessionContainer}
-                  onLayout={(event) => handleItemLayout(index, event)}
-                >
-                  <View style={overlayStyles.sessionInfoContainer}>
-                    <Text style={overlayStyles.sessionTitle}>{session.title}</Text>
-                    <Text style={overlayStyles.sessionDescription}>
-                      {session.description}
-                    </Text>
-                  </View>
-                  <View style={overlayStyles.sessionDetailsContainer}>
-                    <View style={overlayStyles.sessionDetailSection}>
-                      <Text style={overlayStyles.sessionDetailText}>
-                        Your Connections:
-                      </Text>
-                      <Text style={overlayStyles.sessionDetailText}>Jane Smith, Emily Brown, Michael Wilson</Text>
-                    </View>
-                    <View style={overlayStyles.sessionDetailSection}>
-                      <Text style={overlayStyles.sessionDetailText}>
-                        Compatibility:
-                      </Text>
-                      <Text style={overlayStyles.sessionDetailText}>90%</Text>
-                    </View>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </ScrollView>
-      );
+      setTargetIndex(nearestIndex);
     };
 
-  return (
-      <>
-        {location ? (
-          <View style={StyleSheet.absoluteFillObject}>
-            <MapView
-              style={StyleSheet.absoluteFillObject}
-              initialRegion={location}
+    return (
+      <ScrollView
+        ref={(ref) => setScrollViewRef(ref)}
+        scrollEventThrottle={16}
+        contentContainerStyle={overlayStyles.scrollViewContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={{ marginBottom: -10 }}>
+          {nearbySessions.map((session, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => handleNearbySessionPress(session)}
             >
-              <Marker
-                coordinate={{
-                  latitude: location.latitude,
-                  longitude: location.longitude,
-                }}
-                title="Your Location"
-                description="This is your current location"
-              />
-            </MapView>
-            <View style={overlayStyles.topRightContainer}>
+              <View
+                style={overlayStyles.nearbySessionContainer}
+                onLayout={(event) => handleItemLayout(index, event)}
+              >
+                <View style={overlayStyles.sessionInfoContainer}>
+                  <Text style={overlayStyles.sessionTitle}>
+                    {session.title}
+                  </Text>
+                  <Text style={overlayStyles.sessionDescription}>
+                    {session.description}
+                  </Text>
+                </View>
+                <View style={overlayStyles.sessionDetailsContainer}>
+                  <View style={overlayStyles.sessionDetailSection}>
+                    <Text style={overlayStyles.sessionDetailText}>
+                      Your Connections:
+                    </Text>
+                    <Text style={overlayStyles.sessionDetailText}>
+                      Jane Smith, Emily Brown, Michael Wilson
+                    </Text>
+                  </View>
+                  <View style={overlayStyles.sessionDetailSection}>
+                    <Text style={overlayStyles.sessionDetailText}>
+                      Compatibility:
+                    </Text>
+                    <Text style={overlayStyles.sessionDetailText}>90%</Text>
+                  </View>
+                </View>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
+    );
+  };
+
+  return (
+    <>
+      {location ? (
+        <View style={StyleSheet.absoluteFillObject}>
+          <MapView
+            style={StyleSheet.absoluteFillObject}
+            initialRegion={location}
+          >
+            <Marker
+              coordinate={{
+                latitude: location.latitude,
+                longitude: location.longitude,
+              }}
+              title="Your Location"
+              description="This is your current location"
+            />
+          </MapView>
+          <View style={overlayStyles.topRightContainer}>
             <View style={overlayStyles.circleContainer}>
               <Pressable onPress={handleQRCodeScan}>
                 <Image source={QRCodeIcon} style={overlayStyles.qrCodeIcon} />
               </Pressable>
             </View>
-              <View style={overlayStyles.circleContainer}>
-                <Pressable onPress={handleCreateSessionRequest}>
-                  <Image
-                    source={CreateSessionIcon}
-                    style={overlayStyles.createSessionIcon}
-                  />
-                </Pressable>
-              </View>
-              </View>
-            <View style={overlayStyles.topLeftButtonContainer}></View>
-            <View style={overlayStyles.buttonContainer}>
-              <Text style={styles.tertiaryHeaderTitle}>Nearby Sessions</Text>
-              {renderNearbySessions()}
+            <View style={overlayStyles.circleContainer}>
+              <Pressable onPress={handleCreateSessionRequest}>
+                <Image
+                  source={CreateSessionIcon}
+                  style={overlayStyles.createSessionIcon}
+                />
+              </Pressable>
             </View>
-            {isMenuOpen && renderMenu()}
           </View>
+          <View style={overlayStyles.topLeftButtonContainer}></View>
+          <View style={overlayStyles.buttonContainer}>
+            <Text style={styles.tertiaryHeaderTitle}>Nearby Sessions</Text>
+            {renderNearbySessions()}
+          </View>
+          {isMenuOpen && renderMenu()}
+        </View>
       ) : (
         <LoadingScreen />
       )}
-    <Modal visible={isModalVisible} transparent animationType="slide">
-            <View style={overlayStyles.modalContainer}>
-              <View style={overlayStyles.modalContent}>
-                <TextInput
-                  style={overlayStyles.modalInput}
-                  placeholder="Title"
-                  placeholderTextColor="black"
-                  onChangeText={(text) => handleModalInputChange('title', text)}
-                  value={modalData.title}
-                />
-                <View style={overlayStyles.modalButtons}>
-                  <TouchableOpacity onPress={handleCancel}>
-                    <Text style={overlayStyles.modalButtonText}>Cancel</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={handleCreateSession}>
-                    <Text style={overlayStyles.modalButtonText}>Create Session</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
+      <Modal visible={isModalVisible} transparent animationType="slide">
+        <View style={overlayStyles.modalContainer}>
+          <View style={overlayStyles.modalContent}>
+            <TextInput
+              style={overlayStyles.modalInput}
+              placeholder="Title"
+              placeholderTextColor="black"
+              onChangeText={(text) => handleModalInputChange("title", text)}
+              value={modalData.title}
+            />
+            <View style={overlayStyles.modalButtons}>
+              <TouchableOpacity onPress={handleCancel}>
+                <Text style={overlayStyles.modalButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleCreateSession}>
+                <Text style={overlayStyles.modalButtonText}>
+                  Create Session
+                </Text>
+              </TouchableOpacity>
             </View>
-          </Modal>
-        </>
-      );
-    };
+          </View>
+        </View>
+      </Modal>
+    </>
+  );
+};
 
 const overlayStyles = StyleSheet.create({
   topBar: {
@@ -570,77 +571,77 @@ const overlayStyles = StyleSheet.create({
     fontSize: 16,
   },
   searchResultsContainer: {
-      position: "absolute",
-      top: 80,
-      left: 20,
-      right: 20,
-      backgroundColor: "white",
-      borderRadius: 10,
-      elevation: 5,
-      maxHeight: 150,
-      overflow: "hidden",
-    },
-    searchResultText: {
-      padding: 10,
-      fontSize: 16,
-      color: "black"
-    },
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-      modalContent: {
-        backgroundColor: 'white',
-        borderRadius: 10,
-        padding: 20,
-        width: '80%',
-        alignItems: 'center',
-      },
-      modalInput: {
-        width: '100%',
-        borderBottomWidth: 1,
-        borderColor: 'black',
-        marginVertical: 10,
-        padding: 10,
-        color: "black",
-      },
-      modalButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '100%',
-        marginTop: 20,
-      },
-      modalButtonText: {
-        color: 'black',
-        fontSize: 16,
-      },
-      topRightContainer: {
-          position: 'absolute',
-          top: 20,
-          right: 20,
-          flexDirection: 'row',
-        },
-      circleContainer: {
-          width: 40,
-          height: 40,
-          borderRadius: 20, // Half of the width and height for a circle
-          backgroundColor: 'white',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginLeft: 5, // Add some margin between the circles
-              borderWidth: 1, // Add a 1-pixel border
-              borderColor: 'black', // Border color
-        },
-        qrCodeIcon: {
-            width: 20,
-            height: 20,
-          },
+    position: "absolute",
+    top: 80,
+    left: 20,
+    right: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    elevation: 5,
+    maxHeight: 150,
+    overflow: "hidden",
+  },
+  searchResultText: {
+    padding: 10,
+    fontSize: 16,
+    color: "black",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+    width: "80%",
+    alignItems: "center",
+  },
+  modalInput: {
+    width: "100%",
+    borderBottomWidth: 1,
+    borderColor: "black",
+    marginVertical: 10,
+    padding: 10,
+    color: "black",
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginTop: 20,
+  },
+  modalButtonText: {
+    color: "black",
+    fontSize: 16,
+  },
+  topRightContainer: {
+    position: "absolute",
+    top: 20,
+    right: 20,
+    flexDirection: "row",
+  },
+  circleContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20, // Half of the width and height for a circle
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 5, // Add some margin between the circles
+    borderWidth: 1, // Add a 1-pixel border
+    borderColor: "black", // Border color
+  },
+  qrCodeIcon: {
+    width: 20,
+    height: 20,
+  },
 
-          createSessionIcon: {
-            width: 20,
-            height: 20,
-          },
+  createSessionIcon: {
+    width: 20,
+    height: 20,
+  },
 });
 
 export default FindSessionScreen;
