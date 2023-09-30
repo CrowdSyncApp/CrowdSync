@@ -14,6 +14,7 @@ import { createChats } from "../src/graphql/mutations";
 import { listChats } from "../src/graphql/queries";
 import { onCreateChats } from "../src/graphql/subscriptions";
 import "react-native-get-random-values";
+import faker from 'faker';
 import { useAuth } from "../QueryCaching";
 import styles, { palette, fonts } from "./style";
 import { useLog } from "../CrowdSyncLogManager";
@@ -29,6 +30,12 @@ const ChatScreen = ({ route }) => {
   const [ttlExpiration, setTtlExpiration] = useState(0);
   const { user, getUserProfileFromId } = useAuth();
   const { participants, chatType } = route.params;
+
+  const fakeChats = ["Hey everyone! I just got to the event",
+                     "Where's everyone standing? I'm in Building B by the water fountain",
+                     "I'm looking forward to the next speaker in 15 minutes!",
+                     "Heading to a different session now - nice chatting with you all!",
+                     "Hi, where can I find the session on Web3?"];
 
   log.debug(
     "Entering ChatScreen with participants: " +
@@ -159,6 +166,28 @@ const ChatScreen = ({ route }) => {
 
         // Clear the text input after sending the message
         setNewMessage("");
+
+        // Randomly select a message and user
+      const randomMessage = fakeChats[Math.floor(Math.random() * fakeChats.length)];
+      const randomUserId = recIds[Math.floor(Math.random() * recIds.length)];
+      const randomSenderName = ['Jane Smith', 'Emily Brown', 'Michael Wilson'][Math.floor(Math.random() * 3)];
+      const randomTimestamp = new Date(new Date().getTime() + 1).toISOString();
+
+        // Create a new message with random content and sender
+      const randomMessageInput = {
+        chatId: chatId,
+        timestamp: randomTimestamp,
+        messageContent: randomMessage,
+        senderId: randomUserId,
+        senderName: randomSenderName,
+        receiverId: [...recIds, user?.attributes.sub],
+        chatTypeStatus,
+      };
+      log.debug('createChats input for random message: ', JSON.stringify(randomMessageInput));
+
+      // Send the randomly generated message
+      await API.graphql(graphqlOperation(createChats, { input: randomMessageInput }));
+
       } catch (error) {
         console.error("Error sending message:", error);
         log.error("Error sending message:", JSON.stringify(error));
