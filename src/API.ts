@@ -1507,6 +1507,31 @@ export type OnCreateParticipantsSubscription = {
   } | null,
 };
 
+export type OnCreateOrUpdateParticipantsSubscriptionVariables = {
+  sessionId?: string | null,
+  userId?: string | null,
+  visibility?: string | null,
+  role?: string | null,
+  userStatus?: string | null,
+};
+
+export type OnCreateOrUpdateParticipantsSubscription = {
+  onCreateOrUpdateParticipants?:  {
+    __typename: "Participants",
+    sessionId: string,
+    userId: string,
+    joinedAt: string,
+    role?: string | null,
+    jobTitle?: string | null,
+    fullName: string,
+    company?: string | null,
+    visibility: string,
+    tags?: Array< string | null > | null,
+    sessionStatus: string,
+    userStatus: string,
+  } | null,
+};
+
 export type OnUpdateParticipantsSubscriptionVariables = {
   sessionId?: string | null,
   userId?: string | null,

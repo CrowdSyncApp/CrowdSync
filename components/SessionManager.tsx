@@ -5,13 +5,11 @@ import {
   updateSessions,
   createOrUpdateParticipants,
   updateParticipants,
-  updateLocations,
 } from "../src/graphql/mutations";
-import { listParticipants, getParticipants, listLocations } from "../src/graphql/queries";
+import { listParticipants, getParticipants } from "../src/graphql/queries";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import "react-native-get-random-values";
 import { v4 } from "uuid";
-import { useAuth } from "../QueryCaching.tsx";
 import participantsData from "../dummies/dummy_accounts.json";
 
 const MAX_RETRY_ATTEMPTS = 5; // Maximum number of retry attempts
@@ -34,7 +32,7 @@ export async function getParticipantVisibility(userId, sessionId, log) {
 
     const visibility = userIdParticipant.data.getParticipants.visibility;
     log.debug("visibility: ", JSON.stringify(visibility));
-    return visibility == "VISIBLE";
+    return visibility === "VISIBLE";
   } catch (error) {
     console.error("Error getting participant visibility:", error);
     log.error("Error getting participant visibility:", JSON.stringify(error));
@@ -339,7 +337,7 @@ log.debug('exitSession on userId: ' + JSON.stringify(userId) + ' and sessionId: 
     log.debug('Participant exited from session:', JSON.stringify(response.data.updateParticipants));
   } catch (error) {
     console.error('Error exiting participant from session:', error);
-    log.error('Error exiting participant from session:', errorJSON.stringify());
+    log.error('Error exiting participant from session:', JSON.stringify(error));
     throw error; // Re-throw the error to be handled by the caller if needed
   }
 };

@@ -189,7 +189,7 @@ async function refreshLocation(log) {
     if (!user || !user.username) {
       console.error("User data or userId is missing.");
       log.error("User data or userId is missing.");
-      userId = "0949d9ce-b0b1-7019-0aba-062ae33bdd92"; // TODO fix with no authenticated users
+      userId = "0949d9ce-b0b1-7019-0aba-062ae33bdd92";
     } else {
         userId = user?.username;
     }
@@ -339,7 +339,7 @@ async function login(credentials, log) {
 async function logout(log) {
   log.debug("logout");
   try {
-    const response = await Auth.signOut();
+    await Auth.signOut();
     await AsyncStorage.removeItem("userProfileData");
     await AsyncStorage.removeItem("sessionData");
     await clearAllIntervals(log);
@@ -650,7 +650,7 @@ async function uploadImageToS3(profilePictureUri, log) {
   const response = await fetch(profilePictureUri);
   const blob = await response.blob();
 
-  const profilePictureS3Uri = await Storage.put(filename, blob, {
+  await Storage.put(filename, blob, {
     level: "protected",
     contentType: "image/jpeg",
   });

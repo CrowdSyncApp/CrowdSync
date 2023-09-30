@@ -17,6 +17,7 @@ import { getParticipants, listParticipants } from "../src/graphql/queries";
 import { updateParticipants } from "../src/graphql/mutations";
 import {
   onCreateParticipants,
+  onCreateOrUpdateParticipants,
   onDeleteParticipants,
   onUpdateParticipants,
 } from "../src/graphql/subscriptions";
@@ -89,25 +90,25 @@ const SessionHomeScreen = ({ route }) => {
 
         fetchVisibility();
 
-        const createSubscription = () => {
+        const createOrUpdateSubscription = () => {
           // Create subscription for adding new participants
-          log.debug("onCreateParticipants on sessionData: ", sessionData);
+          log.debug("onCreateOrUpdateParticipants on sessionData: ", sessionData);
           const subscription = API.graphql(
-            graphqlOperation(onCreateParticipants, {
+            graphqlOperation(onCreateOrUpdateParticipants, {
               sessionId: sessionData.sessionId,
             })
           ).subscribe({
             next: (response) => {
-              const newParticipant = response.value.data.onCreateParticipants;
+              const newParticipant = response.value.data.onCreateOrUpdateParticipants;
               setParticipants((prevParticipants) => [
                 ...prevParticipants,
                 newParticipant,
               ]);
             },
             error: (error) => {
-              console.error("Error subscribing to participant joined:", error);
+              console.error("Error subscribing to participant created or updated:", error);
               log.error(
-                "Error subscribing to participant joined:",
+                "Error subscribing to participant created or updated:",
                 JSON.stringify(error)
               );
             },
@@ -184,12 +185,12 @@ const SessionHomeScreen = ({ route }) => {
           return subscription;
         };
 
-        const onCreateSubscription = createSubscription();
+        const onCreateOrUpdateSubscription = createOrUpdateSubscription();
         const onDeleteSubscription = deleteSubscription();
         const onUpdateSubscription = updateSubscription();
 
         return () => {
-          onCreateSubscription.unsubscribe();
+          onCreateOrUpdateSubscription.unsubscribe();
           onDeleteSubscription.unsubscribe();
           onUpdateSubscription.unsubscribe();
         };
