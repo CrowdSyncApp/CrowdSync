@@ -17,7 +17,7 @@ export function useLog() {
 export function LogProvider({ children }) {
 
     const logStreamName = `CrowdSync_Log_Stream_${Date.now()}`;
-    console.log("Activating CloudWatch on logGroupName: CrowdSync_Debug_Logs"  + " and logStreamName: " + logStreamName);
+    console.log("Activating CloudWatch on logGroupName: CrowdSync_Debug_Logs and logStreamName: " + logStreamName);
 
     const log = new Logger('CrowdSync', 'DEBUG');
     Amplify.register(log);

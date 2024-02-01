@@ -13,11 +13,7 @@ import {
 } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
-import MyConnections from "./MyConnections";
-import { getParticipants } from "../src/graphql/queries";
-import { Storage } from "aws-amplify";
-import { updateParticipants } from "../src/graphql/mutations";
-import styles, { palette, fonts } from "./style";
+import styles from "./style";
 import { useLog } from "../CrowdSyncLogManager";
 
 const ProfileScreen = ({ route }) => {

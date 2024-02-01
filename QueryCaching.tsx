@@ -157,9 +157,6 @@ async function fetchUserProfile(userId, log) {
         log.debug("updateUserProfiles complete.");
       }
 
-      const currSessionData = await getSessionData(log);
-      data.getUserProfiles.sessionId = currSessionData.sessionId;
-
       const userTags = await getAllUserTags(userId, log);
       data.getUserProfiles.tags = userTags;
 

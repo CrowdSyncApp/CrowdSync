@@ -13,27 +13,23 @@ import {
   Modal,
   TouchableWithoutFeedback,
   Animated,
+  StatusBar,
 } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../QueryCaching";
 import { startSession, removeSessionData, createOrUpdateParticipant, storeSessionData } from "./SessionManager";
 import styles, { palette, fonts } from "./style";
 import { useHeaderHeight } from "@react-navigation/elements";
-import { StatusBar } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import Geolocation from "react-native-geolocation-service";
 import { useLog } from "../CrowdSyncLogManager";
 import LoadingScreen from "./LoadingScreen";
 
-import SampleFindSessionMap from "../images/sample_find_session.png";
-import SearchIcon from "../images/icons/search_icon.png";
 import QRCodeIcon from "../images/icons/scan_qr_icon.png";
 import CreateSessionIcon from "../images/icons/create_session_icon.png";
-import MenuIcon from "../images/icons/menu_icon.png";
 
 const FindSessionScreen = () => {
   const headerHeight = useHeaderHeight();
-  const keyboardVerticalOffset = StatusBar.currentHeight + headerHeight;
   const navigation = useNavigation();
   const {
     user,
@@ -131,10 +127,6 @@ const FindSessionScreen = () => {
       }
     });
   }, [navigation]);
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
 
   const handleCreateSession = async () => {
     // Toggle the visibility of the modal
@@ -633,11 +625,6 @@ const overlayStyles = StyleSheet.create({
     borderWidth: 1, // Add a 1-pixel border
     borderColor: "black", // Border color
   },
-  qrCodeIcon: {
-    width: 20,
-    height: 20,
-  },
-
   createSessionIcon: {
     width: 20,
     height: 20,

@@ -202,11 +202,6 @@ const SessionHomeScreen = ({ route }) => {
     }, [user, fetchParticipants, fetchUserProfileData, sessionData.sessionId])
   );
 
-  const handleJoinSessionWithQRCode = () => {
-    log.debug("handleJoinSessionWithQRCode");
-    navigation.navigate("QRScanner");
-  };
-
   // Function to handle pressing the Search For People button
   const handleSearchForPeople = () => {
     log.debug(
@@ -216,14 +211,6 @@ const SessionHomeScreen = ({ route }) => {
     // Handle the action when Search For People button is pressed
     // For now, let's log a message to the console
     navigation.navigate("SearchForPeople", { sessionData: sessionData });
-  };
-
-  // Function to handle pressing the Chat button
-  const handleChat = () => {
-    log.debug("handleChat");
-    // Handle the action when Chat button is pressed
-    // For now, let's log a message to the console
-    navigation.navigate("ChatScreen");
   };
 
   const handleExitSession = async () => {

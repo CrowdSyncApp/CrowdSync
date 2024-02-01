@@ -40,7 +40,7 @@ const OtherUserProfileScreen = () => {
             let visible;
             if (userData.userId === "1" || userData.userId === "2" || userData.userId === "3" || userData.userId === "4" || userData.userId === "5") {
               visible = true;
-              if (userData.userId == "3") {
+              if (userData.userId === "3") {
                 visible = false;
               }
             } else {

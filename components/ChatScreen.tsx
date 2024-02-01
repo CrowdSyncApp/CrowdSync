@@ -21,7 +21,7 @@ import { useLog } from "../CrowdSyncLogManager";
 import { getSessionData } from "./SessionManager";
 
 const ChatScreen = ({ route }) => {
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [chatId, setChatId] = useState("");
   const [participantIdsList, setParticipantIdsList] = useState("");
@@ -58,7 +58,7 @@ const ChatScreen = ({ route }) => {
             log.debug("participantIdsList: ", JSON.stringify(participantIds));
             setParticipantIdsList(participantIds);
 
-              if (chatType == "GROUP") {
+              if (chatType === "GROUP") {
                    const sessionData = await getSessionData(log);
                    log.debug("Creating chatId with sessionData: ", sessionData);
                    id = sessionData.sessionId + sessionData.creatorId;
